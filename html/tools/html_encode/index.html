@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Encode / Decode</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  h2 {
+    color: #333;
+  }
+  label {
+    font-weight: bold;
+    display: block;
+  }
+  textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+  }
+  .operation {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .operation label {
+    margin-right: 10px;
+  }
+  input[type="button"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+  input[type="button"]:hover {
+    background-color: #0056b3;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>HTML Encode / Decode</h2>
+  <form>
+    <div>
+      <label for="input">Input:</label><br>
+      <textarea id="input" placeholder="Enter your text here"></textarea>
+    </div>
+    <div class="operation">
+      <label><input type="radio" id="encode" name="operation" value="encode" checked>Encode</label>
+      <label><input type="radio" id="decode" name="operation" value="decode">Decode</label>
+      <input type="button" value="Apply" onclick="applyConversion()">
+    </div>
+    <div>
+      <label for="output">Output:</label><br>
+      <textarea id="output" readonly></textarea>
+    </div>
+  </form>
+</div>
+
+<script>
+function htmlEncode(text) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(text));
+  return div.innerHTML;
+}
+
+function htmlDecode(text) {
+  var div = document.createElement('div');
+  div.innerHTML = text;
+  return div.innerText || div.textContent;
+}
+
+function applyConversion() {
+  var inputText = document.getElementById('input').value;
+  var outputText = document.getElementById('output');
+  var operation = document.querySelector('input[name="operation"]:checked').value;
+
+  // Check if the input text is empty
+  if (inputText.trim() === '') {
+    alert('Please enter some text.');
+    return;
+  }
+
+  var output;
+  // Determine whether to encode or decode based on user selection
+  if (operation === 'encode') {
+    output = htmlEncode(inputText);
+  } else {
+    output = htmlDecode(inputText);
+  }
+
+  // Display the result in the output textarea
+  outputText.value = output;
+}
+</script>
+
+</body>
+</html>
