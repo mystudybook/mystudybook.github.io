@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mystudybook.github.io/2024/02/08/Hexo%E6%B7%BB%E5%8A%A0Sitemap/</loc>
+    
+    <lastmod>2024-02-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://mystudybook.github.io/2024/02/05/%E4%BD%BF%E7%94%A8Hexo-Admin/</loc>
     
     <lastmod>2024-02-08</lastmod>
@@ -117,21 +126,7 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/Eclipse/</loc>
-    <lastmod>2024-02-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://mystudybook.github.io/tags/Mac/</loc>
-    <lastmod>2024-02-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://mystudybook.github.io/tags/Hexo/</loc>
+    <loc>https://mystudybook.github.io/tags/SQL%E8%AA%9E%E6%B3%95/</loc>
     <lastmod>2024-02-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -152,7 +147,35 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/SQL%E8%AA%9E%E6%B3%95/</loc>
+    <loc>https://mystudybook.github.io/tags/Eclipse/</loc>
+    <lastmod>2024-02-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/tags/Hexo/</loc>
+    <lastmod>2024-02-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/tags/Google-Search-Console/</loc>
+    <lastmod>2024-02-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/tags/sitemap/</loc>
+    <lastmod>2024-02-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/tags/Mac/</loc>
     <lastmod>2024-02-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -182,21 +205,7 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/IDE%E6%93%8D%E4%BD%9C/</loc>
-    <lastmod>2024-02-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://mystudybook.github.io/categories/Mac/</loc>
-    <lastmod>2024-02-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://mystudybook.github.io/categories/Hexo/</loc>
+    <loc>https://mystudybook.github.io/categories/SQL/</loc>
     <lastmod>2024-02-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -210,7 +219,21 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/SQL/</loc>
+    <loc>https://mystudybook.github.io/categories/IDE%E6%93%8D%E4%BD%9C/</loc>
+    <lastmod>2024-02-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/categories/Hexo/</loc>
+    <lastmod>2024-02-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/categories/Mac/</loc>
     <lastmod>2024-02-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
