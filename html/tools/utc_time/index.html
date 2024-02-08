@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<title>UTC to Local Time Converter</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  h2 {
+    color: #333;
+  }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  select, input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  input[type="button"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  input[type="button"]:hover {
+    background-color: #0056b3;
+  }
+</style>
+</head>
+<body>
+
+<h2>UTC to Local Time Converter</h2>
+<form>
+  <label for="utcTime">Select UTC Time:</label>
+  <input type="datetime-local" id="utcTime">
+  
+  <label for="timeZone">Search and Select Time Zone:</label>
+  <select id="timeZone" onchange="updateLocalTime()">
+    <option value="">Please select time zone</option>
+    <optgroup label="Africa">
+      <option value="Africa/Abidjan">Abidjan</option>
+      <option value="Africa/Accra">Accra</option>
+      <option value="Africa/Addis_Ababa">Addis Ababa</option>
+      <!-- Add more options for Africa -->
+    </optgroup>
+    <optgroup label="America">
+      <option value="America/New_York">New York</option>
+      <option value="America/Los_Angeles">Los Angeles</option>
+      <option value="America/Chicago">Chicago</option>
+      <!-- Add more options for America -->
+    </optgroup>
+    <!-- Add more optgroups for other continents -->
+  </select>
+  
+  <label for="localTime">Local Time:</label>
+  <input type="text" id="localTime" readonly>
+  
+  <input type="button" value="Convert" onclick="updateLocalTime()">
+</form>
+
+<script>
+
+$(document).ready(function() {
+    $('#timeZone').select2();
+});
+
+function updateLocalTime() {
+  var utcTimeStr = document.getElementById('utcTime').value;
+  var timeZone = document.getElementById('timeZone').value;
+  
+  // Validate input
+  if (!utcTimeStr.trim() || !timeZone.trim()) {
+    alert('Please select UTC time and time zone.');
+    return;
+  }
+  
+  // Convert UTC time to local time
+  var utcTime = new Date(utcTimeStr);
+  var options = {timeZone: timeZone, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
+  var localTime = utcTime.toLocaleString('en-US', options);
+  
+  // Display local time
+  document.getElementById('localTime').value = localTime;
+}
+</script>
+
+</body>
+</html>
