@@ -628,13 +628,6 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/SQL%E8%AA%9E%E6%B3%95/</loc>
-    <lastmod>2024-05-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://mystudybook.github.io/tags/UI-Toolkit/</loc>
     <lastmod>2024-05-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -642,21 +635,14 @@
   </url>
   
   <url>
+    <loc>https://mystudybook.github.io/tags/SQL%E8%AA%9E%E6%B3%95/</loc>
+    <lastmod>2024-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://mystudybook.github.io/tags/Eclipse/</loc>
-    <lastmod>2024-05-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://mystudybook.github.io/tags/Google-Search-Console/</loc>
-    <lastmod>2024-05-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://mystudybook.github.io/tags/sitemap/</loc>
     <lastmod>2024-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -671,6 +657,20 @@
   
   <url>
     <loc>https://mystudybook.github.io/tags/html/</loc>
+    <lastmod>2024-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/tags/Google-Search-Console/</loc>
+    <lastmod>2024-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/tags/sitemap/</loc>
     <lastmod>2024-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -756,7 +756,7 @@
 
   
   <url>
-    <loc>https://mystudybook.github.io/categories/%E5%A4%A7%E7%B6%B1/</loc>
+    <loc>https://mystudybook.github.io/categories/Design-Pattern/</loc>
     <lastmod>2024-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -770,7 +770,7 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/Design-Pattern/</loc>
+    <loc>https://mystudybook.github.io/categories/%E5%A4%A7%E7%B6%B1/</loc>
     <lastmod>2024-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
