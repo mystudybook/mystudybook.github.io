@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中華民國身分證字號產生器(Taiwan National identification Generator)</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+  }
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  select, button {
+    display: block;
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  #result {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+  }
+  
+</style>
+</head>
+<body>
+
+
+
+<h1>中華民國（臺灣）身分證字號產生器 (Taiwan National identification Generator)</h1>
+
+<div class="container">
+<label for="city">選擇城市：</label>
+
+<select id="city">
+    <option value="NONE">請選擇(若不選擇則隨機產生)</option>
+    <optgroup label="北部">
+        <option value="A">臺北市 - A</option>
+        <option value="F">新北市 - F</option>
+        <option value="C">基隆市 - C</option>
+        <option value="H">桃園市 - H</option>
+        <option value="O">新竹市 - O</option>
+        <option value="J">新竹縣 - J</option>
+        <option value="G">宜蘭縣 - G</option>
+    </optgroup>
+    <optgroup label="中部">
+        <option value="K">苗栗縣 - K</option>
+        <option value="B">臺中市 - B</option>
+        <option value="N">彰化縣 - N</option>
+        <option value="M">南投縣 - M</option>
+        <option value="P">雲林縣 - P</option>
+    </optgroup> - 
+    <optgroup label="南部">
+        <option value="I">嘉義市 - I</option>
+        <option value="Q">嘉義縣 - Q</option>
+        <option value="D">臺南市 - D</option>
+        <option value="R">臺南縣 - R</option>
+        <option value="E">高雄市 - E</option>
+        <option value="S">高雄縣 - S</option>
+        <option value="T">屏東縣 - T</option>
+    </optgroup>
+    <optgroup label="東部">
+        <option value="G">宜蘭縣 - G</option>
+        <option value="U">花蓮縣 - U</option>
+        <option value="V">臺東縣 - V</option>
+    </optgroup>
+    <optgroup label="外島">
+        <option value="X">澎湖縣 - X</option>
+        <option value="W">金門縣 - W</option>
+        <option value="Z">連江縣 - Z</option>
+    </optgroup>
+</select>
+
+<label for="gender">選擇性別：</label>
+<select id="gender">
+    <option value="NONE">請選擇(若不選擇則隨機產生)</option>
+    <option value="1">男性 - 1</option>
+    <option value="2">女性 - 2</option>
+</select>
+
+<label for="gender">選擇產生筆數：</label>
+<select id="count">
+    <option value="1">1</option>
+    <option value="5">5</option>
+    <option value="10">10</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+    <option value="200">200</option>
+    <option value="500">500</option>
+    <option value="1000">1000</option>
+</select>
+
+<button onclick="generateResult()">產生</button>
+
+<textarea id="result" placeholder="身分證字號"></textarea>
+</div>
+
+
+<script>
+
+// 程式碼來自 https://gist.github.com/chochinlu/2b305dfd1ede28a27fe21c833215d019
+// wiki 身分證驗證規則  https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%B0%91%E8%BA%AB%E5%88%86%E8%AD%89#%E7%B7%A8%E8%99%9F%E8%A6%8F%E5%89%87
+
+// 中華民國身分證字號英文字首的編號規則數字
+const firstLetterMapping = new Map([
+  ['A', '10'],
+  ['B', '11'],
+  ['C', '12'],
+  ['D', '13'],
+  ['E', '14'],
+  ['F', '15'],
+  ['G', '16'],
+  ['H', '17'],
+  ['I', '34'],
+  ['J', '18'],
+  ['K', '19'],
+  ['M', '21'],
+  ['N', '22'],
+  ['O', '35'],
+  ['P', '23'],
+  ['Q', '24'],
+  ['T', '27'],
+  ['U', '28'],
+  ['V', '29'],
+  ['W', '32'],
+  ['X', '30'],
+  ['Z', '33'],
+  ['L', '20'],
+  ['R', '25'],
+  ['S', '26'],
+  ['Y', '31']
+]);
+
+// 驗證規則需要相乘的數
+const authMultiplier = [1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1];
+
+const checkPid = pid => {
+
+  // 長度要為10
+  if (pid.length !== 10) return {result: false, msg: '身分證字號長度不正確'};
+
+  // 開頭第一個為英文字母, 後為9個阿拉伯數字, 第一個數字拿來區分性別，男性為1、女性為2
+  const re = /^[A-Za-z][12]\d{8}/;
+  if (!re.test(pid)) return {result: false, msg: '身分證格式錯誤'};
+
+  // 驗證規則
+  const [first, ...nums] = [...pid];
+  const source = [...firstLetterMapping.get(first.toUpperCase()), ...nums]
+    .map((value, i) => value * authMultiplier[i])
+    .reduce((a, b) => a + b, 0);
+  
+  if (source % 10 !== 0) return {result: false, msg: '驗證失敗'};
+
+  return {result: true};
+};
+
+
+const keys = [...firstLetterMapping.keys()];
+const genders = [1, 2];
+const nums = [...Array(10).keys()];
+const times = [...Array(8).keys()];  // for count 
+
+const genRestNums = () => {
+  let restNum = [];
+  times.forEach(v => {
+    restNum.push(nums[Math.floor(Math.random() * nums.length)]); 
+  });
+
+  return restNum.reduce((a, b) => a.toString() + b.toString(), '');
+};
+
+// 產生可用的身分證字號
+const genPid = (cityKey, genderNumber) => {
+
+  const id = `${cityKey}${genderNumber}${genRestNums()}`;
+
+  const {result} = checkPid(id);
+  return result ? id : genPid(cityKey, genderNumber);  
+};
+
+
+const generateResult = () => {
+
+  const resultElement = document.getElementById('result');
+
+  const cityKey = document.getElementById('city').value;
+  const genderNumber = document.getElementById('gender').value;  
+  const count = document.getElementById('count').value;
+  
+  resultElement.value = '';
+
+  for (let i = 0; i < count; i++) {
+    let key = cityKey;
+    if(key === 'NONE') {
+      key = keys[Math.floor(Math.random() * keys.length)];
+    }
+    
+    let gender = genderNumber;
+    if(gender === 'NONE') {
+      gender = genders[Math.floor(Math.random() * genders.length)];
+    }
+
+    const id = genPid(key, gender);
+    resultElement.value += id + '\n';
+  }
+ 
+};
+
+</script>
+
+</body>
+</html>
