@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mystudybook.github.io/2024/05/25/Command-Pattern/</loc>
+    
+    <lastmod>2024-05-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://mystudybook.github.io/2024/05/29/2024-05-29-wheel-joint-2d/</loc>
     
     <lastmod>2024-05-29</lastmod>
@@ -48,15 +57,6 @@
   
   <url>
     <loc>https://mystudybook.github.io/2024/05/27/2024-05-27-state-pattern/</loc>
-    
-    <lastmod>2024-05-27</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://mystudybook.github.io/2024/05/25/Command-Pattern/</loc>
     
     <lastmod>2024-05-27</lastmod>
     
@@ -632,14 +632,14 @@
 
   
   <url>
-    <loc>https://mystudybook.github.io/tags/Joint-2D/</loc>
+    <loc>https://mystudybook.github.io/tags/Input-System/</loc>
     <lastmod>2024-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/Input-System/</loc>
+    <loc>https://mystudybook.github.io/tags/Joint-2D/</loc>
     <lastmod>2024-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
