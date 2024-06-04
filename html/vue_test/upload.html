@@ -1,0 +1,108 @@
+<script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+
+
+<div id="app">
+  <div class="file-upload">
+    <div class="upload-area" @click="triggerUpload">test</div>
+      <slot v-if="isUploading" name='loading'>
+        <button disabled>Click to Upload</button>
+      </slot>
+      <slot name="uploaded" v-else-if="lastFileData && lastFileData.loaded" :uploadData="lastFileData.data">
+        <button disabled>Click to Upload</button>
+      </slot>
+      <slot v-else name='default'>
+        <span>Click to Upload</span>  
+      </slot>
+    <input ref="fileInput" type="file" name="file" style="display: none" @change="handleFileChange"/>
+    <ul>
+      <li v-for="file in filesList" :key="file.name" :class="`uploaded-file upload-${file.status}`">
+        <span class="filname">
+          {{ file.name }}
+        </span>
+        <button class="delete-icon" @click="reomveFile(file.name)">Del</button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+  <script type="module">
+  import { createApp, ref, reactive } from 'vue';
+
+  const UploadStatus = {
+    READY: 'ready',
+    LOADING: 'loading',
+    SUCCESS: 'success',
+    ERROR: 'error'
+  };  
+  
+  createApp({
+    components: {},
+    data() {},
+    setup() {
+      const fileInput = ref(null);
+      const fileStatus = ref('ready');
+      const filesList = ref([]);
+      const isDragOver = ref(false);
+      
+      const handleFileChange = (e) => {
+        const target = e.target;
+        const files = target.files;        
+        
+        if (files) {
+          const uploadedFile = files[0];
+          const formData = new FormData();
+          formData.append('file', uploadedFile);
+          const fileObj = reactive({
+            size: uploadedFile.size,
+            name: uploadedFile.name,
+            status: 'loading',
+            raw: uploadedFile
+          })
+          filesList.value.push(fileObj)
+          // console.log(filesList);
+        
+          axios.post("localhost:4000", formData, {
+            headers: {
+              "Content-Type": 'multipart/form-data'
+            },
+            
+          }).then(resp=> {
+            
+            console.log('resp', resp)
+            fileObj.status = 'success'
+          }).catch(error=> {
+            fileObj.status = 'error'
+          })
+
+        }      
+      }
+
+      const triggerUpload = () => {
+        if(fileInput.value) {
+          console.log('triggerUpload');
+          fileInput.value.click()
+        }
+      }
+
+      const reomveFile = (name) => {
+          filesList.value = filesList.value.filter(file=>file.name!==name)
+      }
+
+      return {
+        fileInput,
+        handleFileChange,
+        triggerUpload,
+        reomveFile,
+        fileStatus,
+        filesList,
+      }
+    }
+  }).mount('#app')
+  </script>

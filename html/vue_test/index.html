@@ -1,0 +1,36 @@
+<script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+      }
+    }
+  </script>
+  
+<div id="app">
+    <my-name-test my-name="name 1" subtitle="Sub Title 1"></my-name-test>
+    <my-name-test my-name="Name 2" subtitle="Title 2"></my-name-test>
+</div>
+
+<script type="text/x-template" id="test">
+  <div>{{myName}} - {{subtitle}}</div>
+</script>
+
+
+
+  <script type="module">
+    import { createApp } from 'vue'
+  
+    createApp({
+      components: {
+        'MyNameTest': { 
+            template: '#test',
+            props: ['myName','subtitle']
+        }
+      },
+      data() {
+        return {
+          message: 'Hello Vue!'
+        }
+      }
+    }).mount('#app')
+  </script>

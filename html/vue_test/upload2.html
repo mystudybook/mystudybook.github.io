@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PrimeVue + CDN</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    
+  </head>
+  <body>
+    <link rel="stylesheet" href="https://unpkg.com/primevue/resources/themes/lara-light-green/theme.css" />
+    <style>
+      .p-fileupload-file-thumbnail	{
+        display: none;
+      }
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/primevue/core/core.min.js"></script>
+    <script src="https://unpkg.com/primevue/calendar/calendar.min.js"></script>
+    <script src="https://unpkg.com/primevue/fileupload/fileupload.min.js"></script>
+
+    <div id="app">
+      <p-file name="demo[]" url="/api/upload" @upload="onUpload(event)" :multiple="true" :maxFileSize="1000000">
+        <template #empty>
+            <p>Drag and drop files to here to upload.</p>
+        </template>
+      </p-file>
+    
+    </div>
+
+    <script>
+      const { createApp, ref } = Vue;
+      
+      const app = createApp({
+        setup() {
+          const onUpload = (event) => {
+            console.log(event);
+          }
+
+          return {
+            onUpload
+          };
+        },
+      });
+      app.use(primevue.config.default);
+      app.component('p-file', primevue.fileupload);
+      app.component('p-datepicker', primevue.calendar);
+
+      app.mount('#app');
+    </script>
+  </body>
+</html>
