@@ -19,7 +19,7 @@
     <script src="https://unpkg.com/primevue/fileupload/fileupload.min.js"></script>
 
     <div id="app">
-      <p-file name="demo[]" url="/api/upload" @upload="onUpload(event)" :multiple="true" :maxFileSize="1000000">
+      <p-file name="demo[]" url="/api/upload" @upload="onUpload(event)" @before-upload="onBeforeUpload" :multiple="true" :maxFileSize="1000000">
         <template #empty>
             <p>Drag and drop files to here to upload.</p>
         </template>
@@ -35,9 +35,13 @@
           const onUpload = (event) => {
             console.log(event);
           }
+          const onBeforeUpload = (event) => {
+            debugger;
+          }
 
           return {
-            onUpload
+            onUpload,
+            onBeforeUpload
           };
         },
       });

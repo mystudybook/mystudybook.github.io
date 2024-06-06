@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PrimeVue + CDN</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    
+  </head>
+  <body>
+    <link rel="stylesheet" href="https://unpkg.com/primevue/resources/themes/lara-light-green/theme.css" />
+    <style>
+      .p-fileupload-file-thumbnail	{
+        display: none;
+      }
+      .p-float-label:has(input.p-filled) label,
+      .p-float-label:has(input:-webkit-autofill) label,
+      .p-float-label:has(textarea:focus) label,
+      .p-float-label:has(textarea.p-filled) label, 
+      .p-float-label:has(.p-inputwrapper-focus) label,
+      .p-float-label:has(.p-inputwrapper-filled) label {
+        top: -1.5rem;
+        font-size: 15px;
+      } 
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.4.27/dist/vue.global.prod.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/core/core.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/floatlabel/style/floatlabelstyle.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/fileupload/fileupload.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/dialog/dialog.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/dialog/style/dialogstyle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/progressspinner/progressspinner.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/autocomplete/autocomplete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/button/button.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/button/style/buttonstyle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/progressbar/progressbar.min.js"></script>
+
+<script>
+  this.primevue = this.primevue || {},
+this.primevue.floatlabel = function(e, t, n) {
+    "use strict";
+    function r(e) {
+        return e && "object" == typeof e && "default"in e ? e : {
+            default: e
+        }
+    }
+    var o = {
+        name: "FloatLabel",
+        extends: {
+            name: "BaseFloatLabel",
+            extends: r(e).default,
+            props: {},
+            style: r(t).default,
+            provide: function() {
+                return {
+                    $parentInstance: this
+                }
+            }
+        },
+        inheritAttrs: !1
+    };
+    return o.render = function(e, t, r, o, a, l) {
+        return n.openBlock(),
+        n.createElementBlock("span", n.mergeProps({
+            class: e.cx("root")
+        }, e.ptmi("root")), [n.renderSlot(e.$slots, "default")], 16)
+    }
+    ,
+    o
+}(primevue.basecomponent, primevue.floatlabel.style, Vue);
+
+</script>  
+
+    <div id="app">
+      <p-file name="files[]" url="/api/upload" @upload="onUpload" @before-upload="onBeforeUpload" :multiple="true" :maxFileSize="1000000" @select="onSelectedFiles">
+        <template #header="{ chooseCallback, uploadCallback, clearCallback, files }">
+            <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
+                <div class="flex gap-2">
+                  <p-button @click="chooseCallback()" label="Choose" style="margin: 5px;"></p-button>
+                  <p-button @click="uploadEvent(uploadCallback)" label="Upload" severity="success" :disabled="!files || files.length === 0"  style="margin: 5px;"></p-button>
+                  <p-button @click="clearCallback()" label="Cancel" severity="danger" :disabled="!files || files.length === 0"  style="margin: 5px;"></p-button>
+                    
+                    <p-floatlabel style="display: initial;">
+                      <p-autocomplete id="prefix" name="prefix" v-model="prefix" dropdown :suggestions="items" @complete="search" placeholder="Please Enter a Prefix" style="margin: 5px;"></p-autocomplete>
+                      <label for="prefix">Prefix</label>
+                    </p-floatlabel>
+
+                  
+                </div>
+                <p-progressbar v-show="visibleProgressbar" mode="indeterminate"></p-progressbar>
+            </div>
+        </template>
+        <template #empty>
+            <div class="flex align-items-center justify-content-center flex-column">
+                <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400" />
+                <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
+            </div>
+        </template>
+    </p-file>  
+    
+    </div>
+
+    <script>
+      const { createApp, ref } = Vue;
+      const visible = ref(false);
+      const files = ref([]);
+      
+      const prefix = ref("");
+      const app = createApp({
+        setup() {
+          const visibleProgressbar = ref(false);
+
+          const items = ref([]);
+
+const search = (event) => {
+  let _items = ['suppression'];
+  let result = _items.filter(_items => _items.includes(event.query));
+  if(result.length == 0) {
+    result = _items;
+  }
+
+items.value = result;
+}
+
+const onSelectedFiles = (event) => {
+  debugger;
+    files.value = event.files;
+};
+
+const uploadEvent = (callback) => {
+    callback();
+};
+          
+          const onUpload = (event) => {
+              location.reload() 
+          }
+          
+          const onBeforeUpload = (event) => {
+            debugger;
+              visible.value = true;
+              visibleProgressbar.value = true;
+          }
+          
+          
+          
+
+          return {
+            onUpload,
+            visible,
+            visibleProgressbar,
+            onBeforeUpload,
+            onSelectedFiles,
+            uploadEvent,
+            prefix,
+            items,
+            search
+          };
+        },
+      });
+      app.use(primevue.config.default);
+      app.component('p-file', primevue.fileupload);
+      app.component('p-dialog', primevue.dialog);
+      app.component('p-progressspinner', primevue.progressspinner);
+      app.component('p-autocomplete', primevue.autocomplete);
+      app.component('p-button', primevue.button);
+      app.component('p-progressbar', primevue.progressbar);
+      app.component('p-floatlabel', primevue.floatlabel);
+      app.mount('#app');
+    </script>
+
+  </body>
+</html>

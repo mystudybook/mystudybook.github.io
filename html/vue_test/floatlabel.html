@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PrimeVue + CDN</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://unpkg.com/primevue/resources/themes/lara-light-green/theme.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.4.27/dist/vue.global.prod.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/core/core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/fileupload/fileupload.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/dialog/dialog.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/dialog/style/dialogstyle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/progressspinner/progressspinner.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/autocomplete/autocomplete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/button/button.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/button/style/buttonstyle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/progressbar/progressbar.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/floatlabel/style/floatlabelstyle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/floatlabel/floatlabel.js"></script>
+
+  </head>
+  <body>
+
+    <div id="app">
+      <p-floatlabel style="display: initial;">
+        <p-autocomplete id="prefix" name="prefix" v-model="prefix" dropdown :suggestions="items" @complete="search" placeholder="Please Enter a Prefix" style="margin: 5px;"></p-autocomplete>
+        <label for="prefix">Prefix</label>
+      </p-floatlabel>
+
+    </div>
+
+    <script>
+      const { createApp, ref } = Vue;
+      const prefix = ref("");
+      const app = createApp({
+        setup() {
+          const items = ref([]);
+          const search = (event) => {
+            let _items = ['test1', 'test2'];
+            let result = _items.filter(_items => _items.includes(event.query));
+            if(result.length == 0) {
+              result = _items;
+            }
+
+            items.value = result;
+          }          
+          
+
+          return {
+            prefix,
+            items,
+            search
+          };
+        },
+      });
+      app.use(primevue.config.default);
+      app.component('p-file', primevue.fileupload);
+      app.component('p-dialog', primevue.dialog);
+      app.component('p-progressspinner', primevue.progressspinner);
+      app.component('p-autocomplete', primevue.autocomplete);
+      app.component('p-button', primevue.button);
+      app.component('p-progressbar', primevue.progressbar);
+      app.component('p-floatlabel', primevue.floatlabel);
+      app.mount('#app');
+    </script>
+
+  </body>
+</html>
