@@ -20,6 +20,8 @@
     <script src="https://unpkg.com/primevue/column/column.min.js"></script>
     <script src="https://unpkg.com/primevue/columngroup/columngroup.min.js"></script>
     <script src="https://unpkg.com/primevue/row/row.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/confirmationservice/confirmationservice.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/confirmpopup/confirmpopup.min.js"></script>
     
     <div id="app">
       <p-file name="files[]" url="/PuresendService/suppression/uploadfile" @upload="onUpload" :multiple="true" :max-file-size="1000000">
@@ -37,15 +39,27 @@
     <p-column field="name" header="Name"></p-column>
     <p-column field="category" header="Category"></p-column>
     <p-column field="quantity" header="Quantity"></p-column>
+
+    <p-column field="s3ObjectKey" header="S3 Object Key"></p-column>
+    <p-column field="fileSize" header="File Size"></p-column>
+    <p-column field="eTag" header="ETag"></p-column>
+    <p-column>
+        <template #body="{ data }">
+            <div class="flex align-items-center gap-2">
+                <span>Test {{ data.name }}</span>
+            </div>
+        </template> 
+    </p-column>
 </p-datatable>    
     </div>
     
 
     <script>
       const { createApp, ref } = Vue;
-      
       const app = createApp({
         setup() {
+            const { useConfirm } = primevue.useconfirm;
+            const confirm = useConfirm();
           const onUpload = (event) => {
               debugger;
             console.log(event);
@@ -450,12 +464,15 @@
         },
       });
       app.use(primevue.config.default);
+      app.use(primevue.confirmationservice);
+
       app.component('p-file', primevue.fileupload);
       app.component('p-datatable', primevue.datatable);
       app.component('p-column', primevue.column);
       app.component('p-columngroup', primevue.columngroup);
       app.component('p-row', primevue.row);
-
+      //app.component('p-confirmationservice', primevue.confirmationservice);
+      app.component('p-confirmpopup', primevue.confirmpopup);
       app.mount('#app');
     </script>
   </body>

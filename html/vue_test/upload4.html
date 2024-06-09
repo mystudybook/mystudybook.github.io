@@ -35,6 +35,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/floatlabel/style/floatlabelstyle.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/selectbutton/selectbutton.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/selectbutton/style/selectbuttonstyle.min.js"></script>
+    
+    <script src="https://unpkg.com/primevue/datatable/datatable.min.js"></script>
+    <script src="https://unpkg.com/primevue/column/column.min.js"></script>
+    <script src="https://unpkg.com/primevue/columngroup/columngroup.min.js"></script>
+    <script src="https://unpkg.com/primevue/row/row.min.js"></script>
+
 <script>
   this.primevue = this.primevue || {},
 this.primevue.floatlabel = function(e, t, n) {
@@ -98,7 +106,12 @@ this.primevue.floatlabel = function(e, t, n) {
             </div>
         </template>
     </p-file>  
-    
+    <div class="card">
+      <div class="flex justify-content-center mb-4">
+          <p-selectbutton v-model="dataTypeButtonSelected" :options="dataType" option-label="name" data-key="name"  />
+      </div>
+      {{dataTypeButtonSelected.name}}
+  </div>
     </div>
 
     <script>
@@ -147,7 +160,14 @@ const uploadEvent = (callback) => {
           }
           
           
-          
+          const dataType = ref([
+              { name: 'test1', data: 'data1' },
+              { name: 'test2', data: 'data2' }
+          ]); 
+          const dataTypeButtonSelected = ref(dataType.value[0]);
+
+          const value = ref('One-Way');
+          const options = ref(['One-Way', 'Return']);
 
           return {
             onUpload,
@@ -158,7 +178,11 @@ const uploadEvent = (callback) => {
             uploadEvent,
             prefix,
             items,
-            search
+            search,
+            dataTypeButtonSelected,
+            dataType,
+            value,
+            options
           };
         },
       });
@@ -170,6 +194,11 @@ const uploadEvent = (callback) => {
       app.component('p-button', primevue.button);
       app.component('p-progressbar', primevue.progressbar);
       app.component('p-floatlabel', primevue.floatlabel);
+      app.component('p-datatable', primevue.datatable);
+      app.component('p-column', primevue.column);
+      app.component('p-columngroup', primevue.columngroup);
+      app.component('p-row', primevue.row);
+      app.component('p-selectbutton', primevue.selectbutton);
       app.mount('#app');
     </script>
 
