@@ -11,6 +11,15 @@
   </url>
   
   <url>
+    <loc>https://mystudybook.github.io/2024/06/13/2024-06-13-disable-web-security/</loc>
+    
+    <lastmod>2024-06-13</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://mystudybook.github.io/2024/05/29/2024-05-29-wheel-joint-2d/</loc>
     
     <lastmod>2024-06-12</lastmod>
@@ -687,14 +696,14 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/UI-Toolkit/</loc>
+    <loc>https://mystudybook.github.io/tags/SQL%E8%AA%9E%E6%B3%95/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/SQL%E8%AA%9E%E6%B3%95/</loc>
+    <loc>https://mystudybook.github.io/tags/UI-Toolkit/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -708,14 +717,14 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/Hexo/</loc>
+    <loc>https://mystudybook.github.io/tags/html/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/html/</loc>
+    <loc>https://mystudybook.github.io/tags/Hexo/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -736,6 +745,13 @@
   </url>
   
   <url>
+    <loc>https://mystudybook.github.io/tags/Flex/</loc>
+    <lastmod>2024-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://mystudybook.github.io/tags/JSON-Pretty/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -744,13 +760,6 @@
   
   <url>
     <loc>https://mystudybook.github.io/tags/JSON-Formatter/</loc>
-    <lastmod>2024-06-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://mystudybook.github.io/tags/Flex/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -829,13 +838,6 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/Unity/</loc>
-    <lastmod>2024-06-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://mystudybook.github.io/categories/%E5%A4%A7%E7%B6%B1/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -843,7 +845,21 @@
   </url>
   
   <url>
+    <loc>https://mystudybook.github.io/categories/Unity/</loc>
+    <lastmod>2024-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://mystudybook.github.io/categories/AWS/</loc>
+    <lastmod>2024-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/categories/Chrome/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -871,13 +887,6 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/Hexo/</loc>
-    <lastmod>2024-06-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://mystudybook.github.io/categories/Tools/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -885,7 +894,7 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/Mac/</loc>
+    <loc>https://mystudybook.github.io/categories/Hexo/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -899,14 +908,14 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/JavaScript/</loc>
+    <loc>https://mystudybook.github.io/categories/Mac/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/Chrome/</loc>
+    <loc>https://mystudybook.github.io/categories/JavaScript/</loc>
     <lastmod>2024-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
