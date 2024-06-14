@@ -742,13 +742,6 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/Hexo/</loc>
-    <lastmod>2024-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://mystudybook.github.io/tags/Google-Search-Console/</loc>
     <lastmod>2024-06-14</lastmod>
     <changefreq>weekly</changefreq>
@@ -757,6 +750,13 @@
   
   <url>
     <loc>https://mystudybook.github.io/tags/sitemap/</loc>
+    <lastmod>2024-06-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mystudybook.github.io/tags/Hexo/</loc>
     <lastmod>2024-06-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -798,6 +798,13 @@
   </url>
   
   <url>
+    <loc>https://mystudybook.github.io/tags/Unity-package/</loc>
+    <lastmod>2024-06-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://mystudybook.github.io/tags/Unity%E6%9E%B6%E6%A7%8B/</loc>
     <lastmod>2024-06-14</lastmod>
     <changefreq>weekly</changefreq>
@@ -806,13 +813,6 @@
   
   <url>
     <loc>https://mystudybook.github.io/tags/Event/</loc>
-    <lastmod>2024-06-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://mystudybook.github.io/tags/Unity-package/</loc>
     <lastmod>2024-06-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -856,14 +856,14 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/Unity/</loc>
+    <loc>https://mystudybook.github.io/categories/%E5%A4%A7%E7%B6%B1/</loc>
     <lastmod>2024-06-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/%E5%A4%A7%E7%B6%B1/</loc>
+    <loc>https://mystudybook.github.io/categories/Unity/</loc>
     <lastmod>2024-06-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
