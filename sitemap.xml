@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mystudybook.github.io/2024/06/20/2024-06-20-scriptableobject-as-event/</loc>
+    
+    <lastmod>2024-06-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://mystudybook.github.io/2024/06/20/2024-06-20-scriptableobject-as-shared-variable/</loc>
     
     <lastmod>2024-06-20</lastmod>
@@ -757,14 +766,14 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/C/</loc>
+    <loc>https://mystudybook.github.io/tags/SQL%E8%AA%9E%E6%B3%95/</loc>
     <lastmod>2024-06-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/SQL%E8%AA%9E%E6%B3%95/</loc>
+    <loc>https://mystudybook.github.io/tags/C/</loc>
     <lastmod>2024-06-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -848,14 +857,14 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/Unity-package/</loc>
+    <loc>https://mystudybook.github.io/tags/Unity%E6%9E%B6%E6%A7%8B/</loc>
     <lastmod>2024-06-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/tags/Unity%E6%9E%B6%E6%A7%8B/</loc>
+    <loc>https://mystudybook.github.io/tags/Unity-package/</loc>
     <lastmod>2024-06-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -906,14 +915,14 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/Unity/</loc>
+    <loc>https://mystudybook.github.io/categories/%E5%A4%A7%E7%B6%B1/</loc>
     <lastmod>2024-06-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/%E5%A4%A7%E7%B6%B1/</loc>
+    <loc>https://mystudybook.github.io/categories/Unity/</loc>
     <lastmod>2024-06-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -934,14 +943,14 @@
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/C-%E8%AA%9E%E8%A8%80/</loc>
+    <loc>https://mystudybook.github.io/categories/SQL/</loc>
     <lastmod>2024-06-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://mystudybook.github.io/categories/SQL/</loc>
+    <loc>https://mystudybook.github.io/categories/C-%E8%AA%9E%E8%A8%80/</loc>
     <lastmod>2024-06-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
