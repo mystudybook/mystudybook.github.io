@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>螢幕解析度</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f0f0;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            color: #555555;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #007bf0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>解析度資訊</h2>
+    <p id="screen">您的螢幕解析度為：
+        <span id="screenResolution"></span>
+        <button onclick="copyToClipboard('screenResolution')">複製</button>
+    </p>
+    <p id="window">您的瀏覽器目前寬高為：
+        <span id="windowResolution"></span>
+        <button onclick="copyToClipboard('windowResolution')">複製</button>
+    </p>
+    <p id="userAgent">User Agent：
+        <span id="userAgentInfo"></span>
+        <button onclick="copyToClipboard('userAgentInfo')">複製</button>
+    </p>
+</div>
+
+<script>
+var screenWidth = screen.width;
+var screenHeight = screen.height;
+
+var windowWidth = window.innerWidth;
+var windowHeight = window.innerHeight;
+
+document.getElementById("screenResolution").innerText = screenWidth + " x " + screenHeight;
+document.getElementById("windowResolution").innerText = windowWidth + " x " + windowHeight;
+
+var userAgent = navigator.userAgent;
+document.getElementById("userAgentInfo").innerText = userAgent;
+
+function copyToClipboard(elementId) {
+    var text = document.getElementById(elementId).innerText;
+    var tempInput = document.createElement("input");
+    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = text;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+    alert("已複製: " + text);
+}
+</script>
+
+</body>
+</html>
