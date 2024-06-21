@@ -56,10 +56,6 @@
         <span id="screenResolution"></span>
         <button onclick="copyToClipboard('screenResolution')">複製</button>
     </p>
-    <p id="window">您的瀏覽器目前寬高為：
-        <span id="windowResolution"></span>
-        <button onclick="copyToClipboard('windowResolution')">複製</button>
-    </p>
     <p id="userAgent">User Agent：
         <span id="userAgentInfo"></span>
         <button onclick="copyToClipboard('userAgentInfo')">複製</button>
@@ -74,7 +70,6 @@ var windowWidth = window.innerWidth;
 var windowHeight = window.innerHeight;
 
 document.getElementById("screenResolution").innerText = screenWidth + " x " + screenHeight;
-document.getElementById("windowResolution").innerText = windowWidth + " x " + windowHeight;
 
 var userAgent = navigator.userAgent;
 document.getElementById("userAgentInfo").innerText = userAgent;
