@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中文姓名產生器(Chinese Name Generator)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    select,
+    button {
+      display: block;
+      margin-bottom: 20px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input {
+      margin-bottom: 20px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-bottom: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: none;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"
+    integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+
+
+
+  <h1>中文姓名產生器 (Chinese Name Generator)</h1>
+
+  <div class="container">
+    <label for="gender">選擇性別：</label>
+    <select id="gender">
+      <option value="NONE">請選擇(若不選擇則隨機產生)</option>
+      <option value="1">男性</option>
+      <option value="2">女性</option>
+    </select>
+
+    <label for="split">分隔符號：</label>
+    <select id="split">
+      <option value="\n">換行(\n)</option>
+      <option value=",">半形逗號(,)</option>
+      <option value=";">半形分號(;)</option>
+      <option value="\t">Tab(\t)</option>
+      <option value=" ">空白</option>
+    </select>
+
+    <label for="specify_last">指定生成的姓氏</label>
+    <input id="specify_last" placeholder="若要指定只產生單一姓氏，請在此輸入姓氏，如不輸入，則隨機產生姓氏" />
+
+    <label for="chinese_type">繁/簡 體：</label>
+    <select id="chinese_type">
+      <option value="t">繁體</option>
+      <option value="s">簡體</option>
+    </select>
+
+    <label for="count">選擇產生筆數：</label>
+    <select id="count">
+      <option value="1">1</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+      <option value="200">200</option>
+      <option value="500">500</option>
+      <option value="1000">1000</option>
+      <option value="5000">5000</option>
+      <option value="10000">10000</option>
+    </select>
+
+    <button onclick="generateResult()">產生</button>
+
+    <textarea id="result" placeholder="產出姓名結果"></textarea>
+    <button onclick="copyResult()">複製</button>
+    
+  </div>
+
+  <div>
+    <font color="red">本產生器所產生資料，僅供測試使用，切勿用於非法用途！</font>
+    名字資料來源：<a href="https://github.com/wainshine/Chinese-Names-Corpus">https://github.com/wainshine/Chinese-Names-Corpus</a>
+  </div>
+
+  <script>
+    const generateResult = () => {
+      Promise.all([
+        fetchCsvData('/html/tools/chinese_name/last_name.csv'),
+        fetchCsvData('/html/tools/chinese_name/first_name_m.csv'),
+        fetchCsvData('/html/tools/chinese_name/first_name_w.csv'),
+      ])
+        .then(([lastArray, firstManArray, firstWomanArray]) => {
+
+          const converter = OpenCC.Converter({ from: 'tw', to: 'cn' });
+          const genders = [1, 2];
+          const specifyLast = document.getElementById('specify_last').value;
+          const type = document.getElementById('chinese_type').value;
+
+          const split = document.getElementById('split').value;
+          const genderNumber = document.getElementById('gender').value;
+          const count = document.getElementById('count').value;
+          const resultElement = document.getElementById('result');
+
+          const isEmpty = str => !str || !str.trim().length;
+
+          resultElement.value = '';
+
+          let parseSplit = split;
+          if (split === '\\n') {
+            parseSplit = '\n';
+          } else if (split === '\\t') {
+            parseSplit = '\t';
+          }
+
+          for (let i = 0; i < count; i++) {
+            let gender = genderNumber;
+            if (gender === 'NONE') {
+              gender = genders[Math.floor(Math.random() * genders.length)];
+            }
+
+            let lastName = specifyLast;
+            if(isEmpty(lastName)) {
+              lastName = lastArray[Math.floor(Math.random() * lastArray.length)];
+            }
+            
+            let firstName = "";
+            if (gender === "1") {
+              firstName = firstManArray[Math.floor(Math.random() * firstManArray.length)];
+            } else {
+              firstName = firstWomanArray[Math.floor(Math.random() * firstWomanArray.length)];
+            }
+
+            let fullName = lastName + firstName;
+            if (type === 's') {
+              fullName = converter(fullName);
+            }
+
+            resultElement.value += fullName + parseSplit;
+          }
+        })
+        .catch(error => {
+        });
+    };
+
+    const fetchCsvData = (url) => {
+      return fetch(url)
+        .then(response => response.text())
+        .then(csvText => {
+          return new Promise((resolve, reject) => {
+            Papa.parse(csvText, {
+              header: false,
+              skipEmptyLines: true,
+              complete: function (results) {
+                resolve(results.data);
+              },
+              error: function (error) {
+                reject(error);
+              }
+            });
+          });
+        });
+    }
+    const copyResult = () => {
+      const textarea = document.getElementById('result');
+
+      textarea.select();
+      textarea.setSelectionRange(0, textarea.value.length);
+
+      document.execCommand('copy');
+
+      window.getSelection().removeAllRanges();
+      alert('已複製');
+    }
+
+  </script>
+
+</body>
+
+</html>
