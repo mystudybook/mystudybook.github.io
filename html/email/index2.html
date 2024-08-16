@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://usewaypoint.github.io/email-builder-js/assets/favicon-32x32-Cy_yPube.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://usewaypoint.github.io/email-builder-js/assets/favicon-16x16-Dp-UsuYg.png" />
+    <meta name="viewport" content="width=900" />
+    <meta name="description" content="EmailBuilder.js interactive playground. Brought to you by Waypoint." />
+    <title>EmailBuilder.js &mdash; Free and Open Source Template Builder</title>
+    <script type="module">
+      import { TReaderDocument } from './email-builder-js/packages/email-builder/src/index.ts';
+
+const CONFIGURATION = {
+  root: {
+    type: 'EmailLayout',
+    data: {
+      backdropColor: '#F8F8F8',
+      canvasColor: '#FFFFFF',
+      textColor: '#242424',
+      fontFamily: 'MODERN_SANS',
+      childrenIds: ['block-1709578146127'],
+    },
+  },
+  'block-1709578146127': {
+    type: 'Text',
+    data: {
+      style: {
+        fontWeight: 'normal',
+        padding: {
+          top: 16,
+          bottom: 16,
+          right: 24,
+          left: 24,
+        },
+      },
+      props: {
+        text: 'Hello world',
+      },
+    },
+  },
+};
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
