@@ -1,0 +1,1660 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>緩動函數 (Easing function) - Mystudybook</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="mystudybook"><meta name="msapplication-TileImage" content="/images/Computer_icon_cc0.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="mystudybook"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content=".chart_canvas_wrapper{   &amp;#x2F;* height: 200px; *&amp;#x2F;   width: 300px; }     緩動函數 (Easing function) 用於控制物件的速度變化。它們決定物件如何從開始到結束的進行方式，比如是否線性移動，或逐漸加速、減速，甚至彈跳等效果，讓物件的移動看起來更生動。  加速 (Ease In)：物件從靜止逐漸加速 (從 0 開始加速)。"><meta property="og:type" content="blog"><meta property="og:title" content="緩動函數 (Easing function)"><meta property="og:url" content="https://mystudybook.github.io/2024/12/02/2024-12-02-easing-function/"><meta property="og:site_name" content="Mystudybook"><meta property="og:description" content=".chart_canvas_wrapper{   &amp;#x2F;* height: 200px; *&amp;#x2F;   width: 300px; }     緩動函數 (Easing function) 用於控制物件的速度變化。它們決定物件如何從開始到結束的進行方式，比如是否線性移動，或逐漸加速、減速，甚至彈跳等效果，讓物件的移動看起來更生動。  加速 (Ease In)：物件從靜止逐漸加速 (從 0 開始加速)。"><meta property="og:locale" content="zh_TW"><meta property="og:image" content="https://mystudybook.github.io/img/og_image.png"><meta property="article:published_time" content="2024-12-01T21:37:32.261Z"><meta property="article:modified_time" content="2024-12-03T09:22:59.406Z"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://mystudybook.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://mystudybook.github.io/2024/12/02/2024-12-02-easing-function/"},"headline":"緩動函數 (Easing function)","image":["https://mystudybook.github.io/img/og_image.png"],"datePublished":"2024-12-01T21:37:32.261Z","dateModified":"2024-12-03T09:22:59.406Z","author":{"@type":"Person","name":""},"publisher":{"@type":"Organization","name":"Mystudybook","logo":{"@type":"ImageObject","url":"https://mystudybook.github.io/images/Computer_icon_cc0.svg"}},"description":".chart_canvas_wrapper{   &#x2F;* height: 200px; *&#x2F;   width: 300px; }     緩動函數 (Easing function) 用於控制物件的速度變化。它們決定物件如何從開始到結束的進行方式，比如是否線性移動，或逐漸加速、減速，甚至彈跳等效果，讓物件的移動看起來更生動。  加速 (Ease In)：物件從靜止逐漸加速 (從 0 開始加速)。"}</script><link rel="canonical" href="https://mystudybook.github.io/2024/12/02/2024-12-02-easing-function/"><link rel="icon" href="/images/Computer_icon_cc0.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-RXBQVV4XWX" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-RXBQVV4XWX');</script><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><script data-ad-client="ca-pub-7911581883313737" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" async></script><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/categories/%E5%A4%A7%E7%B6%B1/">系列大綱</a><a class="navbar-item" href="/">首頁</a><a class="navbar-item" href="/archives">歸檔</a><a class="navbar-item" href="/categories">分類</a><a class="navbar-item" href="/tags">標籤</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/mystudybook"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-12-01T21:37:32.261Z" title="12/2/2024, 5:37:32 AM">2024-12-02</time>發表</span><span class="level-item"><time dateTime="2024-12-03T09:22:59.406Z" title="12/3/2024, 5:22:59 PM">2024-12-03</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">21 分鐘讀完 (大約3090個字)</span></div></div><h1 class="title is-3 is-size-4-mobile">緩動函數 (Easing function)</h1><div class="content"><style>
+.chart_canvas_wrapper{
+  /* height: 200px; */
+  width: 300px;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+<p>緩動函數 (<code>Easing function</code>) 用於控制物件的速度變化。它們決定物件如何從開始到結束的進行方式，比如是否線性移動，或逐漸加速、減速，甚至彈跳等效果，讓物件的移動看起來更生動。</p>
+<ul>
+<li><p>加速 (Ease In)：物件從靜止逐漸加速 (從 0 開始加速)。</p>
+</li>
+<li><p>減速 (Ease Out)：物件從高速逐漸減速直到靜止 (減速到 0)。</p>
+</li>
+<li><p>加速在減速 (Ease InOut)：先加速後減速的平滑運動 (前半段從 0 開始加速，後半段減速到 0)。</p>
+</li>
+<li><p>線性運動 (Linear) ： 等速運動，從開始到結束的速度完全一致。</p>
+</li>
+<li><p>Quad ： 二次方曲線。</p>
+</li>
+<li><p>Cubic ： 三次方曲線。</p>
+</li>
+<li><p>Quart ： 四次方曲線。</p>
+</li>
+<li><p>Quint ： 五次方曲線。</p>
+</li>
+<li><p>Since ： 平滑的正弦波曲線。</p>
+</li>
+<li><p>Expo ： 指數運動，起始或結束速度變化極快，幾乎瞬間到達或停止。</p>
+</li>
+<li><p>Circ ： 模擬圓形曲線運動，速度變化平滑且自然。</p>
+</li>
+<li><p>Bounce ： 模擬物體彈跳的效果。</p>
+</li>
+<li><p>Elastic ： 模擬彈簧運動的效果，帶有回彈。</p>
+</li>
+<li><p>Flash ： 快速來回閃動的效果。</p>
+</li>
+</ul>
+<hr>
+<iframe frameborder="0" src="https://itch.io/embed-upload/12154150?color=333333" allowfullscreen="" width="750" height="640"><a target="_blank" rel="noopener" href="https://studyplace.itch.io/test-ease">Play Test Ease on itch.io</a></iframe>
+---
+
+<table>
+  <tr>
+    <td> Quad </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInQuad"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutQuad"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutQuad"></canvas> </td>
+  </tr>
+  <tr>
+    <td> Cubic </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInCubic"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutCubic"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutCubic"></canvas> </td>
+  </tr>
+  <tr>
+    <td> Quart </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInQuart"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutQuart"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutQuart"></canvas> </td>
+  </tr> 
+  <tr>
+    <td> Quint </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInQuint"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutQuint"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutQuint"></canvas> </td>
+  </tr>
+  <tr>
+    <td> Sine </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInSine"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutSine"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutSine"></canvas> </td>
+  </tr>
+  <tr>
+    <td> Exponential </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInExpo"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutExpo"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutExpo"></canvas> </td>
+  </tr> 
+  <tr>
+    <td> Circ </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInCirc"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutCirc"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutCirc"></canvas> </td>
+  </tr>
+  <tr>
+    <td> Elastic </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInElastic"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutElastic"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutElastic"></canvas> </td>
+  </tr>
+  <tr>
+    <td> Back </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInBack"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutBack"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutBack"></canvas> </td>
+  </tr>      
+  <tr>
+    <td> Bounce </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseInBounce"></canvas></div> </td>
+    <td> <div class="chart_canvas_wrapper"><canvas id="EaseOutBounce"></canvas></div> </td>
+    <td>  <div class="chart_canvas_wrapper"><canvas id="EaseInOutBounce"></canvas> </td>
+  </tr>          
+</table>
+<!-- - Quad
+    - EaseInQuad ： <div class="chart_canvas_wrapper"><canvas id="EaseInQuad"></canvas></div>
+    - EaseOutQuad ： <div class="chart_canvas_wrapper"><canvas id="EaseOutQuad"></canvas></div>
+    - EaseInOutQuad ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutQuad"></canvas></div>
+- Cubic
+    - EaseInCubic ： <div class="chart_canvas_wrapper"><canvas id="EaseInCubic"></canvas></div>
+    - EaseOutCubic ： <div class="chart_canvas_wrapper"><canvas id="EaseOutCubic"></canvas></div>
+    - EaseInOutCubic ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutCubic"></canvas></div>   
+- Quart
+    - EaseInQuart ： <div class="chart_canvas_wrapper"><canvas id="EaseInQuart"></canvas></div>
+    - EaseOutQuart ： <div class="chart_canvas_wrapper"><canvas id="EaseOutQuart"></canvas></div>
+    - EaseInOutQuart ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutQuart"></canvas></div>  
+- Quint
+    - EaseInQuint ： <div class="chart_canvas_wrapper"><canvas id="EaseInQuint"></canvas></div>
+    - EaseOutQuint ： <div class="chart_canvas_wrapper"><canvas id="EaseOutQuint"></canvas></div>
+    - EaseInOutQuint ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutQuint"></canvas></div>  
+- Sine
+    - EaseInSine ： <div class="chart_canvas_wrapper"><canvas id="EaseInSine"></canvas></div>
+    - EaseOutSine ： <div class="chart_canvas_wrapper"><canvas id="EaseOutSine"></canvas></div>
+    - EaseInOutSine ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutSine"></canvas></div>  
+- Exponential ：
+    - EaseInExpo ： <div class="chart_canvas_wrapper"><canvas id="EaseInExpo"></canvas></div>
+    - EaseOutExpo ： <div class="chart_canvas_wrapper"><canvas id="EaseOutExpo"></canvas></div>
+    - EaseInOutExpo ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutExpo"></canvas></div>  
+- Circ
+    - EaseInCirc ： <div class="chart_canvas_wrapper"><canvas id="EaseInCirc"></canvas></div>
+    - EaseOutCirc ： <div class="chart_canvas_wrapper"><canvas id="EaseOutCirc"></canvas></div>
+    - EaseInOutCirc ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutCirc"></canvas></div>  
+- Elastic
+    - EaseInElastic ： <div class="chart_canvas_wrapper"><canvas id="EaseInElastic"></canvas></div>
+    - EaseOutElastic ： <div class="chart_canvas_wrapper"><canvas id="EaseOutElastic"></canvas></div>
+    - EaseInOutElastic ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutElastic"></canvas></div>  
+- Back ： 
+    - EaseInBack ： <div class="chart_canvas_wrapper"><canvas id="EaseInBack"></canvas></div>
+    - EaseOutBack ： <div class="chart_canvas_wrapper"><canvas id="EaseOutBack"></canvas></div>
+    - EaseInOutBack ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutBack"></canvas></div> 
+- Bounce
+    - EaseInBounce ： <div class="chart_canvas_wrapper"><canvas id="EaseInBounce"></canvas></div>
+    - EaseOutBounce ： <div class="chart_canvas_wrapper"><canvas id="EaseOutBounce"></canvas></div>
+    - EaseInOutBounce ： <div class="chart_canvas_wrapper"><canvas id="EaseInOutBounce"></canvas></div> -->
+- 集合在一張圖中
+    - <div><canvas id="AllInOne"></canvas></div>
+
+<hr>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const easeInQuad = (x) => { return x * x; };
+  const easeOutQuad = (x) => { return 1 - Math.pow(1 - x, 2); };
+  const easeInOutQuad = (x) => { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; };    
+  const easeInCubic = (x) => { return x * x * x; };
+  const easeOutCubic = (x) => { return 1 - Math.pow(1 - x, 3); };
+  const easeInOutCubic = (x) => { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+  const easeInQuart = (x) => { return x * x * x * x; };
+  const easeOutQuart = (x) => { return 1 - Math.pow(1 - x, 4); };
+  const easeInOutQuart = (x) => { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2; };
+  const easeInQuint = (x) => { return x * x * x * x * x; };
+  const easeOutQuint = (x) => { return 1 - Math.pow(1 - x, 5); };
+  const easeInOutQuint = (x) => { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2; };
+  const easeInSine = (x) => { return 1 - Math.cos((x * Math.PI) / 2); };
+  const easeOutSine = (x) => { return Math.sin((x * Math.PI) / 2); };
+  const easeInOutSine = (x) => { return -(Math.cos(Math.PI * x) - 1) / 2; };
+  const easeInExpo = (x) => { return x === 0 ? 0 : Math.pow(2, 10 * x - 10); };
+  const easeOutExpo = (x) => { return x === 1 ? 1 : 1 - Math.pow(2, -10 * x); };
+  const easeInOutExpo = (x) => { return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2; };
+  const easeInCirc = (x) => { return 1 - Math.sqrt(1 - Math.pow(x, 2)); };
+  const easeOutCirc = (x) => { return Math.sqrt(1 - Math.pow(x - 1, 2)); };
+  const easeInOutCirc = (x) => { return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2; };
+  const easeInElastic = (x) => { const c4 = (2 * Math.PI) / 3; return x === 0 ? 0 : x === 1 ? 1 : -Math.pow(2, 10 * x - 10) * Math.sin((x * 10 - 10.75) * c4); };
+  const easeOutElastic = (x) => { const c4 = (2 * Math.PI) / 3; return x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1; };
+  const easeInOutElastic = (x) => { const c5 = (2 * Math.PI) / 4.5; return x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? -(Math.pow(2, 20 * x - 10) * Math.sin((20 * x - 11.125) * c5)) / 2 : (Math.pow(2, -20 * x + 10) * Math.sin((20 * x - 11.125) * c5)) / 2 + 1;};
+  const easeInBack = (x) => { const c1 = 1.70158; const c3 = c1 + 1; return c3 * x * x * x - c1 * x * x; };
+  const easeOutBack = (x) => { const c1 = 1.70158; const c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);};
+  const easeInOutBack = (x) => { const c1 = 1.70158; const c2 = c1 * 1.525; return x < 0.5 ? (Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 : (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2; };
+  const easeInBounce = (x) => { return 1 - easeOutBounce(1 - x); };
+  const easeOutBounce = (x) => { 
+      const n1 = 7.5625;
+      const d1 = 2.75;
+      
+      if (x < 1 / d1) {
+          return n1 * x * x;
+      } else if (x < 2 / d1) {
+          return n1 * (x -= 1.5 / d1) * x + 0.75;
+      } else if (x < 2.5 / d1) {
+          return n1 * (x -= 2.25 / d1) * x + 0.9375;
+      } else {
+          return n1 * (x -= 2.625 / d1) * x + 0.984375;
+      }
+  };
+  const easeInOutBounce = (x) => { return x < 0.5 ? (1 - easeOutBounce(1 - 2 * x)) / 2 : (1 + easeOutBounce(2 * x - 1)) / 2; };
+  const points =[];
+  const pointLength = 100;
+  const pointRadius = 1;
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInCubic(i/pointLength);
+    points.push({x: i/pointLength, y:y_point});
+  }
+  const chart = new Chart(document.getElementById('EaseInCubic').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInCubic',
+            data: points,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points2 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutCubic(i/pointLength);
+    points2.push({x: i/pointLength, y:y_point});
+  }
+  const chart2 = new Chart(document.getElementById('EaseOutCubic').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutCubic',
+            data: points2,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points3 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutCubic(i/pointLength);
+    points3.push({x: i/pointLength, y:y_point});
+  }
+  const chart3 = new Chart(document.getElementById('EaseInOutCubic').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutCubic',
+            data: points3,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points4 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInQuad(i/pointLength);
+    points4.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInQuad').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInQuad',
+            data: points4,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points5 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutQuad(i/pointLength);
+    points5.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseOutQuad').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutQuad',
+            data: points5,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points6 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutQuad(i/pointLength);
+    points6.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInOutQuad').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutQuad',
+            data: points6,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points7 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInQuart(i/pointLength);
+    points7.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInQuart').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInQuart',
+            data: points7,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points8 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutQuart(i/pointLength);
+    points8.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseOutQuart').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutQuart',
+            data: points8,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points9 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutQuart(i/pointLength);
+    points9.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInOutQuart').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutQuart',
+            data: points9,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points10 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInQuint(i/pointLength);
+    points10.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInQuint').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInQuint',
+            data: points10,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points11 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutQuint(i/pointLength);
+    points11.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseOutQuint').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutQuint',
+            data: points11,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points12 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutQuint(i/pointLength);
+    points12.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInOutQuint').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutQuint',
+            data: points12,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points13 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInSine(i/pointLength);
+    points13.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInSine').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInSine',
+            data: points13,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points14 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutSine(i/pointLength);
+    points14.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseOutSine').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutSine',
+            data: points14,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points15 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutSine(i/pointLength);
+    points15.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInOutSine').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutSine',
+            data: points15,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points16 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInExpo(i/pointLength);
+    points16.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInExpo').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInExpo',
+            data: points16,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points17 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutExpo(i/pointLength);
+    points17.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseOutExpo').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutExpo',
+            data: points17,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points18 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutExpo(i/pointLength);
+    points18.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInOutExpo').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutExpo',
+            data: points18,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points19 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInCirc(i/pointLength);
+    points19.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInCirc').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInCirc',
+            data: points19,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points20 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutCirc(i/pointLength);
+    points20.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseOutCirc').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutCirc',
+            data: points20,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points21 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutCirc(i/pointLength);
+    points21.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInOutCirc').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutCirc',
+            data: points21,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points22 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInElastic(i/pointLength);
+    points22.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInElastic').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInElastic',
+            data: points22,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points23 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutElastic(i/pointLength);
+    points23.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseOutElastic').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutElastic',
+            data: points23,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points24 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutElastic(i/pointLength);
+    points24.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInOutElastic').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutElastic',
+            data: points24,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points25 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInBack(i/pointLength);
+    points25.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInBack').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInBack',
+            data: points25,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });   
+  const points26 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutBack(i/pointLength);
+    points26.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseOutBack').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutBack',
+            data: points26,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points27 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutBack(i/pointLength);
+    points27.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInOutBack').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutBack',
+            data: points27,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points28 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInBounce(i/pointLength);
+    points28.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInBounce').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInBounce',
+            data: points28,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points29 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeOutBounce(i/pointLength);
+    points29.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseOutBounce').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseOutBounce',
+            data: points29,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  const points30 =[];
+  for(let i = 0; i < pointLength; i++){
+    let y_point = easeInOutBounce(i/pointLength);
+    points30.push({x: i/pointLength, y:y_point});
+  }
+  new Chart(document.getElementById('EaseInOutBounce').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'EaseInOutBounce',
+            data: points30,
+            borderColor: 'rgba(75, 192, 192, 1)',  
+            borderWidth: 2,
+            fill: false,
+            pointRadius: pointRadius
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });
+  new Chart(document.getElementById('AllInOne').getContext('2d'), {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [
+            {
+                label: 'EaseInCubic',
+                data: points,
+                borderColor: 'rgba(255, 99, 132, 1)',  // 紅色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseOutCubic',
+                data: points2,
+                borderColor: 'rgba(54, 162, 235, 1)',  // 藍色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseInOutCubic',
+                data: points3,
+                borderColor: 'rgba(75, 192, 192, 1)',  // 青綠色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },            
+            {
+                label: 'EaseInQuad',
+                data: points4,
+                borderColor: 'rgba(255, 206, 86, 1)',  // 黃色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseOutQuad',
+                data: points5,
+                borderColor: 'rgba(153, 102, 255, 1)', // 紫色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseInOutQuad',
+                data: points6,
+                borderColor: 'rgba(255, 159, 64, 1)',  // 橙色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },         
+            {
+                label: 'EaseInQuart',
+                data: points7,
+                borderColor: 'rgba(75, 192, 75, 1)',   // 深綠色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseOutQuart',
+                data: points8,
+                borderColor: 'rgba(0, 128, 255, 1)',   // 天藍色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseInOutQuart',
+                data: points9,
+                borderColor: 'rgba(255, 105, 180, 1)', // 粉紅色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },            
+            {
+                label: 'EaseInQuint',
+                data: points10,
+                borderColor: 'rgba(139, 69, 19, 1)',   // 棕色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseOutQuint',
+                data: points11,
+                borderColor: 'rgba(64, 224, 208, 1)',  // 綠松石色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseInOutQuint',
+                data: points12,
+                borderColor: 'rgba(255, 223, 0, 1)',   // 金色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },            
+            {
+                label: 'EaseInSine',
+                data: points13,
+                borderColor: 'rgba(220, 20, 60, 1)',   // 深紅色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseOutSine',
+                data: points14,
+                borderColor: 'rgba(30, 144, 255, 1)',  // 閃亮藍
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseInOutSine',
+                data: points15,
+                borderColor: 'rgba(50, 205, 50, 1)',   // 萊姆綠
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },             
+            {
+                label: 'EaseInExpo',
+                data: points16,
+                borderColor: 'rgba(138, 43, 226, 1)',  // 紫羅蘭色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseOutExpo',
+                data: points17,
+                borderColor: 'rgba(255, 20, 147, 1)',  // 粉色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseInOutExpo',
+                data: points18,
+                borderColor: 'rgba(255, 140, 0, 1)',   // 深橙色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },            
+            {
+                label: 'EaseInCirc',
+                data: points19,
+                borderColor: 'rgba(47, 79, 79, 1)',    // 深灰綠色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },              
+            {
+                label: 'EaseOutCirc',
+                data: points20,
+                borderColor: 'rgba(0, 191, 255, 1)',   // 天藍
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },  
+            {
+                label: 'EaseInOutCirc',
+                data: points21,
+                borderColor: 'rgba(186, 85, 211, 1)',  // 亮紫
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },             
+            {
+                label: 'EaseInElastic',
+                data: points22,
+                borderColor: 'rgba(34, 139, 34, 1)',   // 森林綠
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },             
+            {
+                label: 'EaseOutElastic',
+                data: points23,
+                borderColor: 'rgba(255, 99, 71, 1)',   // 番茄紅
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },             
+            {
+                label: 'EaseInOutElastic',
+                data: points24,
+                borderColor: 'rgba(218, 165, 32, 1)',  // 黃金棕色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },             
+            {
+                label: 'EaseInBack',
+                data: points25,
+                borderColor: 'rgba(128, 128, 128, 1)', // 灰色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },            
+            {
+                label: 'EaseOutBack',
+                data: points26,
+                borderColor: 'rgba(70, 130, 180, 1)',  // 鋼藍色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },            
+            {
+                label: 'EaseInOutBack',
+                data: points27,
+                borderColor: 'rgba(60, 179, 113, 1)',  // 海洋綠
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },
+            {
+                label: 'EaseInBounce',
+                data: points28,
+                borderColor: 'rgba(233, 150, 122, 1)', // 深珊瑚色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            }, 
+            {
+                label: 'EaseOutBounce',
+                data: points29,
+                borderColor: 'rgba(255, 215, 0, 1)',   // 金黃
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            },            
+            {
+                label: 'EaseInOutBounce',
+                data: points30,
+                borderColor: 'rgba(123, 104, 238, 1)', // 中紫色
+                borderWidth: 2,
+                fill: false,
+                pointRadius: pointRadius
+            }
+        ]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: ''
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ''
+                }
+            }
+        }
+    }
+  });   
+});
+</script>
+
+<p>Reference:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://easings.net/#">https://easings.net/#</a></li>
+</ul>
+</div><div class="sharethis-inline-share-buttons"></div><script src="https://platform-api.sharethis.com/js/sharethis.js#property=6651e4e4fef97000199a5cfd&amp;product=inline-share-buttons&amp;source=platform" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2024/11/25/2024-11-25-unity-ugui-performance/"><span class="level-item">Unity UGUI performance</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">評論</h3><script src="https://giscus.app/client.js" repo="mystudybook/mystudybook.github.io" data-repo="mystudybook/mystudybook.github.io" data-repo-id="R_kgDOLOBlnw" data-category-id="DIC_kwDOLOBln84Cf2Cb" data-category="Announcements" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="noborder_light" data-lang="en" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/AWS/"><span class="level-start"><span class="level-item">AWS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/C-%E8%AA%9E%E8%A8%80/"><span class="level-start"><span class="level-item">C# 語言</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Chrome/"><span class="level-start"><span class="level-item">Chrome</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Design-Pattern/"><span class="level-start"><span class="level-item">Design Pattern</span></span><span class="level-end"><span class="level-item tag">15</span></span></a></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/IDE%E6%93%8D%E4%BD%9C/"><span class="level-start"><span class="level-item">IDE操作</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/JavaScript/"><span class="level-start"><span class="level-item">JavaScript</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Mac/"><span class="level-start"><span class="level-item">Mac</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/SQL/"><span class="level-start"><span class="level-item">SQL</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Tools/"><span class="level-start"><span class="level-item">Tools</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/Unity/"><span class="level-start"><span class="level-item">Unity</span></span><span class="level-end"><span class="level-item tag">69</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E7%B6%B1/"><span class="level-start"><span class="level-item">大綱</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-01T21:37:32.261Z">2024-12-02</time></p><p class="title"><a href="/2024/12/02/2024-12-02-easing-function/">緩動函數 (Easing function)</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-25T01:51:44.143Z">2024-11-25</time></p><p class="title"><a href="/2024/11/25/2024-11-25-unity-ugui-performance/">Unity UGUI performance</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-18T01:55:05.298Z">2024-11-18</time></p><p class="title"><a href="/2024/11/18/2024-11-18-textmeshpro-%E9%A1%AF%E7%A4%BA%E4%B8%AD%E6%96%87/">TextMeshPro 顯示中文</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-09-22T16:56:49.559Z">2024-09-23</time></p><p class="title"><a href="/2024/09/23/2024-09-23-java-copy-file/">Java 複製檔案的方式</a></p><p class="categories"><a href="/categories/Java/">Java</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-09-22T06:35:33.925Z">2024-09-22</time></p><p class="title"><a href="/2024/09/22/2024-09-22-how-to-use-cursor-ai-in-unity/">How to use Cursor AI in Unity</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2024/12/"><span class="level-start"><span class="level-item">十二月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/09/"><span class="level-start"><span class="level-item">九月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/08/"><span class="level-start"><span class="level-item">八月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/07/"><span class="level-start"><span class="level-item">七月 2024</span></span><span class="level-end"><span class="level-item tag">17</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/06/"><span class="level-start"><span class="level-item">六月 2024</span></span><span class="level-end"><span class="level-item tag">24</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/05/"><span class="level-start"><span class="level-item">五月 2024</span></span><span class="level-end"><span class="level-item tag">20</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/04/"><span class="level-start"><span class="level-item">四月 2024</span></span><span class="level-end"><span class="level-item tag">37</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/02/"><span class="level-start"><span class="level-item">二月 2024</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI/"><span class="tag">AI</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C#</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chrome/"><span class="tag">Chrome</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DB/"><span class="tag">DB</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Eclipse/"><span class="tag">Eclipse</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Event/"><span class="tag">Event</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Flex/"><span class="tag">Flex</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-Search-Console/"><span class="tag">Google Search Console</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Input-System/"><span class="tag">Input System</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Formatter/"><span class="tag">JSON Formatter</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Pretty/"><span class="tag">JSON Pretty</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Joint-2D/"><span class="tag">Joint 2D</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Mac/"><span class="tag">Mac</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ParticleSystem/"><span class="tag">ParticleSystem</span><span class="tag">11</span></a></div><div class="control"><a class="tags has-addons" href="/tags/SQL%E8%AA%9E%E6%B3%95/"><span class="tag">SQL語法</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ScriptableObject/"><span class="tag">ScriptableObject</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UGUI/"><span class="tag">UGUI</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Builder/"><span class="tag">UI Builder</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Toolkit/"><span class="tag">UI Toolkit</span><span class="tag">18</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-Tips/"><span class="tag">Unity Tips</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-package/"><span class="tag">Unity package</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity%E6%9E%B6%E6%A7%8B/"><span class="tag">Unity架構</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/delegate/"><span class="tag">delegate</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/html/"><span class="tag">html</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/sitemap/"><span class="tag">sitemap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-id/"><span class="tag">taiwan_id</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B8%E5%AD%B8%E7%9B%B8%E9%97%9C/"><span class="tag">數學相關</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%82%E9%96%93/"><span class="tag">時間</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%89%A9%E7%90%86%E7%9B%B8%E9%97%9C/"><span class="tag">物理相關</span><span class="tag">5</span></a></div></div></div></div></div><div class="card widget" data-type="adsense"><div class="card-content"><div class="menu"><h3 class="menu-label">廣告</h3><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7911581883313737" data-ad-slot="4842521037" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a><p class="is-size-7"><span>&copy; 2024 Mystudybook</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-tw");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到頁首" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此網站使用Cookie來改善您的體驗。",
+          dismiss: "知道了！",
+          allow: "允許使用Cookie",
+          deny: "拒絕",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="請輸入關鍵字..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"請輸入關鍵字...","untitled":"(無標題)","posts":"文章","pages":"頁面","categories":"分類","tags":"標籤"});
+        });</script></body></html>
