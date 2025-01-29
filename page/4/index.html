@@ -33,7 +33,402 @@
       switchTab();
       window.addEventListener('hashchange', switchTab, false);
   })();
-  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/categories/%E5%A4%A7%E7%B6%B1/">系列大綱</a><a class="navbar-item" href="/">首頁</a><a class="navbar-item" href="/archives">歸檔</a><a class="navbar-item" href="/categories">分類</a><a class="navbar-item" href="/tags">標籤</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/mystudybook"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-27T20:12:04.604Z" title="6/28/2024, 4:12:04 AM">2024-06-28</time>發表</span><span class="level-item"><time dateTime="2024-07-07T13:55:21.065Z" title="7/7/2024, 9:55:21 PM">2024-07-07</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">4 分鐘讀完 (大約595個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/28/2024-06-28-unity-%E7%9A%84%E6%99%82%E9%96%93%E9%82%8F%E8%BC%AF%E6%B5%81%E7%A8%8B%E5%9C%96/">Unity 的時間邏輯流程圖</a></p><div class="content"><style>
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/categories/%E5%A4%A7%E7%B6%B1/">系列大綱</a><a class="navbar-item" href="/">首頁</a><a class="navbar-item" href="/archives">歸檔</a><a class="navbar-item" href="/categories">分類</a><a class="navbar-item" href="/tags">標籤</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/mystudybook"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-27T20:18:34.351Z" title="6/28/2024, 4:18:34 AM">2024-06-28</time>發表</span><span class="level-item"><time dateTime="2024-07-07T13:54:46.429Z" title="7/7/2024, 9:54:46 PM">2024-07-07</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">2 分鐘讀完 (大約280個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/28/2024-06-28-%E9%8C%84%E8%A3%BD%E9%81%8A%E6%88%B2%E5%BD%B1%E7%89%87/">錄製遊戲影片</a></p><div class="content"><p>錄製遊戲影片是時間管理中的一個特例。保存螢幕圖片的操作需要耗費相當多的時間，這會導致遊戲的正常幀率降低，錄製出的影片無法反映遊戲的實際表現。為了解決這個問題，可以使用 captureFramerate 屬性。該屬性的預設值為 0，表示未錄製遊戲。如果要進行錄製，則需要將該屬性的值設為非零值，此時遊戲時間會變慢，幀更新會在精確的間隔內發生。<br>幀之間的間隔等於 <code>1/Time.captureFramerate</code>，所以如果將值設置為5.0，則更新每五分之一秒發生一次。由於幀率需求有效降低，在 <code>Update</code> 方法中有時間保存螢幕截圖或執行其他操作。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ExampleScript</span> : <span class="title">MonoBehaviour</span> &#123;</span><br><span class="line">    <span class="built_in">string</span> folder = <span class="string">&quot;ScreenshotFolder&quot;</span>;</span><br><span class="line">    <span class="built_in">int</span> frameRate = <span class="number">25</span>;</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Start</span> ()</span> &#123;</span><br><span class="line">        Time.captureFramerate = frameRate;</span><br><span class="line">        System.IO.Directory.CreateDirectory(folder);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Update</span> ()</span> &#123;</span><br><span class="line">        <span class="built_in">string</span> name = <span class="built_in">string</span>.Format(<span class="string">&quot;&#123;0&#125;/&#123;1:D04&#125; shot.png&quot;</span>, folder, Time.frameCount );</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 抓取螢幕截圖，並存放到指定位置</span></span><br><span class="line">        Application.CaptureScreenshot(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>返回 <a href="/2024/06/26/2024-06-26-time-and-frame/">時間與幀</a> 大綱</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-27T20:14:57.693Z" title="6/28/2024, 4:14:57 AM">2024-06-28</time>發表</span><span class="level-item"><time dateTime="2024-07-07T15:27:24.965Z" title="7/7/2024, 11:27:24 PM">2024-07-07</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">8 分鐘讀完 (大約1239個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/28/2024-06-28-time-%E9%A1%9E%E5%B1%AC%E6%80%A7%E5%9C%A8%E5%B9%80%E7%8E%87%E8%AE%8A%E5%8C%96%E4%B8%AD%E7%9A%84%E7%AF%84%E4%BE%8B/">Time 類屬性在幀率變化中的範例</a></p><div class="content"><p>以下將說明各種 Time 類中的屬性是如何回報與響應幀率的巨大變化；下面的表格展示了 Unity 執行了 16 幀的情況，其中第 8 幀出現一個大延遲。</p>
+<table>
+<thead>
+<tr>
+<th>Frame</th>
+<th>unscaledTime</th>
+<th>time</th>
+<th>unscaledDeltaTime</th>
+<th>deltaTime</th>
+<th>smoothDeltaTime</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.018</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.018</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.036</td>
+<td>0.036</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.018</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.054</td>
+<td>0.054</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.018</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0.071</td>
+<td>0.071</td>
+<td>0.017</td>
+<td>0.017</td>
+<td>0.018</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0.089</td>
+<td>0.089</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.018</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0.107</td>
+<td>0.107</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.018</td>
+</tr>
+<tr>
+<td><code>8</code></td>
+<td><code>1.123</code></td>
+<td><code>0.440</code></td>
+<td><code>1.016</code></td>
+<td><code>0.333</code></td>
+<td><code>0.081</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>1.140</td>
+<td>0.457</td>
+<td>0.017</td>
+<td>0.017</td>
+<td>0.066</td>
+</tr>
+<tr>
+<td>10</td>
+<td>1.157</td>
+<td>0.474</td>
+<td>0.017</td>
+<td>0.017</td>
+<td>0.056</td>
+</tr>
+<tr>
+<td>11</td>
+<td>1.175</td>
+<td>0.492</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.049</td>
+</tr>
+<tr>
+<td>12</td>
+<td>1.193</td>
+<td>0.510</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.042</td>
+</tr>
+<tr>
+<td>13</td>
+<td>1.211</td>
+<td>0.528</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.038</td>
+</tr>
+<tr>
+<td>14</td>
+<td>1.229</td>
+<td>0.546</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.034</td>
+</tr>
+<tr>
+<td>15</td>
+<td>1.247</td>
+<td>0.564</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.031</td>
+</tr>
+<tr>
+<td>16</td>
+<td>1.265</td>
+<td>0.582</td>
+<td>0.018</td>
+<td>0.018</td>
+<td>0.028</td>
+</tr>
+</tbody></table>
+<p>在第 1 到第 7 幀中，</p>
+<ul>
+<li>從 <code>time</code> 和 <code>unscaledTime</code> 可以發現這些值穩定的增加，約為 60 幀， <code>timeScale</code> 設為 1 。</li>
+</ul>
+<p>在第 8 幀中，出現了超過一秒的大延遲，</p>
+<ul>
+<li>當幀延遲超過 <code>maximumDeltaTime</code> 的值時，Unity 會限制 <code>deltaTime</code> 回報的值以及增加到目前時間的量。這個限制的目的是避免如果時間步長超過這個數值可能會發生的不良副作用。<ul>
+<li>所謂的不良副作用：像這樣的延遲會導致 <code>deltaTime</code> 的值變得非常大。例如，如果延遲超過一秒，<code>deltaTime</code> 可能會超過 1.0 秒。如果一個物體的移動量是透過 <code>deltaTime</code> 縮放的，這樣大的 <code>deltaTime</code> 值會導致物體在一幀內移動非常大的距離，可能直接穿過遊戲中的牆壁或其他障礙物，導致遊戲中不希望看到的「穿牆」現象。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>下圖表中可以看到在第 8 幀時， <code>unscaledDeltaTime</code> 超過一秒(<code>1.016</code>)，但是 <code>deltaTime</code> 回報的是 0.333 ，這是因為 <code>deltaTime</code> 被 <code>maximumDeltaTime</code> 限制。</p>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<div>
+  <canvas id="deltaTimeBarChart"></canvas>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const ctx = document.getElementById('deltaTimeBarChart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'unscaledDeltaTime',
+            data: [
+                {x: "1", y:0.018},
+                {x: "2", y:0.018},
+                {x: "3", y:0.018},
+                {x: "4", y:0.018},
+                {x: "5", y:0.017},
+                {x: "6", y:0.018},
+                {x: "7", y:0.018},
+                {x: "8", y:1.016},
+                {x: "9", y:0.017},
+                {x: "10", y:0.017},
+                {x: "11", y:0.018},
+                {x: "12", y:0.018},
+                {x: "13", y:0.018},
+                {x: "14", y:0.018},
+                {x: "15", y:0.018},
+                {x: "16", y:0.018},
+            ],
+        },
+        {
+            label: 'deltaTime',
+            data: [
+                {x: "1", y:0.018},
+                {x: "2", y:0.018},
+                {x: "3", y:0.018},
+                {x: "4", y:0.018},
+                {x: "5", y:0.017},
+                {x: "6", y:0.018},
+                {x: "7", y:0.018},
+                {x: "8", y:0.333},
+                {x: "9", y:0.017},
+                {x: "10", y:0.017},
+                {x: "11", y:0.018},
+                {x: "12", y:0.018},
+                {x: "13", y:0.018},
+                {x: "14", y:0.018},
+                {x: "15", y:0.018},
+                {x: "16", y:0.018},
+            ],
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: '幀(Frame)'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: '時間(秒)'
+                }
+            }
+        }
+    }
+  });
+});
+</script>
+
+<hr>
+<p>在第 8 幀時， <code>unscaledTime</code> 增加將近一秒(<code>1.123</code>)的時間，但是 <code>time</code> 只增加較小的時間(<code>0.440</code>)，這是因為 <code>time</code> 加上的是被限制的 <code>deltaTime</code> (即 <code>maximumDeltaTime</code> 的值)。簡單的說：</p>
+<ul>
+<li><code>unscaledTime</code> 代表從遊戲開始到目前幀的真實經過時間，不受限制。</li>
+<li><code>time</code> 代表遊戲開始到目前幀的經過時間，但是受 <code>maximumDeltaTime</code> 限制。<div>
+<canvas id="unscaledTime"></canvas>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+const ctx = document.getElementById('unscaledTime').getContext('2d');
+const chart = new Chart(ctx, {
+  type: 'line',
+  responsive: true,
+  data: {
+      datasets: [{
+          label: 'unscaledTime',
+          data: [
+              {x: "1", y:0.000},
+              {x: "2", y:0.018},
+              {x: "3", y:0.036},
+              {x: "4", y:0.054},
+              {x: "5", y:0.071},
+              {x: "6", y:0.089},
+              {x: "7", y:0.107},
+              {x: "8", y:1.123},
+              {x: "9", y:1.140},
+              {x: "10", y:1.157},
+              {x: "11", y:1.175},
+              {x: "12", y:1.193},
+              {x: "13", y:1.211},
+              {x: "14", y:1.229},
+              {x: "15", y:1.247},
+              {x: "16", y:1.265},
+          ],
+      },
+      {
+          label: 'time',
+          data: [
+              {x: "1", y:0.000},
+              {x: "2", y:0.018},
+              {x: "3", y:0.036},
+              {x: "4", y:0.054},
+              {x: "5", y:0.071},
+              {x: "6", y:0.089},
+              {x: "7", y:0.107},
+              {x: "8", y:0.440},
+              {x: "9", y:0.457},
+              {x: "10", y:0.474},
+              {x: "11", y:0.492},
+              {x: "12", y:0.510},
+              {x: "13", y:0.528},
+              {x: "14", y:0.546},
+              {x: "15", y:0.564},
+              {x: "16", y:0.582},
+          ],
+      }]
+  },
+  options: {
+      scales: {
+          x: {
+              position: 'bottom',
+              title: {
+                  display: true,
+                  text: '幀(Frame)'
+              }
+          },
+          y: {
+              title: {
+                  display: true,
+                  text: '時間(秒)'
+              }
+          }
+      }
+  }
+});
+});
+</script></li>
+</ul>
+<hr>
+<p><code>Time.smoothDeltaTime</code> 提供了最近一段時間內 <code>deltaTime</code> 的平滑近似值，這種平滑處理可以避免在計算中突然出現的波動，這種平滑的演算法無法預測未來的變化，但是可以讓回報的時間較平滑，因此可以比較符合實際預期的時間。</p>
+<div>
+  <canvas id="timeChart"></canvas>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const ctx = document.getElementById('timeChart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'line',
+    responsive: true,
+    data: {
+        datasets: [{
+            label: 'smoothDeltaTime',
+            data: [
+                {x: "1", y:0.018},
+                {x: "2", y:0.018},
+                {x: "3", y:0.018},
+                {x: "4", y:0.018},
+                {x: "5", y:0.018},
+                {x: "6", y:0.018},
+                {x: "7", y:0.018},
+                {x: "8", y:0.081},
+                {x: "9", y:0.066},
+                {x: "10", y:0.056},
+                {x: "11", y:0.049},
+                {x: "12", y:0.042},
+                {x: "13", y:0.038},
+                {x: "14", y:0.034},
+                {x: "15", y:0.031},
+                {x: "16", y:0.028},
+            ],
+        },
+        {
+            label: 'deltaTime',
+            data: [
+                {x: "1", y:0.018},
+                {x: "2", y:0.018},
+                {x: "3", y:0.018},
+                {x: "4", y:0.018},
+                {x: "5", y:0.017},
+                {x: "6", y:0.018},
+                {x: "7", y:0.018},
+                {x: "8", y:0.333},
+                {x: "9", y:0.017},
+                {x: "10", y:0.017},
+                {x: "11", y:0.018},
+                {x: "12", y:0.018},
+                {x: "13", y:0.018},
+                {x: "14", y:0.018},
+                {x: "15", y:0.018},
+                {x: "16", y:0.018},
+            ],
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: '幀(Frame)'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: '時間(秒)'
+                }
+            }
+        }
+    }
+  });
+});
+</script>
+
+<hr>
+<p><code>maximumDeltaTime</code> 也會影響物理系統，物理系統使用 <code>fixedTimestep</code> 值來決定每個固定步長中模擬的時間量。Unity 嘗試保持物理模擬與實際經過的時間同步，有時會在一幀內執行多次物理更新。然而，如果由於某些重計算或延遲導致物理模擬落後太多，系統可能需要多次步驟來追趕當前時間。這種大量的步驟可能進一步導致性能下降。</p>
+<ul>
+<li>為了避免由於試圖追趕而導致的逐步減慢，<code>maximumDeltaTime</code> 值還作為物理系統在任何給定兩幀之間模擬時間的上限。</li>
+<li>如果一次幀更新的處理時間超過了 <code>maximumDeltaTime</code>，物理引擎將不會試圖模擬超過 <code>maximumDeltaTime</code> 的時間，而是讓幀處理趕上。一旦幀更新完成，物理模擬將恢復，就像它停止後沒有時間流逝一樣。這樣做的結果是，物理物體將不會像通常那樣以完全實時移動，而是會略微減速。然而，物理的「時鐘」仍然會跟踪它們，就好像它們在正常移動一樣。物理時間的減速通常不容易察覺，並且通常是在遊戲性能與實時物理模擬之間的可接受折衷。</li>
+</ul>
+<hr>
+<p>返回 <a href="/2024/06/26/2024-06-26-time-and-frame/">時間與幀</a> 大綱</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-27T20:12:04.604Z" title="6/28/2024, 4:12:04 AM">2024-06-28</time>發表</span><span class="level-item"><time dateTime="2024-07-07T13:55:21.065Z" title="7/7/2024, 9:55:21 PM">2024-07-07</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">4 分鐘讀完 (大約595個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/28/2024-06-28-unity-%E7%9A%84%E6%99%82%E9%96%93%E9%82%8F%E8%BC%AF%E6%B5%81%E7%A8%8B%E5%9C%96/">Unity 的時間邏輯流程圖</a></p><div class="content"><style>
 .node.default { font-size: 0.75em; }
 </style>
 <pre class="mermaid">
@@ -467,73 +862,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li><a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-files.html">https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-files.html</a></li>
 </ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-21T17:32:17.876Z" title="6/22/2024, 1:32:17 AM">2024-06-22</time>發表</span><span class="level-item"><time dateTime="2024-07-08T09:06:08.828Z" title="7/8/2024, 5:06:08 PM">2024-07-08</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">3 分鐘讀完 (大約440個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/22/2024-06-22-scriptableobject-as-enum/">ScriptableObject as Enum</a></p><div class="content"><p>將 <code>ScriptableObject</code> 作為 <code>Enum</code> 可以有很多好處，像是可含有自己的屬性和方法等。另外還不具 <code>Enum</code> 的一些缺陷</p>
-<p><code>Enum</code> 的缺陷有</p>
-<ol>
-<li><p>它會隱含(<code>implicitly</code>)的為所有元素賦予一個整數值，這造成刪改 <code>Enum</code> 中的值很不方便，若隨意刪除一個元素，那它之後元素的值都會變</p>
-<ul>
-<li>下面例子，沒有明確指定值，因此會自動從0開始為每個元素賦值</li>
-</ul>
- <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">enum</span> Skill </span><br><span class="line">&#123;</span><br><span class="line">    SpeedUp,</span><br><span class="line">    PowerUp,</span><br><span class="line">    DefenseUp</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p> 預設會自動幫你的賦值</p>
- <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">enum</span> Skill </span><br><span class="line">&#123;</span><br><span class="line">    SpeedUp = <span class="number">0</span>,</span><br><span class="line">    PowerUp = <span class="number">1</span>,</span><br><span class="line">    DefenseUp = <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 假設之後要刪除 `PowerUp` ，那麼在它之後元素的值都會變</span></span><br><span class="line"><span class="built_in">enum</span> Skill </span><br><span class="line">&#123;</span><br><span class="line">    SpeedUp,</span><br><span class="line">    DefenseUp <span class="comment">// DefenseUp 的值會變為 1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>除非使用 <code>Nullable</code> 否則它不可以為 <code>NULL</code> ，因此一般常會自訂一個元素來代表空值</p>
-<ul>
-<li>自訂一個元素來代表空值 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">enum</span> Skill </span><br><span class="line">&#123;</span><br><span class="line">    NONE = <span class="number">0</span>,</span><br><span class="line">    SpeedUp = <span class="number">1</span>,</span><br><span class="line">    PowerUp = <span class="number">2</span>,</span><br><span class="line">    DefenseUp = <span class="number">3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>在 <code>C#</code> ， <code>enum</code> 中不允許有方法或是屬性，需要使用擴展方法來完成</p>
-<ul>
-<li>不可以有方法或屬性 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">enum</span> Skill </span><br><span class="line">&#123;</span><br><span class="line">    NONE = <span class="number">0</span>,</span><br><span class="line">    SpeedUp = <span class="number">1</span>,</span><br><span class="line">    PowerUp = <span class="number">2</span>,</span><br><span class="line">    DefenseUp = <span class="number">3</span></span><br><span class="line">    <span class="comment">// 不可以</span></span><br><span class="line">    <span class="comment">// private float bonusRatio;</span></span><br><span class="line">    <span class="comment">// 不可以</span></span><br><span class="line">    <span class="comment">// public float GetBonusRatio()&#123; return bonusRatio; &#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
- 需要使用擴展方法來完成 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">SkillExtensions</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">double</span> <span class="title">GetBonusRatio</span>(<span class="params"><span class="keyword">this</span> Skill skill</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">switch</span> (skill)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">case</span> Skill.SpeedUp:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1.2</span>;</span><br><span class="line">            <span class="keyword">case</span> Skill.PowerUp:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1.5</span>;</span><br><span class="line">            <span class="keyword">case</span> Skill.DefenseUp:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1.3</span>;</span><br><span class="line">            <span class="literal">default</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1.0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ol>
-<p>因此將 <code>ScriptableObject</code> 作為 <code>Enum</code> 來使用也是一種好選擇，使用的方式為</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CreateAssetMenu(menuName = <span class="string">&quot;ScriptableObjects/SkillSO&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SkillSO</span> : <span class="title">ScriptableObject</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>然後在透過 Unity 編輯器建立需要的元素即可<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1719062604/Hexo/2024/20240621/enum_iyzmwo.png"></p>
-<p>使用上也和 <code>Enum</code> 類似</p>
-<p>返回 <a href="/2024/06/28/2024-06-28-scriptableobject-%E7%B3%BB%E5%88%97/">ScriptableObject 系列</a></p>
-<p>Reference:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://leotgo.medium.com/unity-devs-enums-your-worst-enemy-heres-what-you-should-use-instead-f1418e1461d9">https://leotgo.medium.com/unity-devs-enums-your-worst-enemy-heres-what-you-should-use-instead-f1418e1461d9</a></li>
-<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/enum?redirectedfrom=MSDN">https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/enum?redirectedfrom=MSDN</a></li>
-</ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-21T01:53:43.107Z" title="6/21/2024, 9:53:43 AM">2024-06-21</time>發表</span><span class="level-item"><time dateTime="2024-07-08T08:59:02.315Z" title="7/8/2024, 4:59:02 PM">2024-07-08</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">4 分鐘讀完 (大約637個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/21/2024-06-21-scriptableobject-runtime-set/">ScriptableObject as Runtime Set</a></p><div class="content"><p><code>RuntimeSet</code> 的做法是將 <code>ScriptableObject</code> 作為一個分享集合容器，在執行期間，將物件放入，讓其他要使用它的物件可以透過這個分享容器拿到。</p>
-<p>以下的例子中，將建立一個 <code>GameObjectRuntimeSet</code> ，這個 <code>GameObjectRuntimeSet</code> 將會在執行時持有 <code>Circle</code> 物件集合，而 <code>Circle</code> 物件將由 <code>CreateObject</code> 建立，而 <code>ObjectMonitor</code> 負責查看 <code>GameObjectRuntimeSet</code> 中有多少 <code>Circle</code> 物件</p>
-<p>以下建立一個通用抽象類 <code>RuntimeSet</code> 它繼承 <code>ScriptableObject</code></p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">RuntimeSet</span>&lt;<span class="title">T</span>&gt; : <span class="title">ScriptableObject</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">readonly</span> List&lt;T&gt; Items = <span class="keyword">new</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Count =&gt; Items.Count;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Add</span>(<span class="params">T thing</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!Items.Contains(thing))</span><br><span class="line">            Items.Add(thing);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">Remove</span>(<span class="params">T thing</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> Items.Remove(thing);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> T <span class="keyword">this</span>[<span class="built_in">int</span> index]</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> =&gt; Items[index];</span><br><span class="line">        <span class="keyword">set</span> =&gt; Items[index] = <span class="keyword">value</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Clear</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Items.Clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接著繼承 <code>RuntimeSet</code> 建立一個 <code>GameObjectRuntimeSet</code> ， 這個 <code>GameObjectRuntimeSet</code> 將為 <code>GameObject</code> 的分享集合容器</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">CreateAssetMenu(menuName = <span class="string">&quot;ScriptableObjects/GameObjectRuntimeSet&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GameObjectRuntimeSet</span> : <span class="title">RuntimeSet</span>&lt;<span class="title">GameObject</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在 Unity 編輯器中建立一個 <code>ScriptableObject</code> 實體 <code>CircleRuntimeSet</code><br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1718961672/Hexo/2024/20240621/create_set_xk9pl9.png"></p>
-<p>接著建立要放到這個集合的物件 <code>Circle</code> ，在 <code>OnEnable</code> 時將自己加入集合， <code>OnDisable</code> 時將自己從集合中移除</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Circle</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> GameObjectRuntimeSet GameObjectRuntimeSet;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnEnable</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        GameObjectRuntimeSet.Add(<span class="keyword">this</span>.gameObject);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnDisable</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        GameObjectRuntimeSet.Remove(<span class="keyword">this</span>.gameObject);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>把 <code>ScriptableObject</code> 實體 <code>CircleRuntimeSet</code> 設定到 <code>Circle</code> 的 <code>GameObjectRuntimeSet</code> 中，讓 <code>Circle</code> 知道在 <code>OnEnable</code> 時要放入哪個集合。之後，把 <code>Circle</code> 轉為 <a href="/2024/06/17/2024-06-17-prefab/">Prefab</a><br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1718961870/Hexo/2024/20240621/set_set_to_object_tfcamn.png"></p>
-<p>再建立一個製造<code>Circle</code>的 <code>CreateObject</code>，這邊建立一個按鈕，當按下時，會觸發 <code>CreateObject.Create()</code></p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CreateObject</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> GameObject circle;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Create</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">float</span> randomX = Random.Range(<span class="number">-6f</span>, <span class="number">6f</span>);</span><br><span class="line">        <span class="built_in">float</span> randomY = Random.Range(<span class="number">-6f</span>, <span class="number">6f</span>);</span><br><span class="line">        Vector3 randomPosition = <span class="keyword">new</span> Vector3(randomX, randomY, <span class="number">0f</span>);</span><br><span class="line"></span><br><span class="line">        Instantiate(circle, randomPosition, Quaternion.identity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1718962155/Hexo/2024/20240621/create_object_b2jzs7.png"></p>
-<p>最後建立一個觀看這個集合的物件</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ObjectMonitor</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> GameObjectRuntimeSet GameObjectRuntimeSet;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Debug.Log(<span class="string">&quot;Current objects in the set &quot;</span> + GameObjectRuntimeSet.Count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>觀察結果<br>每按下按鈕一次，所產生的 <code>Circle</code> 物件都會加入 <code>GameObjectRuntimeSet</code> ，而需要知道有多少個 <code>Circle</code> 的物件，它只要從 <code>GameObjectRuntimeSet</code> 裏面就可以找到目前有多少 <code>Circle</code> 物件。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1718962571/Hexo/2024/20240621/set_result_u541r6.png"></p>
-<p>總結</p>
-<ul>
-<li><code>RuntimeSet</code> 將 <code>ScriptableObject</code> 作為分享的集合容器。</li>
-<li>它可以避免使用 <a href="/2024/05/24/Singleton-pattern/">Singleton</a> 來管理物件群</li>
-<li>它避免了使用 <code>Object.FindObjectOfType</code> 或 <code>GameObject.FindWithTag</code> 等開銷可能會比較大的方法來搜尋物件</li>
-</ul>
-<p>返回 <a href="/2024/06/28/2024-06-28-scriptableobject-%E7%B3%BB%E5%88%97/">ScriptableObject 系列</a></p>
-<p>Reference:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://kendevlog.wordpress.com/2017/12/04/unity%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%989-%E6%9B%B4%E5%A4%9Ascriptableobject%E7%9A%84%E5%A6%99%E7%94%A8/">https://kendevlog.wordpress.com/2017/12/04/unity%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%989-%E6%9B%B4%E5%A4%9Ascriptableobject%E7%9A%84%E5%A6%99%E7%94%A8/</a></li>
-</ul>
-</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/3/">上一頁</a></div><div class="pagination-next"><a href="/page/5/">下一頁</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link is-current" href="/page/4/">4</a></li><li><a class="pagination-link" href="/page/5/">5</a></li><li><span class="pagination-ellipsis">&hellip;</span></li><li><a class="pagination-link" href="/page/13/">13</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/AWS/"><span class="level-start"><span class="level-item">AWS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/C-%E8%AA%9E%E8%A8%80/"><span class="level-start"><span class="level-item">C# 語言</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Chrome/"><span class="level-start"><span class="level-item">Chrome</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Design-Pattern/"><span class="level-start"><span class="level-item">Design Pattern</span></span><span class="level-end"><span class="level-item tag">15</span></span></a></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/IDE%E6%93%8D%E4%BD%9C/"><span class="level-start"><span class="level-item">IDE操作</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/JavaScript/"><span class="level-start"><span class="level-item">JavaScript</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Mac/"><span class="level-start"><span class="level-item">Mac</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/SQL/"><span class="level-start"><span class="level-item">SQL</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Tools/"><span class="level-start"><span class="level-item">Tools</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/Unity/"><span class="level-start"><span class="level-item">Unity</span></span><span class="level-end"><span class="level-item tag">72</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E7%B6%B1/"><span class="level-start"><span class="level-item">大綱</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-22T19:09:18.900Z">2024-12-23</time></p><p class="title"><a href="/2024/12/23/2024-12-23-how-to-use-google-admob-in-unity/">在 Unity 中使用 Google AdMob</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-13T00:46:14.981Z">2024-12-13</time></p><p class="title"><a href="/2024/12/13/2024-12-13-audiomixer/">使用 AuidoMixer 管理聲音音量</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-11T06:44:40.443Z">2024-12-11</time></p><p class="title"><a href="/2024/12/11/2024-12-11-scriptableobject-as-dependency-injection-tool/">ScriptableObject 作為 Dependency Injection 的工具</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-09T00:57:50.037Z">2024-12-09</time></p><p class="title"><a href="/2024/12/09/2024-12-09-google-vision-api-with-java/">Google Cloud Vision API with Java</a></p><p class="categories"><a href="/categories/Java/">Java</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-01T21:37:32.261Z">2024-12-02</time></p><p class="title"><a href="/2024/12/02/2024-12-02-easing-function/">緩動函數 (Easing function)</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2024/12/"><span class="level-start"><span class="level-item">十二月 2024</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/09/"><span class="level-start"><span class="level-item">九月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/08/"><span class="level-start"><span class="level-item">八月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/07/"><span class="level-start"><span class="level-item">七月 2024</span></span><span class="level-end"><span class="level-item tag">17</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/06/"><span class="level-start"><span class="level-item">六月 2024</span></span><span class="level-end"><span class="level-item tag">24</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/05/"><span class="level-start"><span class="level-item">五月 2024</span></span><span class="level-end"><span class="level-item tag">20</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/04/"><span class="level-start"><span class="level-item">四月 2024</span></span><span class="level-end"><span class="level-item tag">37</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/02/"><span class="level-start"><span class="level-item">二月 2024</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI/"><span class="tag">AI</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C#</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chrome/"><span class="tag">Chrome</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DB/"><span class="tag">DB</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Eclipse/"><span class="tag">Eclipse</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Event/"><span class="tag">Event</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Flex/"><span class="tag">Flex</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-API/"><span class="tag">Google API</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-Search-Console/"><span class="tag">Google Search Console</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Input-System/"><span class="tag">Input System</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Formatter/"><span class="tag">JSON Formatter</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Pretty/"><span class="tag">JSON Pretty</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Joint-2D/"><span class="tag">Joint 2D</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Mac/"><span class="tag">Mac</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ParticleSystem/"><span class="tag">ParticleSystem</span><span class="tag">11</span></a></div><div class="control"><a class="tags has-addons" href="/tags/SQL%E8%AA%9E%E6%B3%95/"><span class="tag">SQL語法</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ScriptableObject/"><span class="tag">ScriptableObject</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UGUI/"><span class="tag">UGUI</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Builder/"><span class="tag">UI Builder</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Toolkit/"><span class="tag">UI Toolkit</span><span class="tag">18</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-Tips/"><span class="tag">Unity Tips</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-package/"><span class="tag">Unity package</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity%E6%9E%B6%E6%A7%8B/"><span class="tag">Unity架構</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/delegate/"><span class="tag">delegate</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/html/"><span class="tag">html</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/sitemap/"><span class="tag">sitemap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-id/"><span class="tag">taiwan_id</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B8%E5%AD%B8%E7%9B%B8%E9%97%9C/"><span class="tag">數學相關</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%82%E9%96%93/"><span class="tag">時間</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%89%A9%E7%90%86%E7%9B%B8%E9%97%9C/"><span class="tag">物理相關</span><span class="tag">5</span></a></div></div></div></div></div><div class="card widget" data-type="adsense"><div class="card-content"><div class="menu"><h3 class="menu-label">廣告</h3><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7911581883313737" data-ad-slot="4842521037" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a><p class="is-size-7"><span>&copy; 2024 Mystudybook</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-tw");</script><script>var IcarusThemeSettings = {
+</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/3/">上一頁</a></div><div class="pagination-next"><a href="/page/5/">下一頁</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link is-current" href="/page/4/">4</a></li><li><a class="pagination-link" href="/page/5/">5</a></li><li><span class="pagination-ellipsis">&hellip;</span></li><li><a class="pagination-link" href="/page/13/">13</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/AWS/"><span class="level-start"><span class="level-item">AWS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/C-%E8%AA%9E%E8%A8%80/"><span class="level-start"><span class="level-item">C# 語言</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Chrome/"><span class="level-start"><span class="level-item">Chrome</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Design-Pattern/"><span class="level-start"><span class="level-item">Design Pattern</span></span><span class="level-end"><span class="level-item tag">15</span></span></a></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/IDE%E6%93%8D%E4%BD%9C/"><span class="level-start"><span class="level-item">IDE操作</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/JavaScript/"><span class="level-start"><span class="level-item">JavaScript</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Mac/"><span class="level-start"><span class="level-item">Mac</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/SQL/"><span class="level-start"><span class="level-item">SQL</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Tools/"><span class="level-start"><span class="level-item">Tools</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/Unity/"><span class="level-start"><span class="level-item">Unity</span></span><span class="level-end"><span class="level-item tag">74</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E7%B6%B1/"><span class="level-start"><span class="level-item">大綱</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-01-28T22:57:42.018Z">2025-01-29</time></p><p class="title"><a href="/2025/01/29/2025-01-29-particle-system-smoke-effect/">使用粒子系統(Particle System) 製作 2D 煙霧效果</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-01-23T06:12:33.338Z">2025-01-23</time></p><p class="title"><a href="/2025/01/23/2025-01-23-particle-system-collision/">在 2D世界中使用粒子系統 (Particle system) 碰撞物體</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-22T19:09:18.900Z">2024-12-23</time></p><p class="title"><a href="/2024/12/23/2024-12-23-how-to-use-google-admob-in-unity/">在 Unity 中使用 Google AdMob</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-13T00:46:14.981Z">2024-12-13</time></p><p class="title"><a href="/2024/12/13/2024-12-13-audiomixer/">使用 AuidoMixer 管理聲音音量</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-11T06:44:40.443Z">2024-12-11</time></p><p class="title"><a href="/2024/12/11/2024-12-11-scriptableobject-as-dependency-injection-tool/">ScriptableObject 作為 Dependency Injection 的工具</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2025/01/"><span class="level-start"><span class="level-item">一月 2025</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/12/"><span class="level-start"><span class="level-item">十二月 2024</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/09/"><span class="level-start"><span class="level-item">九月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/08/"><span class="level-start"><span class="level-item">八月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/07/"><span class="level-start"><span class="level-item">七月 2024</span></span><span class="level-end"><span class="level-item tag">17</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/06/"><span class="level-start"><span class="level-item">六月 2024</span></span><span class="level-end"><span class="level-item tag">24</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/05/"><span class="level-start"><span class="level-item">五月 2024</span></span><span class="level-end"><span class="level-item tag">20</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/04/"><span class="level-start"><span class="level-item">四月 2024</span></span><span class="level-end"><span class="level-item tag">37</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/02/"><span class="level-start"><span class="level-item">二月 2024</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI/"><span class="tag">AI</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C#</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chrome/"><span class="tag">Chrome</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DB/"><span class="tag">DB</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Eclipse/"><span class="tag">Eclipse</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Event/"><span class="tag">Event</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Flex/"><span class="tag">Flex</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-API/"><span class="tag">Google API</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-Search-Console/"><span class="tag">Google Search Console</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Input-System/"><span class="tag">Input System</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Formatter/"><span class="tag">JSON Formatter</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Pretty/"><span class="tag">JSON Pretty</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Joint-2D/"><span class="tag">Joint 2D</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Mac/"><span class="tag">Mac</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ParticleSystem/"><span class="tag">ParticleSystem</span><span class="tag">13</span></a></div><div class="control"><a class="tags has-addons" href="/tags/SQL%E8%AA%9E%E6%B3%95/"><span class="tag">SQL語法</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ScriptableObject/"><span class="tag">ScriptableObject</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UGUI/"><span class="tag">UGUI</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Builder/"><span class="tag">UI Builder</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Toolkit/"><span class="tag">UI Toolkit</span><span class="tag">18</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-Tips/"><span class="tag">Unity Tips</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-package/"><span class="tag">Unity package</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity%E6%9E%B6%E6%A7%8B/"><span class="tag">Unity架構</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/delegate/"><span class="tag">delegate</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/html/"><span class="tag">html</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/sitemap/"><span class="tag">sitemap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-id/"><span class="tag">taiwan_id</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B8%E5%AD%B8%E7%9B%B8%E9%97%9C/"><span class="tag">數學相關</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%82%E9%96%93/"><span class="tag">時間</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%89%A9%E7%90%86%E7%9B%B8%E9%97%9C/"><span class="tag">物理相關</span><span class="tag">5</span></a></div></div></div></div></div><div class="card widget" data-type="adsense"><div class="card-content"><div class="menu"><h3 class="menu-label">廣告</h3><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7911581883313737" data-ad-slot="4842521037" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a><p class="is-size-7"><span>&copy; 2025 Mystudybook</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-tw");</script><script>var IcarusThemeSettings = {
             article: {
                 highlight: {
                     clipboard: true,
