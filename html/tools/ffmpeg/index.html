@@ -10,7 +10,7 @@
   <meta property="og:title" content="在線 MP3 轉換器">
   <meta property="og:description" content="使用此網頁輕鬆將音頻或視頻檔案轉換為 MP3 格式，支持多種音質選項，並提供波形圖顯示。">
   <meta property="og:type" content="website">
-  <title>在線 MP3 轉換器 - 轉換音頻為 MP3</title>  
+  <title>在線 MP3 轉換器 - 轉換音頻為 MP3</title>
   <title>MP3 轉換器</title>
   <style>
     body {
@@ -79,6 +79,27 @@
       font-size: 14px;
       color: #555;
       margin-top: 10px;
+    }
+
+    .loader {
+      border: 16px solid #f3f3f3;
+      /* Light grey */
+      border-top: 16px solid #3498db;
+      /* Blue */
+      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
@@ -150,6 +171,7 @@
         });
       }
       const { name } = files[0];
+      message.innerHTML = '轉換器載入中...，請稍候 <div class="loader"></div>';
       await ffmpeg.writeFile(name, await fetchFile(files[0]));
       message.innerHTML = '開始轉換';
 
