@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="使用此網頁將您的音頻或視頻檔案輕鬆轉換為高品質的 MP3 檔案。支持多種比特率和採樣率選擇，並提供即時波形顯示。">
+  <meta name="keywords" content="MP3 轉換器, 音頻轉換, 音頻轉 MP3, 音樂轉換, 音頻波形, 在線 MP3 轉換">
+  <meta property="og:title" content="在線 MP3 轉換器">
+  <meta property="og:description" content="使用此網頁輕鬆將音頻或視頻檔案轉換為 MP3 格式，支持多種音質選項，並提供波形圖顯示。">
+  <meta property="og:type" content="website">
+  <title>在線 MP3 轉換器 - 轉換音頻為 MP3</title>  
+  <title>MP3 轉換器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .container {
+      background: white;
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    select,
+    input[type="file"],
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+      border: none;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    a#downloadLink {
+      display: none;
+      text-decoration: none;
+      font-weight: bold;
+      color: #28a745;
+      margin-top: 15px;
+      display: block;
+    }
+
+    a#downloadLink:hover {
+      color: #1e7e34;
+    }
+
+    #message {
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>MP3 轉換器</h1>
+
+    <label for="uploader">請選擇您要轉換的檔案</label>
+    <input type="file" id="uploader" accept="audio/*,video/*,.mkv">
+
+    <label for="bitrate">比特率：</label>
+    <select id="bitrate">
+      <option value="0" selected>保持原樣</option>
+      <option value="128k">128 kbps</option>
+      <option value="192k">192 kbps</option>
+      <option value="256k">256 kbps</option>
+      <option value="320k">320 kbps</option>
+    </select>
+
+    <label for="samplerate">採樣率：</label>
+    <select id="samplerate">
+      <option value="0" selected>保持原樣</option>
+      <option value="22050">22.05 kHz</option>
+      <option value="44100">44.1 kHz</option>
+      <option value="48000">48 kHz</option>
+    </select>
+
+    <audio id="output" controls style="width: 100%; margin-top: 10px;"></audio>
+
+    <div id="waveform"></div>
+
+    <button id="convertBtn">轉 MP3</button>
+    <a style="display:none;" id="downloadLink">下載 MP3</a>
+    <p id="message"></p>
+  </div>
+  <script src="/html/tools/ffmpeg/node_modules/@ffmpeg/ffmpeg/dist/umd/ffmpeg.js"></script>
+  <script type="module">
+
+  </script>
+  <script type="module">
+    import WaveSurfer from 'https://cdn.jsdelivr.net/npm/wavesurfer.js@7.9.0/dist/wavesurfer.esm.js';
+    const wavesurfer = WaveSurfer.create({
+      container: '#waveform',
+      waveColor: '#4F4A85',
+      progressColor: '#383351'
+    })
+
+    wavesurfer.on('interaction', () => {
+      wavesurfer.play()
+    })
+    const { FFmpeg } = FFmpegWASM;
+    let ffmpeg = null;
+
+    const transcode = async () => {
+      const files = document.getElementById('uploader').files;
+      const message = document.getElementById('message');
+      if (ffmpeg === null) {
+        ffmpeg = new FFmpeg();
+        ffmpeg.on("log", ({ message }) => {
+          console.log(message);
+        })
+        ffmpeg.on("progress", ({ progress, time }) => {
+          message.innerHTML = `處理了： ${(progress * 100).toFixed(2)}%`;
+        });
+        await ffmpeg.load({
+          coreURL: "/html/tools/ffmpeg/node_modules/@ffmpeg/core/dist/umd/ffmpeg-core.js",
+        });
+      }
+      const { name } = files[0];
+      await ffmpeg.writeFile(name, await fetchFile(files[0]));
+      message.innerHTML = '開始轉換';
+
+      const command = ["-i", name];
+
+      const bitrate = document.getElementById("bitrate").value; // 取得比特率選項
+      const samplerate = document.getElementById("samplerate").value; // 取得採樣率選項
+      if (bitrate !== 0) {
+        command.push("-b:a", bitrate);
+      }
+      if (samplerate !== 0) {
+        command.push("-ar", samplerate);
+      }
+
+      const originalName = name.split('.').slice(0, -1).join('.'); // 去掉副檔名
+      // 產生 mp3 檔名
+      const outputName = `${originalName}.mp3`;
+      command.push(outputName);
+
+      console.time('exec');
+      await ffmpeg.exec(command);
+      console.timeEnd('exec');
+      message.innerHTML = '轉換完畢';
+      const data = await ffmpeg.readFile(outputName);
+
+      const output = document.getElementById('output');
+      output.src = URL.createObjectURL(new Blob([data.buffer], { type: 'audio/mpeg' }));
+
+      wavesurfer.load(output.src);
+
+      const a = document.getElementById("downloadLink");
+      const blob = new Blob([data.buffer], { type: 'audio/mpeg' });
+      a.href = URL.createObjectURL(blob);
+      a.download = outputName;
+      a.textContent = "下載 MP3";
+      a.style.display = 'inline';
+    }
+    const btn = document.getElementById('convertBtn');
+    btn.addEventListener('click', transcode);
+  </script>
+
+
+
+  <script>
+    const fetchFile = async file => {
+      let data
+
+      if (typeof file === "string") {
+        /* From base64 format */
+        if (/data:_data\/([a-zA-Z]*);base64,([^"]*)/.test(file)) {
+          data = atob(file.split(",")[1])
+            .split("")
+            .map(c => c.charCodeAt(0))
+          /* From remote server/URL */
+        } else {
+          data = await (await fetch(file)).arrayBuffer()
+        }
+      } else if (file instanceof URL) {
+        data = await (await fetch(file)).arrayBuffer()
+      } else if (file instanceof File || file instanceof Blob) {
+        data = await readFromBlobOrFile(file)
+      } else {
+        return new Uint8Array()
+      }
+
+      return new Uint8Array(data)
+    }
+    const readFromBlobOrFile = blob =>
+      new Promise((resolve, reject) => {
+        const fileReader = new FileReader()
+        fileReader.onload = () => {
+          const { result } = fileReader
+          if (result instanceof ArrayBuffer) {
+            resolve(new Uint8Array(result))
+          } else {
+            resolve(new Uint8Array())
+          }
+        }
+        fileReader.onerror = event => {
+          reject(
+            Error(
+              `File could not be read! Code=${event?.target?.error?.code || -1}`
+            )
+          )
+        }
+        fileReader.readAsArrayBuffer(blob)
+      })    
+  </script>
+
+</body>
+
+</html>
