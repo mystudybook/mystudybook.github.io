@@ -166,6 +166,8 @@
         ffmpeg.on("progress", ({ progress, time }) => {
           message.innerHTML = `處理了： ${(progress * 100).toFixed(2)}%`;
         });
+        
+        message.innerHTML = '轉換器載入中...，請稍候 <div class="loader"></div>';
         await ffmpeg.load({
           coreURL: "/html/tools/ffmpeg/node_modules/@ffmpeg/core/dist/umd/ffmpeg-core.js",
         });
