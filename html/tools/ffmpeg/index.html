@@ -178,6 +178,7 @@
       message.innerHTML = '開始轉換';
 
       const command = ["-i", name];
+      command.push("-loglevel", "debug");
 
       const bitrate = document.getElementById("bitrate").value; // 取得比特率選項
       const samplerate = document.getElementById("samplerate").value; // 取得採樣率選項

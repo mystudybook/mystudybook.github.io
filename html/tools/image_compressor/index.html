@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .img-comp-container {
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-left: 45%;
+        }
+
+        .img-comp-img {
+            position: absolute;
+            width: auto;
+            height: auto;
+            overflow: hidden;
+        }
+
+        .img-comp-img img {
+            display: block;
+        }
+
+        .img-comp-slider {
+            position: absolute;
+            z-index: 9;
+            cursor: ew-resize;
+            width: 40px;
+            height: 40px;
+            background-color: #2196F3;
+            opacity: 0.7;
+            border-radius: 50%;
+        }
+    </style>
+    <script src="/html/tools/ffmpeg/node_modules/@ffmpeg/ffmpeg/dist/umd/ffmpeg.js"></script>
+    <script type="module">
+        const { FFmpeg } = FFmpegWASM;
+        let ffmpeg = null;
+
+        const transcode = async () => {
+            const files = document.getElementById('uploader').files;
+            const message = document.getElementById('message');
+            if (ffmpeg === null) {
+                ffmpeg = new FFmpeg();
+                ffmpeg.on("log", ({ message }) => {
+                    console.log(message);
+                })
+                ffmpeg.on("progress", ({ progress, time }) => {
+                    message.innerHTML = `處理了： ${(progress * 100).toFixed(2)}%`;
+                });
+
+                message.innerHTML = '轉換器載入中...，請稍候 <div class="loader"></div>';
+                await ffmpeg.load({
+                    coreURL: "/html/tools/ffmpeg/node_modules/@ffmpeg/core/dist/umd/ffmpeg-core.js",
+                });
+            }
+
+            await ffmpeg.exec('-help');
+
+            const { name } = files[0];
+            message.innerHTML = '轉換器載入中...，請稍候 <div class="loader"></div>';
+            await ffmpeg.writeFile(name, await fetchFile(files[0]));
+            message.innerHTML = '開始轉換';
+
+            // 壓縮率
+            const command = ["-i", name];
+            command.push("-q:v", "2");
+            command.push("-loglevel", "debug");
+
+            const originalName = name.split('.').slice(0, -1).join('.'); // 去掉副檔名
+
+            const outputName = `${originalName}.jpeg`;
+            command.push(outputName);
+
+            console.time('exec');
+            await ffmpeg.exec(command);
+            console.timeEnd('exec');
+            message.innerHTML = '轉換完畢';
+            const data = await ffmpeg.readFile(outputName);
+
+            const output = document.getElementById('output');
+            output.src = URL.createObjectURL(new Blob([data.buffer], { type: 'image/png' }));
+
+            // const a = document.getElementById("downloadLink");
+            // const blob = new Blob([data.buffer], { type: 'audio/mpeg' });
+            // a.href = URL.createObjectURL(blob);
+            // a.download = outputName;
+            // a.textContent = "下載 MP3";
+            // a.style.display = 'inline';
+        }
+        const btn = document.getElementById('convertBtn');
+        btn.addEventListener('click', transcode);
+    </script>
+
+
+
+    <script>
+        const fetchFile = async file => {
+            let data
+
+            if (typeof file === "string") {
+                /* From base64 format */
+                if (/data:_data\/([a-zA-Z]*);base64,([^"]*)/.test(file)) {
+                    data = atob(file.split(",")[1])
+                        .split("")
+                        .map(c => c.charCodeAt(0))
+                    /* From remote server/URL */
+                } else {
+                    data = await (await fetch(file)).arrayBuffer()
+                }
+            } else if (file instanceof URL) {
+                data = await (await fetch(file)).arrayBuffer()
+            } else if (file instanceof File || file instanceof Blob) {
+                data = await readFromBlobOrFile(file)
+            } else {
+                return new Uint8Array()
+            }
+
+            return new Uint8Array(data)
+        }
+        const readFromBlobOrFile = blob =>
+            new Promise((resolve, reject) => {
+                const fileReader = new FileReader()
+                fileReader.onload = () => {
+                    const { result } = fileReader
+                    if (result instanceof ArrayBuffer) {
+                        resolve(new Uint8Array(result))
+                    } else {
+                        resolve(new Uint8Array())
+                    }
+                }
+                fileReader.onerror = event => {
+                    reject(
+                        Error(
+                            `File could not be read! Code=${event?.target?.error?.code || -1}`
+                        )
+                    )
+                }
+                fileReader.readAsArrayBuffer(blob)
+            })    
+    </script>
+    <script>
+        function compareImages(img) {
+            var slider, img, clicked = 0, w, h;
+            w = img.offsetWidth;
+            h = img.offsetHeight;
+            img.style.width = (w / 2) + "px";
+            slider = document.createElement("DIV");
+            slider.setAttribute("class", "img-comp-slider");
+            img.parentElement.insertBefore(slider, img);
+            slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
+            slider.style.left = (w / 2) - (slider.offsetWidth / 2) + "px";
+            slider.addEventListener("mousedown", slideReady);
+            window.addEventListener("mouseup", slideFinish);
+            slider.addEventListener("touchstart", slideReady);
+            window.addEventListener("touchend", slideFinish);
+            function slideReady(e) {
+                e.preventDefault();
+                clicked = 1;
+                window.addEventListener("mousemove", slideMove);
+                window.addEventListener("touchmove", slideMove);
+            }
+            function slideFinish() {
+                clicked = 0;
+            }
+            function slideMove(e) {
+                var pos;
+                if (clicked == 0) return false;
+                pos = getCursorPos(e)
+                if (pos < 0) pos = 0;
+                if (pos > w) pos = w;
+                slide(pos);
+            }
+            function getCursorPos(e) {
+                var a, x = 0;
+                e = (e.changedTouches) ? e.changedTouches[0] : e;
+                a = img.getBoundingClientRect();
+                x = e.pageX - a.left;
+                x = x - window.pageXOffset;
+                return x;
+            }
+            function slide(x) {
+                img.style.width = x + "px";
+                slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
+            }
+        }
+        function initComparisons() {
+            var x, i;
+            x = document.getElementsByClassName("img-comp-overlay");
+            for (i = 0; i < x.length; i++) {
+                compareImages(x[i]);
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>圖片壓縮</h1>
+        <label for="uploader">請選擇您要壓縮的圖片檔案</label>
+        <input type="file" id="uploader">
+
+        <img id="output" controls style="width: 100%; margin-top: 10px;"></img>
+        <button id="convertBtn">壓縮</button>
+        <a style="display:none;" id="downloadLink">下載 MP3</a>
+        <p id="message"></p>
+    </div>
+
+    <p>壓縮後比較</p>
+    <div class="img-comp-container">
+        <div class="img-comp-img">
+            <img src="">
+        </div>
+        <div class="img-comp-img img-comp-overlay">
+            <img src="">
+        </div>
+    </div>
+
+    <script>
+        initComparisons();
+    </script>
+
+</body>
+
+</html>
