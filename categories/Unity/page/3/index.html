@@ -33,7 +33,456 @@
       switchTab();
       window.addEventListener('hashchange', switchTab, false);
   })();
-  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/categories/%E5%A4%A7%E7%B6%B1/">系列大綱</a><a class="navbar-item" href="/">首頁</a><a class="navbar-item" href="/archives">歸檔</a><a class="navbar-item" href="/categories">分類</a><a class="navbar-item" href="/tags">標籤</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/mystudybook"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/categories">分類</a></li><li class="is-active"><a href="#" aria-current="page">Unity</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-17T06:30:08.051Z" title="7/17/2024, 2:30:08 PM">2024-07-17</time>發表</span><span class="level-item"><time dateTime="2024-07-18T04:00:13.743Z" title="7/18/2024, 12:00:13 PM">2024-07-18</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">10 分鐘讀完 (大約1473個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/17/2024-07-17-main-module/">粒子系統的 Main Module</a></p><div class="content"><p>當建立一個新的粒子系統 GameObject，或是將粒子系統組件添加到現有的 GameObject 中時， Unity 就會將 Main Module 嵌入粒子系統中。</p>
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/categories/%E5%A4%A7%E7%B6%B1/">系列大綱</a><a class="navbar-item" href="/">首頁</a><a class="navbar-item" href="/archives">歸檔</a><a class="navbar-item" href="/categories">分類</a><a class="navbar-item" href="/tags">標籤</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/mystudybook"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/categories">分類</a></li><li class="is-active"><a href="#" aria-current="page">Unity</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-19T00:22:53.160Z" title="7/19/2024, 8:22:53 AM">2024-07-19</time>發表</span><span class="level-item"><time dateTime="2024-07-19T09:10:24.827Z" title="7/19/2024, 5:10:24 PM">2024-07-19</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">2 分鐘讀完 (大約300個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/19/2024-07-19-force-over-lifetime/">粒子系統的 Force over Lifetime</a></p><div class="content"><p>在此模組中指定的力量（如風或吸引力）讓粒子加速。</p>
+<table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>X, Y, Z</td>
+<td>在 X、Y 和 Z 軸上應用於每個粒子的力量。</td>
+</tr>
+<tr>
+<td>Space</td>
+<td>選擇力量是應用於局部空間(<code>Local</code>)還是世界空間(<code>World</code>)。</td>
+</tr>
+<tr>
+<td>Randomize</td>
+<td>當使用 <code>Random Between Two Constants</code> 或 <code>Random Between Two Curves</code> 模式時，系統會在每一幀內從定義的範圍中選擇新的力的方向讓粒子的運動變得更加混亂和不規則。</td>
+</tr>
+</tbody></table>
+<p>在流體(Fluids)的運動中，常常會受到外力的影響。例如，煙霧從火源上升時，會因為周圍的熱空氣而稍微加速。通過使用曲線來控制粒子在其生命周期中的力量，可以實現微妙的效果。以之前的例子為例，煙霧最初會向上加速，但隨著上升的空氣逐漸變涼，力量會減弱。火焰產生的濃煙可能會在最初加速，然後隨著擴散變慢，甚至如果持續很長時間，可能會開始向下落。</p>
+<p>Reference:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/Manual/PartSysForceOverLifeModule.html">https://docs.unity3d.com/Manual/PartSysForceOverLifeModule.html</a></li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-18T23:42:12.851Z" title="7/19/2024, 7:42:12 AM">2024-07-19</time>發表</span><span class="level-item"><time dateTime="2024-07-19T08:23:16.049Z" title="7/19/2024, 4:23:16 PM">2024-07-19</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">3 分鐘讀完 (大約475個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/19/2024-07-19-inherit-velocity/">粒子系統的 Inherit Velocity</a></p><div class="content"><p>使用這個模組在子發射器（subemitters）上。父系統中的每個粒子都可以在子發射器中產生粒子。此模組讀取來自父粒子的速度，並控制子發射器粒子的速度如何隨著時間對該速度作出反應。</p>
+<table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mode</td>
+<td>指定發射器速度如何應用於粒子。<hr> <code>Current</code> ：發射器(emitter)目前的速度將會在每一幀中應用到所有粒子。例如，目前的發射器速度減慢，則所有粒子也會跟著減慢。 <br> <code>Initial</code> ：發射器的速度會在每個粒子生成時應用一次。之後發射器速度的任何變化都不會影響已經生成的粒子。</td>
+</tr>
+<tr>
+<td>Multiplier</td>
+<td>設定粒子應繼承的發射器速度的比例。</td>
+</tr>
+</tbody></table>
+<p>這個模組適合從移動物體中發射粒子，例如從車輛產生的塵土，火箭的煙霧，蒸汽火車煙囪中的蒸汽，或任何需要粒子在初始階段以其來源物體的速度的百分比移動的情況。這個模組只在<a href="/2024/07/17/2024-07-17-main-module/">主模組</a>中的 <code>Simulation Space</code> 設為 <code>World</code> 時才會對粒子產生影響。</p>
+<p>也可以使用曲線讓效果隨時間變化。例如，你可以對新建立的粒子施加強的吸引力，隨時間減少。這對於蒸汽火車的煙霧會很有用，煙霧會隨時間慢慢漂移，停止並跟隨它所排放的火車。</p>
+<p>Unity 以兩種方式計算發射器的速度，可以在<a href="/2024/07/17/2024-07-17-main-module/">主模組</a>中的 Emitter Velocity 屬性設定要使用的計算方式：</p>
+<ul>
+<li>基於附加的 Rigidbody 組件的速度</li>
+<li>基於粒子系統的 Transform 組件在目前幀中移動的距離</li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-18T21:55:56.241Z" title="7/19/2024, 5:55:56 AM">2024-07-19</time>發表</span><span class="level-item"><time dateTime="2024-07-19T07:37:01.068Z" title="7/19/2024, 3:37:01 PM">2024-07-19</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">4 分鐘讀完 (大約629個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/19/2024-07-19-noise-module/">粒子系統的 Noise module</a></p><div class="content"><p> Noise module 為粒子運動添加湍流(turbulence)效果。預設中不會啟用這個模組。</p>
+<table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Separate Axes</td>
+<td>對粒子效果進行細緻的調整，以便在 X、Y 和 Z 軸上分別應用不同的強度和重映射值。</td>
+</tr>
+<tr>
+<td>Strength</td>
+<td>一條曲線(curve)來定義噪聲效果(noise effect)在粒子整個生命週期中的強度。越高的值會使粒子移動得更快、更遠。</td>
+</tr>
+<tr>
+<td>Frequency</td>
+<td>此屬性控制了粒子改變運動方向的頻率以及改變方向的劇烈程度，較低的值會產生柔和(soft)、平滑(smooth)的噪聲(noise)，較高的值會產生快速變化的噪聲。</td>
+</tr>
+<tr>
+<td>Scroll Speed</td>
+<td>此屬性讓粒子隨著時間運動的更加不可預測和不規則。值越高粒子移動越不穩定。</td>
+</tr>
+<tr>
+<td>Damping</td>
+<td>啟用此屬性後，強度與頻率成正比。</td>
+</tr>
+<tr>
+<td>Octaves</td>
+<td>用於指定生成最終噪聲值的重疊噪聲層數。使用更多層會產生更豐富、更複雜的噪聲，但會顯著增加性能成本。</td>
+</tr>
+<tr>
+<td>Octave Multiplier</td>
+<td>Octaves 啟用時才可用。對於每個額外的噪聲層(noise layer)，將強度按此比例減少。</td>
+</tr>
+<tr>
+<td>Octave Scale</td>
+<td>Octaves啟用時才可用。使用此屬性來調整每個額外的噪聲層的頻率。</td>
+</tr>
+<tr>
+<td>Quality</td>
+<td>較低的 Quality ，可以減少效能消耗，但是也會影響噪聲(noise)的視覺效果。</td>
+</tr>
+<tr>
+<td>Remap</td>
+<td>將最終的噪聲值重新映射到不同的範圍內。</td>
+</tr>
+<tr>
+<td>Remap Curve</td>
+<td>Remap 啟用時才可用。此屬性為描述如何將最終噪聲值轉換為不同範圍的曲線。例如，可以使用此曲線來選擇噪聲場中的較低範圍並忽略較高範圍，透過建造一個從高開始並在零處結束的曲線來實現。</td>
+</tr>
+<tr>
+<td>Position Amount</td>
+<td>控制噪聲對粒子位置影響的倍數。</td>
+</tr>
+<tr>
+<td>Rotation Amount</td>
+<td>控制噪聲對粒子旋轉影響的倍數（以每秒度數為單位）。</td>
+</tr>
+<tr>
+<td>Size Amount</td>
+<td>控制噪聲對粒子大小影響的倍數。</td>
+</tr>
+</tbody></table>
+<p>可以用強烈的高頻噪聲來模擬火星的運動，而使用柔和的低頻噪聲則更適合模擬煙霧效果。<br>噪聲(Noise)演算法基於 <code>Curl Noise</code>，內部使用多個 <code>Perlin Noise</code> 樣本(Sample)來建立最終的噪聲場。</p>
+<p>Reference:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/Manual/PartSysNoiseModule.html">https://docs.unity3d.com/Manual/PartSysNoiseModule.html</a></li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-18T16:48:00.413Z" title="7/19/2024, 12:48:00 AM">2024-07-19</time>發表</span><span class="level-item"><time dateTime="2024-07-19T05:55:35.124Z" title="7/19/2024, 1:55:35 PM">2024-07-19</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">2 分鐘讀完 (大約340個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/19/2024-07-19-velocity-over-lifetime-module/">粒子系統的 Velocity over Lifetime module</a></p><div class="content"><p>Velocity over Lifetime 模組讓你可以在粒子生命週期中控制粒子的速度。預設中不會啟用這個模組。</p>
+<table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Linear X, Y, Z</td>
+<td>粒子在 X，Y 與 Z 軸(axe) 上直線運動速度(Linear velocity)</td>
+</tr>
+<tr>
+<td>Space</td>
+<td>指定線性 X、Y、Z 軸是指本地空間(Local)還是世界空間(World)。</td>
+</tr>
+<tr>
+<td>Orbital X, Y, Z</td>
+<td>粒子圍繞 X、Y 和 Z 軸的軌道速度(Orbital velocity)。</td>
+</tr>
+<tr>
+<td>Offset X, Y, Z</td>
+<td>繞軌粒子的軌道中心位置。</td>
+</tr>
+<tr>
+<td>Radial</td>
+<td>粒子朝向或遠離中心位置的徑向速度(Radial velocity)。</td>
+</tr>
+<tr>
+<td>Speed Modifier</td>
+<td>對粒子沿著&#x2F;圍繞其當前移動方向的速度應用一個倍數。</td>
+</tr>
+</tbody></table>
+<hr>
+<p>要建立在特定方向上漂移的粒子，可以使用 <code>Linear X, Y, Z</code> 曲線(curve)模式。</p>
+<p>要建立圍繞中心位置旋轉的粒子效果，請使用 <code>Orbital X, Y, Z</code> 。此外，可以使用 <code>Radial</code> 將粒子推向或遠離中心位置。通過使用 <code>Offset X, Y, Z</code> ，您可以為每個粒子定義自定義的旋轉中心。</p>
+<p>您還可以使用此模組來調整粒子系統中粒子的速度，而不影響它們的方向，只需將上述所有值保持為零，僅修改 <code>Speed Modifier </code> 即可。</p>
+<p>Reference:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/Manual/PartSysVelOverLifeModule.html">https://docs.unity3d.com/Manual/PartSysVelOverLifeModule.html</a></li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-17T21:25:41.112Z" title="7/18/2024, 5:25:41 AM">2024-07-18</time>發表</span><span class="level-item"><time dateTime="2024-07-18T14:21:31.226Z" title="7/18/2024, 10:21:31 PM">2024-07-18</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">19 分鐘讀完 (大約2794個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/18/2024-07-18-shape/">粒子系統的 Shape</a></p><div class="content"><p>Shape Module 定義了粒子的體積(volume)或表面(surface)以及開始速度(velocity)的方向。<br>所有的形狀（除了網格(Mesh)）都有定義關於它們尺寸的屬性，例如半徑(Radius)屬性，可以在 Sence 編輯器中編輯這些屬性，選擇的形狀會影響粒子發射的區域與發射粒子的初始方向。例如，</p>
+<ul>
+<li>球形(Sphere)：會向所有方向發射粒子，</li>
+<li>錐形(Cone)：使粒子從發射點向外擴散開來，形成一個擴散的粒子流。</li>
+<li>網格(Mesh)：粒子會沿著網格表面上每個點的法線方向發射出去。</li>
+</ul>
+<h1 id="Sphere-與-Hemisphere"><a href="#Sphere-與-Hemisphere" class="headerlink" title="Sphere 與 Hemisphere"></a>Sphere 與 Hemisphere</h1><table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Shape</td>
+<td><code>Sphere</code>：向所有方向發射粒子 <br> <code>Hemisphere</code> ：在平面的一側均勻地向各個方向發射粒子。</td>
+</tr>
+<tr>
+<td>Radius</td>
+<td><code>Sphere</code> 或 <code>Hemisphere</code> 形狀的半徑(<code>radius</code>)</td>
+</tr>
+<tr>
+<td>Radius Thickness</td>
+<td>發射粒子的體積比例。值為 0 時，粒子從形狀的外表面發射。值為 1 時，粒子從整個體積發射。介於這兩者之間的值將使用部分體積進行發射。</td>
+</tr>
+<tr>
+<td>Arc</td>
+<td>設定球體的弧度，若 <code>Sphere</code> 設為 360 的話，為一個球體，設為180則為半球體。 <hr> <code>Mode</code> ： 定義 Unity 如何在形狀的弧線周圍生成粒子 <br> — <code>Random</code> ：隨機產生粒子。 <br> — <code>Loop</code> ：循環產生粒子，並在每個週期結束時回到起點。 <br> — <code>Ping-Pong</code> ：與 Loop 模式相同，只是每個連續的循環會以與上次相反的方向進行。 <br> — <code>Burst Spread</code> ：爆炸擴散模式會均勻地在形狀周圍分配粒子生成。與預設的隨機化行為相比，這種模式可以均勻地分佈粒子，避免粒子聚集在一起不均勻的情況。爆炸擴散模式最適合與爆炸發射一起使用。 <hr> <code>Spread</code> ：弧線周圍可能產生粒子的離散間隔。例如，值為 0 時允許粒子在弧線周圍的任意位置生成，而值為 0.1 時則只允許粒子在形狀周圍的 10% 間隔處生成。</td>
+</tr>
+<tr>
+<td>Texture</td>
+<td>為粒子著色的紋理。</td>
+</tr>
+<tr>
+<td>Position</td>
+<td>對發射器形狀(emitter shape)應用一個偏移量。</td>
+</tr>
+<tr>
+<td>Rotation</td>
+<td>旋轉發射器形狀(emitter shape)。</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>改變發射器形狀(emitter shape)的大小。</td>
+</tr>
+<tr>
+<td>Align to Direction</td>
+<td>根據粒子初始移動方向來定向粒子。如果你想模擬例如在碰撞過程中從車身飛脫的漆塊，這會很有用。如果方向不滿意，你也可以在主模組中通過設置<code>Start Rotation</code>的值來覆蓋它。</td>
+</tr>
+<tr>
+<td>Randomize Direction</td>
+<td>將粒子的方向混合到隨機方向。當設置為 0 時，這個設置沒有影響。當設置為 1 時，粒子的方向完全隨機。</td>
+</tr>
+<tr>
+<td>Spherize Direction</td>
+<td>將粒子的方向混合到球形方向，即它們將從 Transform 的中心向外移動。當設置為 0 時，這個設置沒有影響。當設置為 1 時，粒子的方向指向中心外側（其行為與形狀設置為 Sphere 時相同）。</td>
+</tr>
+<tr>
+<td>Randomize Position</td>
+<td>將粒子隨機移動直到指定的值。當設置為 0 時，這個設置沒有影響。任何其他值都會在粒子的生成位置上添加一些隨機性。</td>
+</tr>
+</tbody></table>
+<h1 id="Cone"><a href="#Cone" class="headerlink" title="Cone"></a>Cone</h1><table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Shape</td>
+<td><code>Cone</code>： 從錐體(Cone)的底部或主體發射粒子。粒子隨著它們距離錐體中心線由遠而近的發散。</td>
+</tr>
+<tr>
+<td>Angle</td>
+<td>錐體在其頂點的角度。角度為 0 時產生一個圓柱體，而角度為 90 時產生一個扁平的圓盤。</td>
+</tr>
+<tr>
+<td>Radius</td>
+<td><code>Cone</code> 形狀的半徑(<code>radius</code>)</td>
+</tr>
+<tr>
+<td>Radius Thickness</td>
+<td>發射粒子的體積比例。值為 0 時，粒子從形狀的外表面發射。值為 1 時，粒子從整個體積發射。介於這兩者之間的值將使用部分體積進行發射。</td>
+</tr>
+<tr>
+<td>Arc</td>
+<td>發射器形狀所形成的圓形的角度部分。 <hr> <code>Mode</code> ： 定義 Unity 如何在形狀的弧線周圍生成粒子 <br> — <code>Random</code> ：隨機產生粒子。 <br> — <code>Loop</code> ：循環產生粒子，並在每個週期結束時回到起點。 <br> — <code>Ping-Pong</code> ：與 Loop 模式相同，只是每個連續的循環會以與上次相反的方向進行。 <br> — <code>Burst Spread</code> ：爆炸擴散模式會均勻地在形狀周圍分配粒子生成。與預設的隨機化行為相比，這種模式可以均勻地分佈粒子，避免粒子聚集在一起不均勻的情況。爆炸擴散模式最適合與爆炸發射一起使用。 <hr> <code>Spread</code> ：弧線周圍可能產生粒子的離散間隔。例如，值為 0 時允許粒子在弧線周圍的任意位置生成，而值為 0.1 時則只允許粒子在形狀周圍的 10% 間隔處生成。</td>
+</tr>
+<tr>
+<td>Length</td>
+<td>設定錐體的長度。只在 <code>Emit from</code> 屬性設置為 <code>Volume</code> 時才可使用。</td>
+</tr>
+<tr>
+<td>Emit from</td>
+<td>從錐體的哪部分發射粒子，底部(<code>Base</code>)或體積(<code>Volume</code>)。</td>
+</tr>
+<tr>
+<td>Texture</td>
+<td>為粒子著色的紋理。</td>
+</tr>
+<tr>
+<td>Position</td>
+<td>對發射器形狀(emitter shape)應用一個偏移量。</td>
+</tr>
+<tr>
+<td>Rotation</td>
+<td>旋轉發射器形狀(emitter shape)。</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>改變發射器形狀(emitter shape)的大小。</td>
+</tr>
+<tr>
+<td>Align to Direction</td>
+<td>根據粒子初始移動方向來定向粒子。如果你想模擬例如在碰撞過程中從車身飛脫的漆塊，這會很有用。如果方向不滿意，你也可以在主模組中通過設置<code>Start Rotation</code>的值來覆蓋它。</td>
+</tr>
+<tr>
+<td>Randomize Direction</td>
+<td>將粒子的方向混合到隨機方向。當設置為 0 時，這個設置沒有影響。當設置為 1 時，粒子的方向完全隨機。</td>
+</tr>
+<tr>
+<td>Spherize Direction</td>
+<td>將粒子的方向混合到球形方向，即它們將從 Transform 的中心向外移動。當設置為 0 時，這個設置沒有影響。當設置為 1 時，粒子的方向指向中心外側（其行為與形狀設置為 Sphere 時相同）。</td>
+</tr>
+<tr>
+<td>Randomize Position</td>
+<td>將粒子隨機移動直到指定的值。當設置為 0 時，這個設置沒有影響。任何其他值都會在粒子的生成位置上添加一些隨機性。</td>
+</tr>
+</tbody></table>
+<h1 id="Donut"><a href="#Donut" class="headerlink" title="Donut"></a>Donut</h1><table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Shape</td>
+<td><code>Donut</code>： 從圓環（torus）發射粒子。粒子從圓環的環狀部分向外移動。</td>
+</tr>
+<tr>
+<td>Radius</td>
+<td><code>Donut</code> 形狀的主要半徑(<code>radius</code>)</td>
+</tr>
+<tr>
+<td>Donus Radius</td>
+<td><code>Donut</code> 形狀外部厚度的半徑</td>
+</tr>
+<tr>
+<td>Radius Thickness</td>
+<td>發射粒子的體積比例。值為 0 時，粒子從形狀的外表面發射。值為 1 時，粒子從整個體積發射。介於這兩者之間的值將使用部分體積進行發射。</td>
+</tr>
+<tr>
+<td>Arc</td>
+<td>發射器形狀所形成的圓形的角度部分。 <hr> <code>Mode</code> ： 定義 Unity 如何在形狀的弧線周圍生成粒子 <br> — <code>Random</code> ：隨機產生粒子。 <br> — <code>Loop</code> ：循環產生粒子，並在每個週期結束時回到起點。 <br> — <code>Ping-Pong</code> ：與 Loop 模式相同，只是每個連續的循環會以與上次相反的方向進行。 <br> — <code>Burst Spread</code> ：爆炸擴散模式會均勻地在形狀周圍分配粒子生成。與預設的隨機化行為相比，這種模式可以均勻地分佈粒子，避免粒子聚集在一起不均勻的情況。爆炸擴散模式最適合與爆炸發射一起使用。 <hr> <code>Spread</code> ：弧線周圍可能產生粒子的離散間隔。例如，值為 0 時允許粒子在弧線周圍的任意位置生成，而值為 0.1 時則只允許粒子在形狀周圍的 10% 間隔處生成。</td>
+</tr>
+<tr>
+<td>Length</td>
+<td>設定錐體的長度。只在 <code>Emit from</code> 屬性設置為 <code>Volume</code> 時才可使用。</td>
+</tr>
+<tr>
+<td>Emit from</td>
+<td>從錐體的哪部分發射粒子，底部(<code>Base</code>)或體積(<code>Volume</code>)。</td>
+</tr>
+<tr>
+<td>Texture</td>
+<td>為粒子著色的紋理。</td>
+</tr>
+<tr>
+<td>Position</td>
+<td>對發射器形狀(emitter shape)應用一個偏移量。</td>
+</tr>
+<tr>
+<td>Rotation</td>
+<td>旋轉發射器形狀(emitter shape)。</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>改變發射器形狀(emitter shape)的大小。</td>
+</tr>
+<tr>
+<td>Align to Direction</td>
+<td>根據粒子初始移動方向來定向粒子。如果你想模擬例如在碰撞過程中從車身飛脫的漆塊，這會很有用。如果方向不滿意，你也可以在主模組中通過設置<code>Start Rotation</code>的值來覆蓋它。</td>
+</tr>
+<tr>
+<td>Randomize Direction</td>
+<td>將粒子的方向混合到隨機方向。當設置為 0 時，這個設置沒有影響。當設置為 1 時，粒子的方向完全隨機。</td>
+</tr>
+<tr>
+<td>Spherize Direction</td>
+<td>將粒子的方向混合到球形方向，即它們將從 Transform 的中心向外移動。當設置為 0 時，這個設置沒有影響。當設置為 1 時，粒子的方向指向中心外側（其行為與形狀設置為 Sphere 時相同）。</td>
+</tr>
+<tr>
+<td>Randomize Position</td>
+<td>將粒子隨機移動直到指定的值。當設置為 0 時，這個設置沒有影響。任何其他值都會在粒子的生成位置上添加一些隨機性。</td>
+</tr>
+</tbody></table>
+<h1 id="Box"><a href="#Box" class="headerlink" title="Box"></a>Box</h1><table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Shape</td>
+<td><code>Box</code>： 從盒子（Box）的邊緣(edge)，表面(surface)或是盒體(body)發射粒子。粒子會向發射器物件的 Z 方向移動。</td>
+</tr>
+<tr>
+<td>Emit from</td>
+<td>從盒子（Box）的哪部分發射粒子，邊緣(<code>Edge</code>)，外殼(<code>Shell</code>)或體積(<code>Volume</code>)。</td>
+</tr>
+<tr>
+<td>Texture</td>
+<td>為粒子著色的紋理。</td>
+</tr>
+<tr>
+<td>Position</td>
+<td>對發射器形狀(emitter shape)應用一個偏移量。</td>
+</tr>
+<tr>
+<td>Rotation</td>
+<td>旋轉發射器形狀(emitter shape)。</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>改變發射器形狀(emitter shape)的大小。</td>
+</tr>
+<tr>
+<td>Align to Direction</td>
+<td>根據粒子初始移動方向來定向粒子。如果你想模擬例如在碰撞過程中從車身飛脫的漆塊，這會很有用。如果方向不滿意，你也可以在主模組中通過設置<code>Start Rotation</code>的值來覆蓋它。</td>
+</tr>
+<tr>
+<td>Randomize Direction</td>
+<td>將粒子的方向混合到隨機方向。當設置為 0 時，這個設置沒有影響。當設置為 1 時，粒子的方向完全隨機。</td>
+</tr>
+<tr>
+<td>Spherize Direction</td>
+<td>將粒子的方向混合到球形方向，即它們將從 Transform 的中心向外移動。當設置為 0 時，這個設置沒有影響。當設置為 1 時，粒子的方向指向中心外側（其行為與形狀設置為 Sphere 時相同）。</td>
+</tr>
+<tr>
+<td>Randomize Position</td>
+<td>將粒子隨機移動直到指定的值。當設置為 0 時，這個設置沒有影響。任何其他值都會在粒子的生成位置上添加一些隨機性。</td>
+</tr>
+</tbody></table>
+<h1 id="Mesh-，-MeshRenderer-與-SkinnedMeshRenderer"><a href="#Mesh-，-MeshRenderer-與-SkinnedMeshRenderer" class="headerlink" title="Mesh ， MeshRenderer 與 SkinnedMeshRenderer"></a>Mesh ， MeshRenderer 與 SkinnedMeshRenderer</h1><table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Shape</td>
+<td><code>Mesh</code>： 從盒子（Box）的邊緣(edge)，表面(surface)或是盒體(body)發射粒子。粒子會向發射器物件的 Z 方向移動。</td>
+</tr>
+</tbody></table>
+<p>Reference:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/Manual/PartSysShapeModule.html">https://docs.unity3d.com/Manual/PartSysShapeModule.html</a></li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-17T20:00:52.895Z" title="7/18/2024, 4:00:52 AM">2024-07-18</time>發表</span><span class="level-item"><time dateTime="2024-07-18T05:25:01.122Z" title="7/18/2024, 1:25:01 PM">2024-07-18</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">3 分鐘讀完 (大約505個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/18/2024-07-18-emission-module/">粒子系統的 Emission Module</a></p><div class="content"><p>Emission Module 的屬性會影響粒子系統發射的速率和時間。在建立一個新的粒子系統 GameObject 時，預設會啟用這個模組。</p>
+<table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Rate over Time</td>
+<td>單位時間內發射粒子的數量(以秒為單位)。這表示在每個時間單位內，系統會產生指定數量的粒子。例如：設為 10 表示系統每秒會產生 10 個粒子。</td>
+</tr>
+<tr>
+<td>Rate over Distance</td>
+<td>每移動一單位距離發射的粒子數量(以米為單位)。這表示粒子系統根據其移動距離來發射粒子，而不是時間。<br>例如：設為 5 時，則表示每移動一米時，系統會產生 5 個粒子。這個屬性在模擬由物體運動產生的粒子時非常有用（例如，從汽車輪子在泥土軌道上產生的灰塵） <hr> 這兩個值各自計算互不影響，例如系統在 10 秒內，移動了 5 米，那麼粒子系統會發射 10*(<code>Rate over Time</code>) + 5*(<code>Rate over Distance</code>) 個粒子</td>
+</tr>
+<tr>
+<td>Bursts</td>
+<td>一次性爆發是生成粒子的事件，這些設置允許在指定的時間點發射粒子。<hr> <code>Time</code> ：設置在粒子系統開始播放後多少秒的時間點上發射爆發。 <br> <code>Count</code> ：設置每次爆發可能發射的粒子數量。 <br> <code>Cycles</code> ：設置爆發要播放多少次。 <br> <code>Interval</code> ： 設置每個爆發周期觸發之間的時間間隔（以秒為單位）。 <br> <code>Probability</code> ：控制每次爆發事件生成粒子的可能性。越高的值將使系統產生更多粒子，若值為 1 則保證系統每次爆發事件都會生成粒子，不會有任何隨機性或不確定性。</td>
+</tr>
+</tbody></table>
+<p>發射(emission)率可以是恆定的，也可以根據曲線(curve)在系統的生命週期內發生變化。</p>
+<p>Reference:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/Manual/PartSysEmissionModule.html">https://docs.unity3d.com/Manual/PartSysEmissionModule.html</a></li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-17T06:30:08.051Z" title="7/17/2024, 2:30:08 PM">2024-07-17</time>發表</span><span class="level-item"><time dateTime="2024-07-18T04:00:13.743Z" title="7/18/2024, 12:00:13 PM">2024-07-18</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">10 分鐘讀完 (大約1473個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/17/2024-07-17-main-module/">粒子系統的 Main Module</a></p><div class="content"><p>當建立一個新的粒子系統 GameObject，或是將粒子系統組件添加到現有的 GameObject 中時， Unity 就會將 Main Module 嵌入粒子系統中。</p>
 <table>
 <thead>
 <tr>
@@ -337,598 +786,7 @@
 <td>射線被哪些層的碰撞器阻擋，在 <a href="/2024/07/05/2024-07-05-ugui-canvas/">Screen Space - Overlay</a> 模式下無效</td>
 </tr>
 </tbody></table>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-04T21:22:28.843Z" title="7/5/2024, 5:22:28 AM">2024-07-05</time>發表</span><span class="level-item"><time dateTime="2024-07-05T10:19:51.754Z" title="7/5/2024, 6:19:51 PM">2024-07-05</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">11 分鐘讀完 (大約1662個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/05/2024-07-05-canvasscaler/">Canvas Scaler</a></p><div class="content"><p>Canvas Scaler 組件(<code>Component</code>)是控制 UI 縮放的組件。主要負責控制在不同解析度下 UI 元件大小縮放比例，讓 UI 可以自動適應不同的螢幕，但它不負責位置，位置由 (RectTransform)[&#x2F;2024&#x2F;07&#x2F;05&#x2F;2024-07-05-ugui-recttransform] 組件負責。</p>
-<p>Canvas Size 為 Cavas 中 RectTransform 的寬高。</p>
-<ul>
-<li>下圖中，<ul>
-<li>左側的 Screen 為目前裝置的螢幕大小，下圖為 1012 x 515</li>
-<li>Cavas 中 RectTransform 的 寬高＊縮放係數 &#x3D; 螢幕解析度， (width * X scale) x (height * Y scale)， <code>(1012 * 1) x (515 * 1)</code><br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1720158267/Hexo/2024/07/20240705/canvas_size_ujz2we.png"></li>
-</ul>
-</li>
-</ul>
-<p>Reference Resolution(參考解析度)：在 Scale With Screen Size 模式中，它會參與解析度自適應的計算</p>
-<p>主要提供三種模式</p>
-<ul>
-<li>Constant Pixel Size(恆定像素模式)：不論螢幕大小如何，UI始終保持相同像素大小。<ul>
-<li>一般在遊戲中不常用。</li>
-<li>它不會讓 UI 元件自動適應解析度大小，除非使用程式碼去修改</li>
-</ul>
-</li>
-<li>Scale With Screen Size(縮放模式)：根據螢幕大小進行縮放<ul>
-<li>在遊戲中最常用</li>
-</ul>
-</li>
-<li>Constant Physical Size(恆定物理模式)：不論螢幕大小如何，UI元素始終保持相同物理大小</li>
-<li>World (世界模式)：當 Canvas 的 Render Mode 選擇為 World Space 時，會將 Canvas Scaler 變為 World。<ul>
-<li>一般不常更改，主要像素密度，一般值越大越清晰。因此當文字模糊時，可以考慮加大這個值。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h1 id="Constant-Pixel-Size-恆定像素模式"><a href="#Constant-Pixel-Size-恆定像素模式" class="headerlink" title="Constant Pixel Size(恆定像素模式)"></a>Constant Pixel Size(恆定像素模式)</h1><h2 id="Scale-Factor"><a href="#Scale-Factor" class="headerlink" title="Scale Factor"></a>Scale Factor</h2><p>Scale Factor 縮放 Canvas 中所有 UI 元素。</p>
-<p>當 Scale Factor 為 1 且 Screen Size&#x3D;1024x768 則 Canvas Size 會為 1024x768，圖片大小為原樣<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1720161632/Hexo/2024/07/20240705/ScaleFactor_1_o2o7pa.png"></p>
-<p>當 Scale Factor 為 2 且 Screen Size&#x3D;1024x768 則 Canvas Size 會為 512x384，在其中的圖片大小看起來會放大 2 倍。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1720161632/Hexo/2024/07/20240705/ScaleFactor_2_wd3qwn.png"></p>
-<h2 id="Reference-Pixel-Per-Unit"><a href="#Reference-Pixel-Per-Unit" class="headerlink" title="Reference Pixel Per Unit"></a>Reference Pixel Per Unit</h2><p>Reference Pixel Per Unit 設定多少像素對應 Unity 中的一個單位，預設一個單位為 100 像素。</p>
-<p>在計算時，圖片設定中的 <code>Pixels Per Unit</code> 設定會與此參數一起計算。(圖片設定中的 Texture Type 要設為 Sprite(2D and UI))，<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1720163282/Hexo/2024/07/20240705/pixel_per_unit_dnstqb.png"></p>
-<p>當 <code>Pixels Per Unit=100</code>，表示每單位由 100 像素組成，而圖片解析度是<code>512x512</code>，那麼圖片在世界座標中大小就會變成 512&#x2F;100 &#x3D; 5.12x5.12 Unit<br>Sprite 在世界座標的大小 &#x3D; <code>原圖片大小(像素) / Pixels Per Unit</code></p>
-<p>UI的大小 &#x3D; <code>原圖片大小(像素) / (Pixels Per Unit / Reference Pixels Per Unit)</code></p>
-<hr>
-<h1 id="Scale-With-Screen-Size"><a href="#Scale-With-Screen-Size" class="headerlink" title="Scale With Screen Size"></a>Scale With Screen Size</h1><h2 id="Reference-Resolution"><a href="#Reference-Resolution" class="headerlink" title="Reference Resolution"></a>Reference Resolution</h2><p>Reference Resolution：參考解析度，美術人員出圖的標準解析度。一邊選擇市面上最常見的解析度作為標準。</p>
-<ul>
-<li>使用在電腦上的話，可以用 <code>1920x1080</code></li>
-<li>假設你要用於 Android 或是 iOS 的手機遊戲的話，可以用 <code>1080x1440</code></li>
-</ul>
-<h2 id="Screen-Match-Mode"><a href="#Screen-Match-Mode" class="headerlink" title="Screen Match Mode"></a>Screen Match Mode</h2><p>Screen Match Mode：螢幕匹配模式，當目前螢幕解析度寬高不符合解析度時，用於解析度大小自適應的匹配模式。</p>
-<h3 id="Expand-擴大"><a href="#Expand-擴大" class="headerlink" title="Expand(擴大)"></a>Expand(擴大)</h3><p>Expand：水平或垂直擴大 Canvas Size，讓它<font color="red">高於Reference Resolution</font>，不會裁剪 UI 元素，可能會有黑邊。<br>計算公式： </p>
-<ul>
-<li><code>scaleFactor(縮放係數) = Mathf.Min(screenSize.x(螢幕寬) / m_ReferenceResolution.x(Reference Resolution寬), screenSize.y(螢幕高) / m_ReferenceResolution.y(Reference Resolution高))</code></li>
-<li><code>Canvas Size = 螢幕寬高 / scaleFactor(縮放係數)</code></li>
-</ul>
-<p>例子： Reference Resolution 為 1920x1080 ， 螢幕(screen)解析度為 800x600。<br>scaleFactor &#x3D; Mathf.Min(800&#x2F;1920, 600&#x2F;1080) &#x3D; Mathf.Min(0.41667, 0.5555) &#x3D; 0.41667<br>Canvas Size &#x3D; (800,600) &#x2F; 0.41667 &#x3D; (1920, 1440)</p>
-<p>效果：最大程度的顯示所有 UI 元素，保留 UI 所有的細節，可能會有黑邊。</p>
-<h3 id="Shirk-收縮"><a href="#Shirk-收縮" class="headerlink" title="Shirk(收縮)"></a>Shirk(收縮)</h3><p>Shirk：水平或垂直收縮 Canvas Size，讓它<font color="red">低於Reference Resolution</font>，可能會被裁減。<br>計算公式： </p>
-<ul>
-<li><code>scaleFactor(縮放係數) = Mathf.Max(screenSize.x(螢幕寬) / m_ReferenceResolution.x(Reference Resolution寬), screenSize.y(螢幕高) / m_ReferenceResolution.y(Reference Resolution高))</code></li>
-<li><code>Canvas Size = 螢幕寬高 / scaleFactor(縮放係數)</code></li>
-</ul>
-<p>例子： Reference Resolution 為 1920x1080 ， 螢幕(screen)解析度為 800x600。<br>scaleFactor &#x3D; Mathf.Max(800&#x2F;1920, 600&#x2F;1080) &#x3D; Mathf.Max(0.41667, 0.5555) &#x3D; 0.5555<br>Canvas Size &#x3D; (800,600) &#x2F; 0.5555 &#x3D; (1440, 1080)</p>
-<p>效果：最大程度的放大 UI 元素，可能會被裁減。</p>
-<h3 id="Match-Width-Or-Height"><a href="#Match-Width-Or-Height" class="headerlink" title="Match Width Or Height"></a>Match Width Or Height</h3><p>Match Width Or Height：以寬和高進行混合縮放。</p>
-<ul>
-<li>Match：用於計算寬高匹配值。<ul>
-<li>當值為 0 時，適合直立螢幕模式的遊戲。將 Canvas Size 寬度設為 Reference Resolution 的寬度，並保持比例不變，螢幕越高時可能會出現黑邊。</li>
-<li>當值為 1 時，用在橫向螢幕模式的遊戲。將 Canvas Size 高度設為 Reference Resolution 的高度，並保持比例不變，螢幕越長時可能會出現黑邊。<br>計算公式：<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">float</span> logWidth = Mathf.Log(screenSize.x / m_ReferenceResolution.x, kLogBase);</span><br><span class="line"><span class="built_in">float</span> logHeight = Mathf.Log(screenSize.y / m_ReferenceResolution.y, kLogBase);</span><br><span class="line"><span class="built_in">float</span> logWeightedAverage = Mathf.Lerp(logWidth, logHeight, m_MatchWidthOrHeight);</span><br><span class="line">scaleFactor = Mathf.Pow(kLogBase, logWeightedAverage);</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<p>使用建議</p>
-<ul>
-<li>存在直立螢幕模式和橫向螢幕模式的遊戲選擇使用 <code>Expand</code> 或 <code>Shirnk</code></li>
-<li>不存在螢幕模式切換的遊戲（即定死為直立螢幕模式或是橫向螢幕模式）選擇使用 <code>Match Width Or Height</code></li>
-<li>直式螢幕稱為 <code>Portrait</code> ，橫式螢幕 <code>Landscape</code></li>
-</ul>
-<hr>
-<h1 id="Constant-Physical-Size-恆定物理模式"><a href="#Constant-Physical-Size-恆定物理模式" class="headerlink" title="Constant Physical Size(恆定物理模式)"></a>Constant Physical Size(恆定物理模式)</h1><h2 id="DPI-Dots-Per-Inch，每英吋點數"><a href="#DPI-Dots-Per-Inch，每英吋點數" class="headerlink" title="DPI (Dots Per Inch，每英吋點數)"></a>DPI (Dots Per Inch，每英吋點數)</h2><p>DPI：圖像每英吋長度內的像素點數</p>
-<h2 id="Physical-Unit"><a href="#Physical-Unit" class="headerlink" title="Physical Unit"></a>Physical Unit</h2><p>Physical Unit：物理單位，使用的物理單位種類</p>
-<ul>
-<li>Centimeters(cm 公分)：1 英吋 &#x3D; 2.54 公分</li>
-<li>Millimeters(mm 公釐)：1 英吋 &#x3D; 25.4 公釐</li>
-<li>Inches(英吋)： 1 英吋 &#x3D; 1 英吋</li>
-<li>Points (點)： 1 英吋 &#x3D; 72 點</li>
-<li>Picas (派卡)： 1 英吋 &#x3D; 6 派卡</li>
-</ul>
-<h2 id="Fallback-Screen-DPI：備用-DPI-，當找不到裝置-DPI-時，使用此值"><a href="#Fallback-Screen-DPI：備用-DPI-，當找不到裝置-DPI-時，使用此值" class="headerlink" title="Fallback Screen DPI：備用 DPI ，當找不到裝置 DPI 時，使用此值"></a>Fallback Screen DPI：備用 DPI ，當找不到裝置 DPI 時，使用此值</h2><h2 id="Default-Sprite-DPI：預設圖片-DPI"><a href="#Default-Sprite-DPI：預設圖片-DPI" class="headerlink" title="Default Sprite DPI：預設圖片 DPI"></a>Default Sprite DPI：預設圖片 DPI</h2><p>計算公式：根據 DPI 算出新的 Reference Pixels Per Unit<br><code>新 Reference Pixels Per Unit = Reference Pixels Per Unit ＊ Physical Unit / Default Sprite DPI</code></p>
-<p>UI的大小 &#x3D; <code>原圖片大小(像素) / (Pixels Per Unit / 新 Reference Pixels Per Unit)</code></p>
-<p>根據裝置的 DPI 進行計算，在不同裝置上的顯示大小更加準確</p>
-<h1 id="World-模式"><a href="#World-模式" class="headerlink" title="World 模式"></a>World 模式</h1><p>當 Canvas 的 Render Mode 選擇為 <code>World Space</code> 時，會將 Canvas Scaler 變為 World ， 3D 世界模式。</p>
-<h2 id="Dynamic-Pixels-Per-Unit"><a href="#Dynamic-Pixels-Per-Unit" class="headerlink" title="Dynamic Pixels Per Unit"></a>Dynamic Pixels Per Unit</h2><p>UI 中動態建立的點陣圖(例如文字)，中的單位像素(類似密度)。一般值越大越清晰。因此當文字模糊時，可以考慮加大這個值。</p>
-<h2 id="Reference-Pixels-Per-Unit"><a href="#Reference-Pixels-Per-Unit" class="headerlink" title="Reference Pixels Per Unit"></a>Reference Pixels Per Unit</h2><p>單位參考像素，多少像素對應 Unity 中的一個單位，預設一個單位為 100 像素。</p>
-<p>Reference:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://www.arkaistudio.com/blog/2016/03/28/unity-ugui-%e5%8e%9f%e7%90%86%e7%af%87%e4%ba%8c%ef%bc%9acanvas-scaler-%e7%b8%ae%e6%94%be%e6%a0%b8%e5%bf%83/">https://www.arkaistudio.com/blog/2016/03/28/unity-ugui-%e5%8e%9f%e7%90%86%e7%af%87%e4%ba%8c%ef%bc%9acanvas-scaler-%e7%b8%ae%e6%94%be%e6%a0%b8%e5%bf%83/</a></li>
-<li><a target="_blank" rel="noopener" href="https://forum.unity.com/threads/what-reference-resolution-and-game-view-settings-should-i-use.1088650/">https://forum.unity.com/threads/what-reference-resolution-and-game-view-settings-should-i-use.1088650/</a></li>
-</ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-04T19:06:56.857Z" title="7/5/2024, 3:06:56 AM">2024-07-05</time>發表</span><span class="level-item"><time dateTime="2024-07-05T10:20:12.857Z" title="7/5/2024, 6:20:12 PM">2024-07-05</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">4 分鐘讀完 (大約533個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/05/2024-07-05-ugui-canvas/">UGUI Canvas</a></p><div class="content"><p>Canvas 組件(<code>Component</code>)為 UGUI 中的根本，主要用來渲染自己的所有 UI 組件。UI 組件必須要為 Canvas 組件的子組件才可正常顯示。</p>
-<h1 id="Render-Mode"><a href="#Render-Mode" class="headerlink" title="Render Mode"></a>Render Mode</h1><p>UI 渲染方式有以下三種</p>
-<ul>
-<li>Screen Space - Overlay(預設)：螢幕空間，覆蓋模式，<ul>
-<li>UI 始終顯示在場景(<code>Scene</code>)內容前方。</li>
-<li><code>Pixel Perfect</code>：是否開啟無鋸齒精確渲染，性能換效果，當勾選時會有較好的 UI 顯示，但是較耗費性能</li>
-<li><code>SortOrder</code>：排序層編號，用於控制多個 Canvas 時的渲染先後順序。該值越高顯示越前面</li>
-<li><code>Target Display</code>：目標裝置，在哪個裝置上顯示。</li>
-<li><code>Additional Shader Channels</code>：其他著色器通道，決定著色器可以讀取哪些資料。</li>
-</ul>
-</li>
-<li>Screen Space - Camera：螢幕空間，攝影機模式，<ul>
-<li>3D 物體可以顯示在 UI 之前。</li>
-<li><code>Render Camera</code>：用於渲染UI的攝影機，如果不設定，則會類似於覆蓋模式<ul>
-<li>一般不建議直接使用主攝影機去渲染 UI</li>
-</ul>
-</li>
-<li><code>Plane Distance</code>：UI 平面在攝影機前方的距離，類似整體 Z 軸的感覺。值越小該 Canvas UI 越靠近攝影機。</li>
-<li><code>Sorting Layer</code>：Canvas屬於的排序層，可在 <code>Edit</code> -&gt; <code>Project Setting</code> -&gt; <code>Tags and Layers</code> -&gt; <code>Sorting Layers</code> 進行新增與編輯，越下方的層顯示越前面</li>
-<li><code>Order in Layer</code>：Canvas在所屬排序層下的順序，該值越高顯示越前面</li>
-<li>例如角色狀態，一般會選這種模式，因為玩家角色物件要顯示在 UI 前面。</li>
-</ul>
-</li>
-<li>World Space： 世界空間，3D模式。<ul>
-<li><code>Event Camera</code>：用於處理 UI 事件(Click、Drag)的攝影機。如果不設定，不能正常註冊UI事件，有就是說如果沒設定則像是 Click 事件就無法正常使用。<ul>
-<li>一般使用主攝影機</li>
-</ul>
-</li>
-<li>把 UI 當作 3D 物件，可以圍著人物或其他物件旋轉，移動。</li>
-</ul>
-</li>
-</ul>
-<p>Reference:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV14N411Z7Fz?p=3&vd_source=f103d4eb21cc24456defbcf356882852">https://www.bilibili.com/video/BV14N411Z7Fz?p=3&amp;vd_source=f103d4eb21cc24456defbcf356882852</a></li>
-</ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-27T20:18:34.351Z" title="6/28/2024, 4:18:34 AM">2024-06-28</time>發表</span><span class="level-item"><time dateTime="2024-07-07T13:54:46.429Z" title="7/7/2024, 9:54:46 PM">2024-07-07</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">2 分鐘讀完 (大約280個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/28/2024-06-28-%E9%8C%84%E8%A3%BD%E9%81%8A%E6%88%B2%E5%BD%B1%E7%89%87/">錄製遊戲影片</a></p><div class="content"><p>錄製遊戲影片是時間管理中的一個特例。保存螢幕圖片的操作需要耗費相當多的時間，這會導致遊戲的正常幀率降低，錄製出的影片無法反映遊戲的實際表現。為了解決這個問題，可以使用 captureFramerate 屬性。該屬性的預設值為 0，表示未錄製遊戲。如果要進行錄製，則需要將該屬性的值設為非零值，此時遊戲時間會變慢，幀更新會在精確的間隔內發生。<br>幀之間的間隔等於 <code>1/Time.captureFramerate</code>，所以如果將值設置為5.0，則更新每五分之一秒發生一次。由於幀率需求有效降低，在 <code>Update</code> 方法中有時間保存螢幕截圖或執行其他操作。</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ExampleScript</span> : <span class="title">MonoBehaviour</span> &#123;</span><br><span class="line">    <span class="built_in">string</span> folder = <span class="string">&quot;ScreenshotFolder&quot;</span>;</span><br><span class="line">    <span class="built_in">int</span> frameRate = <span class="number">25</span>;</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Start</span> ()</span> &#123;</span><br><span class="line">        Time.captureFramerate = frameRate;</span><br><span class="line">        System.IO.Directory.CreateDirectory(folder);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Update</span> ()</span> &#123;</span><br><span class="line">        <span class="built_in">string</span> name = <span class="built_in">string</span>.Format(<span class="string">&quot;&#123;0&#125;/&#123;1:D04&#125; shot.png&quot;</span>, folder, Time.frameCount );</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 抓取螢幕截圖，並存放到指定位置</span></span><br><span class="line">        Application.CaptureScreenshot(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>返回 <a href="/2024/06/26/2024-06-26-time-and-frame/">時間與幀</a> 大綱</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-27T20:14:57.693Z" title="6/28/2024, 4:14:57 AM">2024-06-28</time>發表</span><span class="level-item"><time dateTime="2024-07-07T15:27:24.965Z" title="7/7/2024, 11:27:24 PM">2024-07-07</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">8 分鐘讀完 (大約1239個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/28/2024-06-28-time-%E9%A1%9E%E5%B1%AC%E6%80%A7%E5%9C%A8%E5%B9%80%E7%8E%87%E8%AE%8A%E5%8C%96%E4%B8%AD%E7%9A%84%E7%AF%84%E4%BE%8B/">Time 類屬性在幀率變化中的範例</a></p><div class="content"><p>以下將說明各種 Time 類中的屬性是如何回報與響應幀率的巨大變化；下面的表格展示了 Unity 執行了 16 幀的情況，其中第 8 幀出現一個大延遲。</p>
-<table>
-<thead>
-<tr>
-<th>Frame</th>
-<th>unscaledTime</th>
-<th>time</th>
-<th>unscaledDeltaTime</th>
-<th>deltaTime</th>
-<th>smoothDeltaTime</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>0.000</td>
-<td>0.000</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.018</td>
-</tr>
-<tr>
-<td>2</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.018</td>
-</tr>
-<tr>
-<td>3</td>
-<td>0.036</td>
-<td>0.036</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.018</td>
-</tr>
-<tr>
-<td>4</td>
-<td>0.054</td>
-<td>0.054</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.018</td>
-</tr>
-<tr>
-<td>5</td>
-<td>0.071</td>
-<td>0.071</td>
-<td>0.017</td>
-<td>0.017</td>
-<td>0.018</td>
-</tr>
-<tr>
-<td>6</td>
-<td>0.089</td>
-<td>0.089</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.018</td>
-</tr>
-<tr>
-<td>7</td>
-<td>0.107</td>
-<td>0.107</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.018</td>
-</tr>
-<tr>
-<td><code>8</code></td>
-<td><code>1.123</code></td>
-<td><code>0.440</code></td>
-<td><code>1.016</code></td>
-<td><code>0.333</code></td>
-<td><code>0.081</code></td>
-</tr>
-<tr>
-<td>9</td>
-<td>1.140</td>
-<td>0.457</td>
-<td>0.017</td>
-<td>0.017</td>
-<td>0.066</td>
-</tr>
-<tr>
-<td>10</td>
-<td>1.157</td>
-<td>0.474</td>
-<td>0.017</td>
-<td>0.017</td>
-<td>0.056</td>
-</tr>
-<tr>
-<td>11</td>
-<td>1.175</td>
-<td>0.492</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.049</td>
-</tr>
-<tr>
-<td>12</td>
-<td>1.193</td>
-<td>0.510</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.042</td>
-</tr>
-<tr>
-<td>13</td>
-<td>1.211</td>
-<td>0.528</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.038</td>
-</tr>
-<tr>
-<td>14</td>
-<td>1.229</td>
-<td>0.546</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.034</td>
-</tr>
-<tr>
-<td>15</td>
-<td>1.247</td>
-<td>0.564</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.031</td>
-</tr>
-<tr>
-<td>16</td>
-<td>1.265</td>
-<td>0.582</td>
-<td>0.018</td>
-<td>0.018</td>
-<td>0.028</td>
-</tr>
-</tbody></table>
-<p>在第 1 到第 7 幀中，</p>
-<ul>
-<li>從 <code>time</code> 和 <code>unscaledTime</code> 可以發現這些值穩定的增加，約為 60 幀， <code>timeScale</code> 設為 1 。</li>
-</ul>
-<p>在第 8 幀中，出現了超過一秒的大延遲，</p>
-<ul>
-<li>當幀延遲超過 <code>maximumDeltaTime</code> 的值時，Unity 會限制 <code>deltaTime</code> 回報的值以及增加到目前時間的量。這個限制的目的是避免如果時間步長超過這個數值可能會發生的不良副作用。<ul>
-<li>所謂的不良副作用：像這樣的延遲會導致 <code>deltaTime</code> 的值變得非常大。例如，如果延遲超過一秒，<code>deltaTime</code> 可能會超過 1.0 秒。如果一個物體的移動量是透過 <code>deltaTime</code> 縮放的，這樣大的 <code>deltaTime</code> 值會導致物體在一幀內移動非常大的距離，可能直接穿過遊戲中的牆壁或其他障礙物，導致遊戲中不希望看到的「穿牆」現象。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p>下圖表中可以看到在第 8 幀時， <code>unscaledDeltaTime</code> 超過一秒(<code>1.016</code>)，但是 <code>deltaTime</code> 回報的是 0.333 ，這是因為 <code>deltaTime</code> 被 <code>maximumDeltaTime</code> 限制。</p>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<div>
-  <canvas id="deltaTimeBarChart"></canvas>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const ctx = document.getElementById('deltaTimeBarChart').getContext('2d');
-  const chart = new Chart(ctx, {
-    type: 'bar',
-    responsive: true,
-    data: {
-        datasets: [{
-            label: 'unscaledDeltaTime',
-            data: [
-                {x: "1", y:0.018},
-                {x: "2", y:0.018},
-                {x: "3", y:0.018},
-                {x: "4", y:0.018},
-                {x: "5", y:0.017},
-                {x: "6", y:0.018},
-                {x: "7", y:0.018},
-                {x: "8", y:1.016},
-                {x: "9", y:0.017},
-                {x: "10", y:0.017},
-                {x: "11", y:0.018},
-                {x: "12", y:0.018},
-                {x: "13", y:0.018},
-                {x: "14", y:0.018},
-                {x: "15", y:0.018},
-                {x: "16", y:0.018},
-            ],
-        },
-        {
-            label: 'deltaTime',
-            data: [
-                {x: "1", y:0.018},
-                {x: "2", y:0.018},
-                {x: "3", y:0.018},
-                {x: "4", y:0.018},
-                {x: "5", y:0.017},
-                {x: "6", y:0.018},
-                {x: "7", y:0.018},
-                {x: "8", y:0.333},
-                {x: "9", y:0.017},
-                {x: "10", y:0.017},
-                {x: "11", y:0.018},
-                {x: "12", y:0.018},
-                {x: "13", y:0.018},
-                {x: "14", y:0.018},
-                {x: "15", y:0.018},
-                {x: "16", y:0.018},
-            ],
-        }]
-    },
-    options: {
-        scales: {
-            x: {
-                position: 'bottom',
-                title: {
-                    display: true,
-                    text: '幀(Frame)'
-                }
-            },
-            y: {
-                title: {
-                    display: true,
-                    text: '時間(秒)'
-                }
-            }
-        }
-    }
-  });
-});
-</script>
-
-<hr>
-<p>在第 8 幀時， <code>unscaledTime</code> 增加將近一秒(<code>1.123</code>)的時間，但是 <code>time</code> 只增加較小的時間(<code>0.440</code>)，這是因為 <code>time</code> 加上的是被限制的 <code>deltaTime</code> (即 <code>maximumDeltaTime</code> 的值)。簡單的說：</p>
-<ul>
-<li><code>unscaledTime</code> 代表從遊戲開始到目前幀的真實經過時間，不受限制。</li>
-<li><code>time</code> 代表遊戲開始到目前幀的經過時間，但是受 <code>maximumDeltaTime</code> 限制。<div>
-<canvas id="unscaledTime"></canvas>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-const ctx = document.getElementById('unscaledTime').getContext('2d');
-const chart = new Chart(ctx, {
-  type: 'line',
-  responsive: true,
-  data: {
-      datasets: [{
-          label: 'unscaledTime',
-          data: [
-              {x: "1", y:0.000},
-              {x: "2", y:0.018},
-              {x: "3", y:0.036},
-              {x: "4", y:0.054},
-              {x: "5", y:0.071},
-              {x: "6", y:0.089},
-              {x: "7", y:0.107},
-              {x: "8", y:1.123},
-              {x: "9", y:1.140},
-              {x: "10", y:1.157},
-              {x: "11", y:1.175},
-              {x: "12", y:1.193},
-              {x: "13", y:1.211},
-              {x: "14", y:1.229},
-              {x: "15", y:1.247},
-              {x: "16", y:1.265},
-          ],
-      },
-      {
-          label: 'time',
-          data: [
-              {x: "1", y:0.000},
-              {x: "2", y:0.018},
-              {x: "3", y:0.036},
-              {x: "4", y:0.054},
-              {x: "5", y:0.071},
-              {x: "6", y:0.089},
-              {x: "7", y:0.107},
-              {x: "8", y:0.440},
-              {x: "9", y:0.457},
-              {x: "10", y:0.474},
-              {x: "11", y:0.492},
-              {x: "12", y:0.510},
-              {x: "13", y:0.528},
-              {x: "14", y:0.546},
-              {x: "15", y:0.564},
-              {x: "16", y:0.582},
-          ],
-      }]
-  },
-  options: {
-      scales: {
-          x: {
-              position: 'bottom',
-              title: {
-                  display: true,
-                  text: '幀(Frame)'
-              }
-          },
-          y: {
-              title: {
-                  display: true,
-                  text: '時間(秒)'
-              }
-          }
-      }
-  }
-});
-});
-</script></li>
-</ul>
-<hr>
-<p><code>Time.smoothDeltaTime</code> 提供了最近一段時間內 <code>deltaTime</code> 的平滑近似值，這種平滑處理可以避免在計算中突然出現的波動，這種平滑的演算法無法預測未來的變化，但是可以讓回報的時間較平滑，因此可以比較符合實際預期的時間。</p>
-<div>
-  <canvas id="timeChart"></canvas>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const ctx = document.getElementById('timeChart').getContext('2d');
-  const chart = new Chart(ctx, {
-    type: 'line',
-    responsive: true,
-    data: {
-        datasets: [{
-            label: 'smoothDeltaTime',
-            data: [
-                {x: "1", y:0.018},
-                {x: "2", y:0.018},
-                {x: "3", y:0.018},
-                {x: "4", y:0.018},
-                {x: "5", y:0.018},
-                {x: "6", y:0.018},
-                {x: "7", y:0.018},
-                {x: "8", y:0.081},
-                {x: "9", y:0.066},
-                {x: "10", y:0.056},
-                {x: "11", y:0.049},
-                {x: "12", y:0.042},
-                {x: "13", y:0.038},
-                {x: "14", y:0.034},
-                {x: "15", y:0.031},
-                {x: "16", y:0.028},
-            ],
-        },
-        {
-            label: 'deltaTime',
-            data: [
-                {x: "1", y:0.018},
-                {x: "2", y:0.018},
-                {x: "3", y:0.018},
-                {x: "4", y:0.018},
-                {x: "5", y:0.017},
-                {x: "6", y:0.018},
-                {x: "7", y:0.018},
-                {x: "8", y:0.333},
-                {x: "9", y:0.017},
-                {x: "10", y:0.017},
-                {x: "11", y:0.018},
-                {x: "12", y:0.018},
-                {x: "13", y:0.018},
-                {x: "14", y:0.018},
-                {x: "15", y:0.018},
-                {x: "16", y:0.018},
-            ],
-        }]
-    },
-    options: {
-        scales: {
-            x: {
-                position: 'bottom',
-                title: {
-                    display: true,
-                    text: '幀(Frame)'
-                }
-            },
-            y: {
-                title: {
-                    display: true,
-                    text: '時間(秒)'
-                }
-            }
-        }
-    }
-  });
-});
-</script>
-
-<hr>
-<p><code>maximumDeltaTime</code> 也會影響物理系統，物理系統使用 <code>fixedTimestep</code> 值來決定每個固定步長中模擬的時間量。Unity 嘗試保持物理模擬與實際經過的時間同步，有時會在一幀內執行多次物理更新。然而，如果由於某些重計算或延遲導致物理模擬落後太多，系統可能需要多次步驟來追趕當前時間。這種大量的步驟可能進一步導致性能下降。</p>
-<ul>
-<li>為了避免由於試圖追趕而導致的逐步減慢，<code>maximumDeltaTime</code> 值還作為物理系統在任何給定兩幀之間模擬時間的上限。</li>
-<li>如果一次幀更新的處理時間超過了 <code>maximumDeltaTime</code>，物理引擎將不會試圖模擬超過 <code>maximumDeltaTime</code> 的時間，而是讓幀處理趕上。一旦幀更新完成，物理模擬將恢復，就像它停止後沒有時間流逝一樣。這樣做的結果是，物理物體將不會像通常那樣以完全實時移動，而是會略微減速。然而，物理的「時鐘」仍然會跟踪它們，就好像它們在正常移動一樣。物理時間的減速通常不容易察覺，並且通常是在遊戲性能與實時物理模擬之間的可接受折衷。</li>
-</ul>
-<hr>
-<p>返回 <a href="/2024/06/26/2024-06-26-time-and-frame/">時間與幀</a> 大綱</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-27T20:12:04.604Z" title="6/28/2024, 4:12:04 AM">2024-06-28</time>發表</span><span class="level-item"><time dateTime="2024-07-07T13:55:21.065Z" title="7/7/2024, 9:55:21 PM">2024-07-07</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">4 分鐘讀完 (大約595個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/28/2024-06-28-unity-%E7%9A%84%E6%99%82%E9%96%93%E9%82%8F%E8%BC%AF%E6%B5%81%E7%A8%8B%E5%9C%96/">Unity 的時間邏輯流程圖</a></p><div class="content"><style>
-.node.default { font-size: 0.75em; }
-</style>
-<pre class="mermaid">
-flowchart TD
-    A["`deltaTime`"] --> B{"`deltaTime 
-                             是否比
-                             maximumDeltaTime 大？`"}
-    B -- 是 --> C[deltaTime 的值設為<br>maximumDeltaTime]
-    C --> D
-    B -- 否 --> D[ deltaTime <br>被加到 time 中 ]
-    D --> E{"`fixedTime 
-              是否落後 Time.time 
-              一個固定時間步長？`"}
-    E -- 是 --> F[ fixedDeltaTime <br>加到 fixedTime中 ]
-    F --> G[ 執行 FixedUpdate ]
-    G --> E
-    E -- 否 --> H[ 執行 Update ]
-</pre>
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true });
-</script>
-
-<p><code>Time.time</code> ：為遊戲開始後經過的時間，以秒為單位，一般會持續穩定的增加，只可讀。</p>
-<ul>
-<li>受 <code>timeScale</code> 影響，如果 <code>Time.timeScale</code> 設為 0 ，那麼 <code>Time.time</code> 會停止計時，可以達到遊戲暫停的功能。</li>
-<li>受 <code>maximumDeltaTime</code> 限制。</li>
-<li>當在 <code>FixedUpdate</code> 中呼叫時，回傳的是 <code>Time.fixedTime</code> 的值。</li>
-<li>通常用於關於整場遊戲計時的計算。</li>
-</ul>
-<p><code>Time.deltaTime</code> ：從上一個幀到目前幀之間的時間間隔，以秒為單位。</p>
-<ul>
-<li>可以在遊戲中用來製作倒數裝置，例如施放技能的時間變化。</li>
-</ul>
-<p><code>Time.timeScale</code> ：時間流逝的縮放程度，可以用在實現慢動作效果，預設為 1.0 。 </p>
-<ul>
-<li>當為 1.0 時，表示遊戲時間和真實時間同步，</li>
-<li>如果設為 0.5 則遊戲時間以半速運行。</li>
-<li>設為 0.1 可以實現慢動作效果，這表示播放速度為正常速度的 10%。經過十秒之後 <code>Time.time</code> 的值會增加 1。</li>
-<li>當為 0 時，則時間停止，但是遊戲邏輯(像是 <code>Update</code> 方法仍然會被呼叫)與渲染事件仍然會被觸發。但 <code>Time.time</code> 不會增加，<code>Time.deltaTime</code> 也為 0。</li>
-</ul>
-<p><code>Time.maximumDeltaTime</code> ：上面的屬性會被 <code>Time.maximumDeltaTime</code> 限制，這表示這些屬性任何幀率變化的長度永遠不會超過 <code>Time.maximumDeltaTime</code>，例如，如果發生一秒的延遲，且 <code>maximumDeltaTime</code> 為 0.333，那麼 <code>Time.time</code> 只會增加 0.333，而 <code>Time.deltaTime</code> 也會等於 0.333，儘管實際上已經過了更多時間。</p>
-<ul>
-<li><code>unscale</code>版本的屬性(如<code>Time.unscaledTime</code>和<code>Time.unscaledDeltaTime</code>)會忽略這些變化和限制，並回報實際經過的時間。對於需要在遊戲慢動作播放時仍以固定速度響應的任何事物都很有用。例如，用於 UI 交互動畫。</li>
-</ul>
-<p>返回 <a href="/2024/06/26/2024-06-26-time-and-frame/">時間與幀</a> 大綱</p>
-<p>Reference:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/uploads/Main/time-flowchart.png">https://docs.unity3d.com/uploads/Main/time-flowchart.png</a></li>
-</ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-06-27T20:06:04.762Z" title="6/28/2024, 4:06:04 AM">2024-06-28</time>發表</span><span class="level-item"><time dateTime="2024-07-07T15:22:10.509Z" title="7/7/2024, 11:22:10 PM">2024-07-07</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">3 分鐘讀完 (大約502個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/06/28/2024-06-28-%E5%9B%BA%E5%AE%9A%E6%99%82%E9%96%93%E6%AD%A5%E9%95%B7(fixed-timestep)/">固定時間步長(Fixed Timestep)</a></p><div class="content"><p>在 Unity 中，它的物理系統使用固定時間步長(<code>Fixed Timestep</code>)，Unity 提供 <a href="/2024/06/11/2024-06-11-unity-MonoBehaviour/">FixedUpdate</a> 作為我們程式碼的入口(<code>entry point</code>)，你可以在這邊執行與物理相關的程式碼，例如向 <code>Rigidbody</code> 施加力。</p>
-<p><code>fixedDeltaTime</code> 是 Unity 中控制固定時間步長循環間隔的屬性，以秒為單位。</p>
-<ul>
-<li>例如，當 <code>fixedDeltaTime</code>為 0.01 時意味著每個固定時間步長持續 1&#x2F;100 秒，因此<font color="red">每秒會執行 100 次固定更新</font>。</li>
-</ul>
-<p>當你的APP執行的幀率高於每秒固定時間步長(<code>Fixed Timestep</code>)時，這表示每個幀的持續時間會比單個固定時間步長的持續時間還要短。</p>
-<ul>
-<li>例如，如果 <code>fixedDeltaTime</code> 設為 0.02，那麼通常每秒會有 50 次固定更新。<ul>
-<li>如果你的 APP 以每秒 60 幀的速度執行，這會超過每秒 50 次的固定更新，這表示大約每十幀中會有一幀不會觸發固定更新。</li>
-</ul>
-</li>
-</ul>
-<p>如果你的 APP 的幀率低於固定時間步長值，這意味著每個幀的持續時間比單個固定時間步長還要長。為了解決這個問題，Unity 每幀會執行一個或多個固定更新，以便物理模擬能夠趕上自上一幀以來流逝的時間。</p>
-<ul>
-<li>例如，如果你的固定時間步長值為 0.01，每秒會執行 100 次固定更新。如果你的應用以每秒 25 幀的速度運行，每幀的持續時間（0.04 秒）是固定時間步長值（0.01 秒）的四倍， Unity 將每幀執行四次固定更新。在幀率較低時，Unity 通過增加固定更新次數來保持物理模擬的準確性。</li>
-</ul>
-<p><code>fixedDeltaTime</code> 設定的越低，表示越頻繁的執行物理更新，模擬的越精確，但是會加大 CPU 的負擔。</p>
-<p>返回 <a href="/2024/06/26/2024-06-26-time-and-frame/">時間與幀</a> 大綱</p>
-</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/categories/Unity/page/2/">上一頁</a></div><div class="pagination-next"><a href="/categories/Unity/page/4/">下一頁</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/categories/Unity/">1</a></li><li><a class="pagination-link" href="/categories/Unity/page/2/">2</a></li><li><a class="pagination-link is-current" href="/categories/Unity/page/3/">3</a></li><li><a class="pagination-link" href="/categories/Unity/page/4/">4</a></li><li><span class="pagination-ellipsis">&hellip;</span></li><li><a class="pagination-link" href="/categories/Unity/page/8/">8</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/AWS/"><span class="level-start"><span class="level-item">AWS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/C-%E8%AA%9E%E8%A8%80/"><span class="level-start"><span class="level-item">C# 語言</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Chrome/"><span class="level-start"><span class="level-item">Chrome</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Design-Pattern/"><span class="level-start"><span class="level-item">Design Pattern</span></span><span class="level-end"><span class="level-item tag">15</span></span></a></li><li><a class="level is-mobile" href="/categories/Docker/"><span class="level-start"><span class="level-item">Docker</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/IDE%E6%93%8D%E4%BD%9C/"><span class="level-start"><span class="level-item">IDE操作</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/JavaScript/"><span class="level-start"><span class="level-item">JavaScript</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Mac/"><span class="level-start"><span class="level-item">Mac</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/SQL/"><span class="level-start"><span class="level-item">SQL</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Tools/"><span class="level-start"><span class="level-item">Tools</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/Unity/"><span class="level-start"><span class="level-item">Unity</span></span><span class="level-end"><span class="level-item tag">75</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E7%B6%B1/"><span class="level-start"><span class="level-item">大綱</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-12T01:54:01.988Z">2025-02-12</time></p><p class="title"><a href="/2025/02/12/2025-02-12-image-to-base64/">圖片與 Base64 轉換 - 線上工具</a></p><p class="categories"><a href="/categories/Tools/">Tools</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-09T05:42:10.769Z">2025-02-09</time></p><p class="title"><a href="/2025/02/09/2025-02-09-mp3-converter/">MP3 轉換器</a></p><p class="categories"><a href="/categories/Tools/">Tools</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-08T06:19:59.255Z">2025-02-08</time></p><p class="title"><a href="/2025/02/08/2025-02-08-%E5%B0%87%E8%B3%87%E6%96%99%E5%A4%BE%E6%8C%87%E5%90%91%E5%88%B0%E5%85%B6%E4%BB%96%E4%BD%8D%E7%BD%AE/">將資料夾指向到其他位置</a></p><p class="categories"><a href="/categories/Mac/">Mac</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-07T16:49:14.797Z">2025-02-08</time></p><p class="title"><a href="/2025/02/08/2025-02-08-docker-note/">Docker 筆記</a></p><p class="categories"><a href="/categories/Docker/">Docker</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-01-30T02:26:23.560Z">2025-01-30</time></p><p class="title"><a href="/2025/01/30/2025-01-30-create-unit-test-for-unity/">在 Unity 中使用 Unit test</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2025/02/"><span class="level-start"><span class="level-item">二月 2025</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/01/"><span class="level-start"><span class="level-item">一月 2025</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/12/"><span class="level-start"><span class="level-item">十二月 2024</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/09/"><span class="level-start"><span class="level-item">九月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/08/"><span class="level-start"><span class="level-item">八月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/07/"><span class="level-start"><span class="level-item">七月 2024</span></span><span class="level-end"><span class="level-item tag">17</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/06/"><span class="level-start"><span class="level-item">六月 2024</span></span><span class="level-end"><span class="level-item tag">24</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/05/"><span class="level-start"><span class="level-item">五月 2024</span></span><span class="level-end"><span class="level-item tag">20</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/04/"><span class="level-start"><span class="level-item">四月 2024</span></span><span class="level-end"><span class="level-item tag">37</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/02/"><span class="level-start"><span class="level-item">二月 2024</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI/"><span class="tag">AI</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C#</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chrome/"><span class="tag">Chrome</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DB/"><span class="tag">DB</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Eclipse/"><span class="tag">Eclipse</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Event/"><span class="tag">Event</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Flex/"><span class="tag">Flex</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-API/"><span class="tag">Google API</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-Search-Console/"><span class="tag">Google Search Console</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Input-System/"><span class="tag">Input System</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Formatter/"><span class="tag">JSON Formatter</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Pretty/"><span class="tag">JSON Pretty</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Joint-2D/"><span class="tag">Joint 2D</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Mac/"><span class="tag">Mac</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ParticleSystem/"><span class="tag">ParticleSystem</span><span class="tag">13</span></a></div><div class="control"><a class="tags has-addons" href="/tags/SQL%E8%AA%9E%E6%B3%95/"><span class="tag">SQL語法</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ScriptableObject/"><span class="tag">ScriptableObject</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UGUI/"><span class="tag">UGUI</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Builder/"><span class="tag">UI Builder</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Toolkit/"><span class="tag">UI Toolkit</span><span class="tag">18</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unit-Test/"><span class="tag">Unit Test</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-Tips/"><span class="tag">Unity Tips</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-package/"><span class="tag">Unity package</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity%E6%9E%B6%E6%A7%8B/"><span class="tag">Unity架構</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/delegate/"><span class="tag">delegate</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/html/"><span class="tag">html</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/sitemap/"><span class="tag">sitemap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-id/"><span class="tag">taiwan_id</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B8%E5%AD%B8%E7%9B%B8%E9%97%9C/"><span class="tag">數學相關</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%82%E9%96%93/"><span class="tag">時間</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%89%A9%E7%90%86%E7%9B%B8%E9%97%9C/"><span class="tag">物理相關</span><span class="tag">5</span></a></div></div></div></div></div><div class="card widget" data-type="adsense"><div class="card-content"><div class="menu"><h3 class="menu-label">廣告</h3><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7911581883313737" data-ad-slot="4842521037" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a><p class="is-size-7"><span>&copy; 2025 Mystudybook</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-tw");</script><script>var IcarusThemeSettings = {
+</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/categories/Unity/page/2/">上一頁</a></div><div class="pagination-next"><a href="/categories/Unity/page/4/">下一頁</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/categories/Unity/">1</a></li><li><a class="pagination-link" href="/categories/Unity/page/2/">2</a></li><li><a class="pagination-link is-current" href="/categories/Unity/page/3/">3</a></li><li><a class="pagination-link" href="/categories/Unity/page/4/">4</a></li><li><span class="pagination-ellipsis">&hellip;</span></li><li><a class="pagination-link" href="/categories/Unity/page/9/">9</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/AWS/"><span class="level-start"><span class="level-item">AWS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/C-%E8%AA%9E%E8%A8%80/"><span class="level-start"><span class="level-item">C# 語言</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Chrome/"><span class="level-start"><span class="level-item">Chrome</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Design-Pattern/"><span class="level-start"><span class="level-item">Design Pattern</span></span><span class="level-end"><span class="level-item tag">15</span></span></a></li><li><a class="level is-mobile" href="/categories/Docker/"><span class="level-start"><span class="level-item">Docker</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/IDE%E6%93%8D%E4%BD%9C/"><span class="level-start"><span class="level-item">IDE操作</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/JavaScript/"><span class="level-start"><span class="level-item">JavaScript</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Mac/"><span class="level-start"><span class="level-item">Mac</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/SQL/"><span class="level-start"><span class="level-item">SQL</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Tools/"><span class="level-start"><span class="level-item">Tools</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/Unity/"><span class="level-start"><span class="level-item">Unity</span></span><span class="level-end"><span class="level-item tag">81</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E7%B6%B1/"><span class="level-start"><span class="level-item">大綱</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-14T00:08:14.885Z">2025-02-14</time></p><p class="title"><a href="/2025/02/14/2025-02-14-shader-graph-simple-example/">Shader Graph 入門</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-13T00:15:57.255Z">2025-02-13</time></p><p class="title"><a href="/2025/02/13/2025-02-13-shader-graph-outline/">Shader Graph 筆記大綱</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E7%B6%B1/">大綱</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-13T00:15:10.388Z">2025-02-13</time></p><p class="title"><a href="/2025/02/13/2025-02-13-shader-graph-properties/">Shader Graph Properties</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-12T23:00:25.913Z">2025-02-13</time></p><p class="title"><a href="/2025/02/13/2025-02-13-shader-graph-block-node/">Shader Graph Block Node 筆記</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-12T06:16:33.240Z">2025-02-12</time></p><p class="title"><a href="/2025/02/12/2025-02-12-shader-graph-space/">Shader Graph 的空間</a></p><p class="categories"><a href="/categories/Unity/">Unity</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2025/02/"><span class="level-start"><span class="level-item">二月 2025</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/01/"><span class="level-start"><span class="level-item">一月 2025</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/12/"><span class="level-start"><span class="level-item">十二月 2024</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/09/"><span class="level-start"><span class="level-item">九月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/08/"><span class="level-start"><span class="level-item">八月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/07/"><span class="level-start"><span class="level-item">七月 2024</span></span><span class="level-end"><span class="level-item tag">17</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/06/"><span class="level-start"><span class="level-item">六月 2024</span></span><span class="level-end"><span class="level-item tag">24</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/05/"><span class="level-start"><span class="level-item">五月 2024</span></span><span class="level-end"><span class="level-item tag">20</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/04/"><span class="level-start"><span class="level-item">四月 2024</span></span><span class="level-end"><span class="level-item tag">37</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/02/"><span class="level-start"><span class="level-item">二月 2024</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI/"><span class="tag">AI</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C#</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chrome/"><span class="tag">Chrome</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DB/"><span class="tag">DB</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Eclipse/"><span class="tag">Eclipse</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Event/"><span class="tag">Event</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Flex/"><span class="tag">Flex</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-API/"><span class="tag">Google API</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-Search-Console/"><span class="tag">Google Search Console</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Input-System/"><span class="tag">Input System</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Formatter/"><span class="tag">JSON Formatter</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Pretty/"><span class="tag">JSON Pretty</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Joint-2D/"><span class="tag">Joint 2D</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Mac/"><span class="tag">Mac</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ParticleSystem/"><span class="tag">ParticleSystem</span><span class="tag">13</span></a></div><div class="control"><a class="tags has-addons" href="/tags/SQL%E8%AA%9E%E6%B3%95/"><span class="tag">SQL語法</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ScriptableObject/"><span class="tag">ScriptableObject</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Shader-Graph/"><span class="tag">Shader Graph</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UGUI/"><span class="tag">UGUI</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Builder/"><span class="tag">UI Builder</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Toolkit/"><span class="tag">UI Toolkit</span><span class="tag">18</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unit-Test/"><span class="tag">Unit Test</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-Tips/"><span class="tag">Unity Tips</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-package/"><span class="tag">Unity package</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity%E6%9E%B6%E6%A7%8B/"><span class="tag">Unity架構</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/delegate/"><span class="tag">delegate</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/html/"><span class="tag">html</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/sitemap/"><span class="tag">sitemap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-id/"><span class="tag">taiwan_id</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B8%E5%AD%B8%E7%9B%B8%E9%97%9C/"><span class="tag">數學相關</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%82%E9%96%93/"><span class="tag">時間</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%89%A9%E7%90%86%E7%9B%B8%E9%97%9C/"><span class="tag">物理相關</span><span class="tag">5</span></a></div></div></div></div></div><div class="card widget" data-type="adsense"><div class="card-content"><div class="menu"><h3 class="menu-label">廣告</h3><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7911581883313737" data-ad-slot="4842521037" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a><p class="is-size-7"><span>&copy; 2025 Mystudybook</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-tw");</script><script>var IcarusThemeSettings = {
             article: {
                 highlight: {
                     clipboard: true,
