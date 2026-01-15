@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>圖片轉檔工具</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        :root { --primary: #4a90e2; --success: #27ae60; --bg: #f8f9fa; }
+        body { font-family: sans-serif; background: var(--bg); padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        #dropZone { border: 2px dashed #bbb; border-radius: 10px; padding: 30px; text-align: center; cursor: pointer; }
+        #dropZone.dragover { border-color: var(--primary); background: #f0f7ff; }
+        .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 15px; margin: 20px 0; padding: 15px; background: #f1f3f5; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+        .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; }
+        .btn-convert { background: var(--primary); color: white; }
+        .btn-zip { background: #333; color: white; display: none; }
+        .btn-single { background: var(--success); color: white; font-size: 12px; display: none; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📸 圖片轉檔</h2>
+    <div id="dropZone"><p>拖放圖片或點擊選擇</p><input type="file" id="fileInput" hidden accept="image/*" multiple></div>
+
+    <div class="toolbar">
+        <label>格式：<select id="formatSelect"><option value="image/webp">WebP</option><option value="image/jpeg">JPEG</option><option value="image/png">PNG</option></select></label>
+        <label>品質：<input type="range" id="qualityRange" min="10" max="100" value="80"> <span id="qV">80</span>%</label>
+        <button id="convertBtn" class="btn btn-convert">🚀 轉換 / 更新結果</button>
+        <button id="zipBtn" class="btn btn-zip">📦 下載全部 (ZIP)</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>預覽</th>
+                <th>原始資訊</th>
+                <th>原始大小</th>
+                <th>轉換後大小</th>
+                <th>動作</th>
+            </tr>
+        </thead>
+        <tbody id="resultBody"></tbody>
+    </table>
+</div>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const resultBody = document.getElementById('resultBody');
+    const convertBtn = document.getElementById('convertBtn');
+    const zipBtn = document.getElementById('zipBtn');
+    const qRange = document.getElementById('qualityRange');
+    const qV = document.getElementById('qV');
+    
+    let fileQueue = []; 
+
+    qRange.oninput = (e) => qV.innerText = e.target.value;
+    dropZone.onclick = () => fileInput.click();
+    fileInput.onchange = (e) => handleFileSelection(e.target.files);
+    dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('dragover'); };
+    dropZone.ondragleave = () => dropZone.classList.remove('dragover');
+    dropZone.ondrop = (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); handleFileSelection(e.dataTransfer.files); };
+
+    async function handleFileSelection(files) {
+        if (files.length === 0) return;
+        // 每次重新上傳，清空舊資料與連結
+        fileQueue.forEach(item => { if (item.convertedUrl) URL.revokeObjectURL(item.convertedUrl); });
+        fileQueue = [];
+        resultBody.innerHTML = '';
+        zipBtn.style.display = 'none';
+
+        for (const file of Array.from(files)) {
+            if (!file.type.startsWith('image/')) continue;
+            const dataUrl = await readFile(file);
+            const img = await loadImage(dataUrl);
+            const id = 'f_' + Math.random().toString(36).substr(2, 9);
+            
+            fileQueue.push({ id, file, imgElement: img, preview: dataUrl, convertedBlob: null, convertedUrl: null, newName: '' });
+
+            const tr = document.createElement('tr');
+            tr.id = id;
+            tr.innerHTML = `
+                <td><img src="${dataUrl}" class="thumb"></td>
+                <td><strong>${file.name}</strong><br><small>${img.width}x${img.height}</small></td>
+                <td>${(file.size / 1024).toFixed(1)} KB</td>
+                <td class="status-cell">等待轉換</td>
+                <td><a class="btn btn-single">下載</a></td>
+            `;
+            resultBody.appendChild(tr);
+        }
+    }
+
+    function readFile(file) { return new Promise(r => { const rd = new FileReader(); rd.onload = e => r(e.target.result); rd.readAsDataURL(file); }); }
+    function loadImage(src) { return new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; }); }
+
+    convertBtn.onclick = async () => {
+        if (fileQueue.length === 0) return alert('請先新增圖片');
+        
+        const format = document.getElementById('formatSelect').value;
+        const quality = parseInt(qRange.value) / 100;
+        const ext = format.split('/')[1];
+
+        convertBtn.disabled = true;
+
+        for (const item of fileQueue) {
+            const row = document.getElementById(item.id);
+            const statusCell = row.querySelector('.status-cell');
+            const dBtn = row.querySelector('.btn-single');
+
+            // --- 核心修正 1：釋放舊的 Blob URL 避免記憶體洩漏 ---
+            if (item.convertedUrl) URL.revokeObjectURL(item.convertedUrl);
+
+            // --- 核心修正 2：重新產生檔名 (隨機字串防重複) ---
+            const lastDotIndex = item.file.name.lastIndexOf('.');
+            const baseName = lastDotIndex === -1 ? item.file.name : item.file.name.substring(0, lastDotIndex);
+            const randomId = Math.random().toString(36).substr(2, 5); 
+            item.newName = `${baseName}_${randomId}.${ext}`;
+
+            // 繪製
+            const canvas = document.createElement('canvas');
+            canvas.width = item.imgElement.width;
+            canvas.height = item.imgElement.height;
+            canvas.getContext('2d').drawImage(item.imgElement, 0, 0);
+
+            // 轉檔
+            const blob = await new Promise(r => canvas.toBlob(r, format, quality));
+            item.convertedBlob = blob;
+            const url = URL.createObjectURL(blob);
+            item.convertedUrl = url;
+
+            // 更新 UI
+            statusCell.innerHTML = `<b style="color:var(--success)">${(blob.size/1024).toFixed(1)} KB</b>`;
+            dBtn.href = url;
+            dBtn.download = item.newName;
+            dBtn.style.display = 'inline-block';
+        }
+        convertBtn.disabled = false;
+        zipBtn.style.display = 'inline-block';
+    };
+
+    zipBtn.onclick = async () => {
+        const zip = new JSZip();
+        fileQueue.forEach(item => { if(item.convertedBlob) zip.file(item.newName, item.convertedBlob); });
+        zipBtn.disabled = true;
+        const zipBlob = await zip.generateAsync({type:"blob"}, (m) => {
+            zipBtn.innerText = `打包 ${m.percent.toFixed(0)}%`;
+        });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(zipBlob);
+        link.download = `bundle_${Date.now()}.zip`;
+        link.click();
+        zipBtn.disabled = false;
+        zipBtn.innerText = "📦 下載全部 (ZIP)";
+    };
+</script>
+</body>
+</html>
