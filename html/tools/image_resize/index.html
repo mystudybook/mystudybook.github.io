@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專業批次圖片縮放工具 - 支援拖曳上傳</title>
+    <meta name="description" content="支援拖曳上傳的線上圖片批次縮放工具。自動顯示每張原始尺寸，鎖定比例不失真。">
+    
+    <style>
+        :root { --primary: #1a73e8; --bg: #f8f9fa; --secondary: #5f6368; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 950px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; font-size: 1.8em; }
+        .subtitle { text-align: center; color: var(--secondary); margin-bottom: 30px; font-size: 0.9em; }
+
+        /* 拖曳區樣式優化 */
+        .upload-section { 
+            border: 2px dashed #cbd5e0; 
+            padding: 40px; 
+            text-align: center; 
+            cursor: pointer; 
+            border-radius: 12px; 
+            transition: all 0.2s ease; 
+            background: #fff; 
+            margin-bottom: 25px; 
+        }
+        /* 當檔案拖到上方時的視覺效果 */
+        .upload-section.dragover { 
+            border-color: var(--primary); 
+            background: #eef5ff; 
+            transform: scale(1.02);
+        }
+
+        .global-settings { background: #e8f0fe; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #d2e3fc; }
+        .global-settings h2 { margin-top: 0; font-size: 1.1em; color: #174ea6; }
+        .setting-controls { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+        
+        .image-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; gap: 20px; background: #fff; border-radius: 8px; margin-bottom: 10px; border: 1px solid transparent; transition: 0.2s; }
+        .image-item:hover { border-color: #d2e3fc; background: #fdfdfd; }
+        
+        .thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; }
+        .file-info { flex: 2; min-width: 150px; }
+        .file-name { font-weight: bold; font-size: 0.9em; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; color: #202124; }
+        .orig-size-tag { display: inline-block; background: #f1f3f4; color: #5f6368; padding: 2px 8px; border-radius: 4px; font-size: 0.75em; margin-top: 5px; border: 1px solid #dadce0; }
+
+        .item-controls { flex: 3; display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+        .input-wrapper { display: flex; flex-direction: column; align-items: center; }
+        .input-label { font-size: 0.7em; color: #888; margin-bottom: 2px; }
+        input[type="number"] { width: 85px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; text-align: center; }
+        
+        .btn { padding: 10px 20px; border-radius: 6px; cursor: pointer; border: none; font-weight: 600; transition: 0.2s; }
+        .btn-apply { background: #174ea6; color: white; }
+        .btn-download { background: var(--primary); color: white; width: 100%; padding: 15px; font-size: 1.1em; margin-top: 20px; }
+        .remove-btn { color: #d93025; cursor: pointer; font-size: 1.2em; padding: 0 10px; }
+
+        .seo-content { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; color: #777; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+
+<main class="container">
+    <header>
+        <h1>批次圖片尺寸調整工具</h1>
+        <p class="subtitle">支援拖曳上傳與原始解析度顯示</p>
+    </header>
+
+    <section class="upload-section" id="dropZone">
+        <strong>將圖片拖曳到此處，或點擊選擇檔案</strong>
+        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">一次支援多張圖片上傳</p>
+        <input type="file" id="fileInput" accept="image/*" multiple style="display:none">
+    </section>
+
+    <section id="batchBox" class="global-settings" style="display:none;">
+        <h2>⚙️ 批次統一設定</h2>
+        <div class="setting-controls">
+            <div>
+                <label style="font-size: 0.85em; font-weight: bold;">統一寬度 (px):</label>
+                <input type="number" id="allWidth" placeholder="輸入寬度">
+            </div>
+            <div style="display:flex; align-items: center; gap: 5px;">
+                <input type="checkbox" id="globalLock" checked> 
+                <label for="globalLock" style="cursor:pointer; font-size: 0.85em;">保持比例</label>
+            </div>
+            <button class="btn btn-apply" onclick="applyToAll()">套用至全部</button>
+        </div>
+    </section>
+
+    <section id="imageList"></section>
+    <button id="downloadAllBtn" class="btn btn-download" disabled>全部處理並下載 (0)</button>
+
+    <article class="seo-content">
+        <p>所有圖片均在您的瀏覽器本地處理，保障隱私。</p>
+    </article>
+</main>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const imageList = document.getElementById('imageList');
+    const downloadAllBtn = document.getElementById('downloadAllBtn');
+    const batchBox = document.getElementById('batchBox');
+    const allWidthInput = document.getElementById('allWidth');
+    const globalLock = document.getElementById('globalLock');
+    
+    let filesData = [];
+
+    // --- 拖曳功能實作 ---
+
+    // 1. 當檔案拖入區域時改變樣式
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('dragover');
+        }, false);
+    });
+
+    // 2. 當檔案離開或放開時恢復樣式
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('dragover');
+        }, false);
+    });
+
+    // 3. 處理放開檔案的動作
+    dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }, false);
+
+    // 4. 處理點擊上傳
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    // --- 檔案處理核心邏輯 ---
+
+    async function handleFiles(files) {
+        const selectedFiles = Array.from(files);
+        for (const file of selectedFiles) {
+            if (!file.type.startsWith('image/')) continue; // 確保是圖片
+            await processFile(file);
+        }
+        fileInput.value = ""; 
+        renderList();
+    }
+
+    function processFile(file) {
+        return new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    filesData.push({
+                        id: Date.now() + Math.random(),
+                        name: file.name,
+                        src: e.target.result,
+                        origW: img.width,
+                        origH: img.height,
+                        ratio: img.width / img.height,
+                        newW: img.width,
+                        newH: img.height
+                    });
+                    resolve();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function applyToAll() {
+        const targetW = parseInt(allWidthInput.value);
+        if (!targetW) return;
+        filesData.forEach(item => {
+            item.newW = targetW;
+            if (globalLock.checked) item.newH = Math.round(targetW / item.ratio);
+        });
+        renderList();
+    }
+
+    function renderList() {
+        imageList.innerHTML = "";
+        batchBox.style.display = filesData.length > 0 ? 'block' : 'none';
+        downloadAllBtn.disabled = filesData.length === 0;
+        downloadAllBtn.innerText = `全部處理並下載 (${filesData.length})`;
+        
+        filesData.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'image-item';
+            row.innerHTML = `
+                <img src="${item.src}" class="thumb" alt="預覽">
+                <div class="file-info">
+                    <span class="file-name" title="${item.name}">${item.name}</span>
+                    <span class="orig-size-tag">原始解析度: <b>${item.origW} x ${item.origH}</b> px</span>
+                </div>
+                <div class="item-controls">
+                    <div class="input-wrapper">
+                        <span class="input-label">寬 (W)</span>
+                        <input type="number" value="${item.newW}" onchange="updateSingle(${item.id}, 'w', this.value)">
+                    </div>
+                    <span style="margin-top: 15px; color: #ccc;">×</span>
+                    <div class="input-wrapper">
+                        <span class="input-label">高 (H)</span>
+                        <input type="number" value="${item.newH}" onchange="updateSingle(${item.id}, 'h', this.value)">
+                    </div>
+                </div>
+                <div class="remove-btn" onclick="removeItem(${item.id})">✕</div>
+            `;
+            imageList.appendChild(row);
+        });
+    }
+
+    function updateSingle(id, type, val) {
+        const item = filesData.find(f => f.id === id);
+        val = parseInt(val) || 0;
+        if (type === 'w') {
+            item.newW = val;
+            if (globalLock.checked) item.newH = Math.round(val / item.ratio);
+        } else {
+            item.newH = val;
+            if (globalLock.checked) item.newW = Math.round(val * item.ratio);
+        }
+        renderList();
+    }
+
+    function removeItem(id) {
+        filesData = filesData.filter(f => f.id !== id);
+        renderList();
+    }
+
+    downloadAllBtn.addEventListener('click', async () => {
+        downloadAllBtn.disabled = true;
+        for (let i = 0; i < filesData.length; i++) {
+            await downloadImage(filesData[i]);
+            await new Promise(r => setTimeout(r, 450));
+        }
+        downloadAllBtn.disabled = false;
+        alert("所有檔案已下載！");
+    });
+
+    function downloadImage(item) {
+        return new Promise(resolve => {
+            const canvas = document.createElement('canvas');
+            const img = new Image();
+            img.onload = () => {
+                canvas.width = item.newW;
+                canvas.height = item.newH;
+                canvas.getContext('2d').drawImage(img, 0, 0, item.newW, item.newH);
+                const a = document.createElement('a');
+                a.href = canvas.toDataURL('image/jpeg', 0.88);
+                a.download = `resized_${item.name}`;
+                a.click();
+                resolve();
+            };
+            img.src = item.src;
+        });
+    }
+</script>
+
+</body>
+</html>

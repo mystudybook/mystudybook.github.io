@@ -1,0 +1,131 @@
+<!-- <link href="https://cdn.jsdelivr.net/npm/grapesjs@0.21.12/dist/css/grapes.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/grapesjs@0.21.12/dist/grapes.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-newsletter@1.0.2/dist/index.js"></script> -->
+
+
+<link href="./grapesjs/grapes.min.css" rel="stylesheet">
+
+<script src="./grapesjs/grapes.min.js"></script>
+<script src="./grapesjs/newsletter.js"></script>
+
+
+<div id="gjs"></div>
+
+<textarea id="output"></textarea>
+<button id="getOutput">Get output</button>
+
+<script type="text/javascript">
+  var editor = grapesjs.init({
+    container: '#gjs',
+    avoidInlineStyle: false,
+    storageManager: false,
+    plugins: ['grapesjs-preset-newsletter'],
+    pluginsOpts: {
+      'grapesjs-preset-newsletter': {
+        // options
+      }
+    },
+    assetManager: {
+      embedAsBase64: false,
+      openAssetsOnDrop: false,
+      autoAdd: false,
+      upload: false,
+      showUrlInput: false,
+      custom: true
+    },
+  });
+  console.log(editor.Commands.get('gjs-get-inlined-html'));
+
+  document.getElementById("getOutput").addEventListener('click', function (event) {
+    var content = editor.Canvas.getDocument();
+    document.getElementById("output").value = '<html>' + content.documentElement.innerHTML + '</html>';
+  });
+  const assetManager = editor.AssetManager;
+
+  editor.Commands.add('open-assets', () => console.log('do nothing'));
+
+  editor.on("component:selected", model => {
+
+    if (model.attributes.type === 'image') {
+      model.addTrait({
+        name: 'src',
+      });
+    }
+
+    model.getSrcResult = () => {
+      return model.src;
+    }
+
+  });
+
+  editor.on("component:mount", model => {
+    model.getSrcResult = () => {
+      return 'null';
+    }
+  })
+
+  const imageComponentType = editor.DomComponents.componentTypes.find(item => item.id === "image");
+  const { DomComponents, Blocks } = editor;
+
+  
+  // DomComponents.addType("image", {
+  //   isComponent: el => el.tagName == 'img',
+  //   extend: "image",
+  //   model: {
+  //     defaults:{
+  //       tagName: 'img',
+  //       traits: [
+  //         'alt',
+  //         'src'
+  //       ],
+  //     }
+  //   },
+  //   view: {
+  //     events: {
+  //       dblclick: "handleDblClick"
+  //     },
+  //     handleDblClick() {
+  //       alert("Howdy!");
+  //     }
+  //   }
+  // });
+
+  // Blocks.add("Image", {
+  //   label: "Custom Image",
+  //   attributes: { class: "fa fa-file-image-o" },
+  //   content: {
+  //     type: "custom-image"
+  //   }
+  // });
+
+
+  // debugger
+  // DomComponents.addType('image', {
+  //   extend: "image",
+  //   isComponent: el => el.tagName == 'img',
+  //   model: {
+  //     defaults: {
+  //       traits: [
+  //         'alt',
+  //         'src'
+  //       ],
+  //     },
+  //   },
+  // });
+
+
+  // editor.Components.addType('image', {
+  //   model: {
+  //     defaults: {
+  //       traits: [
+  //         {
+  //           type: 'href-next',
+  //           name: 'href',
+  //           label: 'New href',
+  //         },
+  //       ]
+  //     }
+  //   }
+  // });
+</script>

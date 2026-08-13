@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PrimeVue + CDN</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    
+  </head>
+  <body>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/primevue@3.52.0/resources/themes/arya-blue/theme.css" />
+    <style>
+      .p-fileupload-file-thumbnail  {
+        display: none;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.4.27/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/core/core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/fileupload/fileupload.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/dialog/dialog.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/dialog/style/dialogstyle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/button/button.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/primevue@3.52.0/dropdown.min.js"></script>
+
+    <div id="app">
+      <p-dropdown input-id="data-type" v-model="selectedDataType" v-model:invalid="val" placeholder="Please Select a Data Type"  name="dataType" :options="dataType" option-label="name" class="w-full md:w-14rem" />
+
+      <p-dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '25rem' }">
+          <span class="p-text-secondary block mb-5">Update your information.</span>
+          <div class="flex align-items-center gap-3 mb-3">
+              <label for="username" class="font-semibold w-6rem">Username</label>
+          </div>
+          <div class="flex align-items-center gap-3 mb-5">
+              <label for="email" class="font-semibold w-6rem">Email</label>
+          </div>
+          <div class="flex justify-content-end gap-2">
+              <p-button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
+              <p-button type="button" label="Save" @click="visible = false"></Button>
+          </div>
+      </p-dialog>
+    </div>
+    
+
+
+    <script>
+      const { createApp, ref } = Vue;
+      const visible = ref(false);
+      const app = createApp({
+        setup() {
+          const onUpload = (event) => {
+              location.reload() 
+          }
+
+          const dataType = ref([
+              { name: 'test1', data: 'data1' },
+              { name: 'test2', data: 'data2' }
+          ]);          
+          const selectedDataType = ref();
+
+          const val = ref(false);
+          val.value = true;
+          return {
+            onUpload,
+            visible,
+            dataType,
+            selectedDataType,
+            val
+          };
+        },
+      });
+      app.use(primevue.config.default);
+      app.component('p-file', primevue.fileupload);
+      app.component('p-dialog', primevue.dialog);
+      app.component('p-button', primevue.button);
+      app.component('p-dropdown', primevue.dropdown);
+
+      app.mount('#app');
+    </script>
+  </body>
+</html>
