@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台灣測試資料產生器 - 姓名、身分證、電話、地址隨機產生</title>
+<meta name="description" content="免費台灣測試資料產生器，可隨機產生台灣姓名、身分證字號、生日、手機號碼、Email 與地址，適合程式開發、資料庫及表單測試使用。">
+<meta name="keywords" content="台灣測試資料,身分證產生器,隨機姓名,台灣地址,假資料,測試用資料,資料庫測試,表單測試,Taiwan test data, fake person generator">
+<meta property="og:title" content="台灣測試資料產生器 - 姓名、身分證、電話、地址隨機產生">
+<meta property="og:description" content="免費台灣測試資料產生器，可隨機產生台灣姓名、身分證字號、生日、手機號碼、Email 與地址，適合程式開發、資料庫及表單測試使用。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "台灣測試資料產生器",
+  "alternateName": "Taiwan Test Data Generator",
+  "description": "免費線上工具，可隨機產生台灣姓名、身分證字號、性別、出生日期、手機號碼、Email 與地址，支援 CSV 與 JSON 匯出，適合程式開發、資料庫及表單測試使用。",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "currency": "TWD"
+  },
+  "featureList": "隨機姓名、身分證字號（含驗證碼）、性別、出生日期、手機號碼、Email、台灣地址、郵遞區號、UUID，支援 CSV／JSON 匯出"
+}
+</script>
+<style>
+  body {
+    font-family: "Microsoft JhengHei", Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: #222;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  h1 small {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    font-weight: normal;
+    margin-top: 4px;
+  }
+  label {
+    display: block;
+    margin: 12px 0 4px;
+    font-weight: bold;
+  }
+  select, button, input[type="text"], input[type="number"] {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .age-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .age-row input {
+    width: 90px;
+  }
+  .checkbox-group {
+    column-count: 2;
+    column-gap: 16px;
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+  }
+  .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: normal;
+    margin: 6px 0;
+  }
+  .checkbox-group input {
+    width: auto;
+  }
+  .result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .result-actions button {
+    margin: 0;
+    flex: 1 1 auto;
+    width: auto;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    margin-top: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  thead th {
+    background-color: #f0f0f0;
+    position: sticky;
+    top: 0;
+  }
+  .table-wrap {
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  .disclaimer {
+    color: #b00;
+    margin-top: 16px;
+    font-size: 13px;
+  }
+  .empty-hint {
+    color: #999;
+    padding: 12px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<h1>台灣測試資料產生器<small>Taiwan Test Data Generator</small></h1>
+
+<div class="container">
+  <label for="city">選擇縣市：</label>
+  <select id="city">
+    <option value="NONE">請選擇（若不選擇則隨機產生）</option>
+  </select>
+
+  <label for="gender">選擇性別：</label>
+  <select id="gender">
+    <option value="NONE">請選擇（若不選擇則隨機產生）</option>
+    <option value="1">男性</option>
+    <option value="2">女性</option>
+  </select>
+
+  <label>年齡範圍：</label>
+  <div class="age-row">
+    <input type="number" id="minAge" value="18" min="0" max="120">
+    <span>～</span>
+    <input type="number" id="maxAge" value="65" min="0" max="120">
+  </div>
+
+  <label>選擇產生欄位：</label>
+  <div class="checkbox-group" id="fieldGroup">
+    <label><input type="checkbox" data-field="name" checked> 姓名</label>
+    <label><input type="checkbox" data-field="id" checked> 身分證字號</label>
+    <label><input type="checkbox" data-field="gender" checked> 性別</label>
+    <label><input type="checkbox" data-field="birthday" checked> 出生日期</label>
+    <label><input type="checkbox" data-field="phone" checked> 手機號碼</label>
+    <label><input type="checkbox" data-field="email" checked> Email</label>
+    <label><input type="checkbox" data-field="address" checked> 地址</label>
+    <label><input type="checkbox" data-field="postalCode"> 郵遞區號</label>
+    <label><input type="checkbox" data-field="uuid"> UUID</label>
+  </div>
+
+  <label for="domain">Email 網域：</label>
+  <input type="text" id="domain" placeholder="可輸入多個，以逗號或換行分隔（留空則用 example.com）" value="">
+
+  <label for="count">選擇產生筆數：</label>
+  <select id="count">
+    <option value="1">1</option>
+    <option value="5">5</option>
+    <option value="10" selected>10</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+    <option value="200">200</option>
+    <option value="500">500</option>
+    <option value="1000">1000</option>
+    <option value="5000">5000</option>
+    <option value="10000">10000</option>
+  </select>
+
+  <button onclick="generateResult()">產生</button>
+</div>
+
+<div class="container" style="margin-top:20px;">
+  <h2 style="text-align:center;">產生結果</h2>
+  <div class="result-actions">
+    <button onclick="copyAll()">複製全部</button>
+    <button onclick="downloadCsv()">CSV</button>
+    <button onclick="downloadJson()">JSON</button>
+  </div>
+  <div id="tableWrap" class="table-wrap">
+    <div class="empty-hint">尚未產生資料，請先點選「產生」。</div>
+  </div>
+  <div class="disclaimer">
+    本產生器所產生之姓名、身分證字號、電話、Email 與地址皆為隨機測試資料，
+    僅供程式開發與測試使用，切勿用於非法用途。地址為隨機組合，不保證為真實地址。
+  </div>
+</div>
+
+<script src="./address_data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/pinyin-pro/dist/index.js" crossorigin="anonymous"></script>
+<script>
+
+// ===== 身分證相關常數（沿用中華民國身分證產生器規則）=====
+const firstLetterMapping = new Map([
+  ['A','10'],['B','11'],['C','12'],['D','13'],['E','14'],['F','15'],
+  ['G','16'],['H','17'],['I','34'],['J','18'],['K','19'],['M','21'],
+  ['N','22'],['O','35'],['P','23'],['Q','24'],['T','27'],['U','28'],
+  ['V','29'],['W','32'],['X','30'],['Z','33'],['L','20'],['R','25'],
+  ['S','26'],['Y','31']
+]);
+
+// ===== 輔助函式 =====
+const rand = (n) => Math.floor(Math.random() * n);
+const randInt = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pad = (n) => String(n).padStart(2, '0');
+
+// ===== 身分證：計數器式生成（批次內唯一）=====
+const idCounters = new Map();
+function getNextSeven(letter, genderDigit) {
+  const key = letter + genderDigit;
+  if (!idCounters.has(key)) {
+    idCounters.set(key, { next: Math.floor(Math.random() * 9000000) });
+  }
+  const c = idCounters.get(key);
+  const n = c.next++;
+  return String(n).padStart(7, '0');
+}
+function calcCheckDigit(letter, genderDigit, sevenDigits) {
+  const two = firstLetterMapping.get(letter);
+  const prefix = [two[0], two[1], String(genderDigit)].concat(sevenDigits.split(''));
+  const weights = [1, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+  let s = 0;
+  for (let i = 0; i < 10; i++) s += +prefix[i] * weights[i];
+  return (10 - (s % 10)) % 10;
+}
+function genId(letter, genderDigit) {
+  const seven = getNextSeven(letter, genderDigit);
+  const check = calcCheckDigit(letter, genderDigit, seven);
+  return letter + genderDigit + seven + check;
+}
+
+// ===== 姓名：3 字名（姓氏＋名字兩字），批次內去重 =====
+let nameData = null;
+function fetchCsv(url) {
+  return fetch(url).then(r => r.text()).then(text => {
+    const parsed = Papa.parse(text, { header: false, skipEmptyLines: true });
+    return parsed.data.map(row => (row[0] || '').trim()).filter(Boolean);
+  });
+}
+function loadNameData() {
+  if (nameData) return Promise.resolve(nameData);
+  return Promise.all([
+    fetchCsv('/html/tools/chinese_name/last_name.csv'),
+    fetchCsv('/html/tools/chinese_name/first_name_m.csv'),
+    fetchCsv('/html/tools/chinese_name/first_name_w.csv')
+  ]).then(([last, man, woman]) => {
+    nameData = { last, man, woman };
+    return nameData;
+  });
+}
+function genUniqueName(genderNum, used) {
+  const pool = genderNum === 1 ? nameData.man : nameData.woman;
+  for (let t = 0; t < 100; t++) {
+    const sur = nameData.last[rand(nameData.last.length)];
+    const given = pool[rand(pool.length)];
+    const name = sur + given;
+    if (!used.has(name)) { used.add(name); return name; }
+  }
+  const sur = nameData.last[rand(nameData.last.length)];
+  return sur + pool[rand(pool.length)];
+}
+
+// ===== Email 拼音轉寫 =====
+const PINYIN_FALLBACK = {
+  '王':'wang','李':'li','張':'zhang','劉':'liu','陳':'chen','楊':'yang','黃':'huang',
+  '郭':'guo','林':'lin','何':'he','徐':'xu','鄭':'zheng','謝':'xie','洪':'hong',
+  '趙':'zhao','蔡':'cai','潘':'pan','詹':'zhan','蘇':'su','邱':'qiu','曾':'zeng','廖':'liao',
+  '吳':'wu','余':'yu','金':'jin','游':'you','董':'dong','袁':'yuan','葉':'ye','侯':'hou',
+  '施':'shi','庄':'zhuang','江':'jiang','明':'ming','華':'hua','靜':'jing','慧':'hui',
+  '美':'mei','燕':'yan','芬':'fen','阿':'a','玉':'yu','珠':'zhu','秀':'xiu','蘭':'lan',
+  '蓮':'lian','志':'zhi','建':'jian','國':'guo','家':'jia','偉':'wei','強':'qiang'
+};
+function toLatin(pinyinStr) {
+  const r = pinyinPro.pinyin(pinyinStr, { toneMarks: false, toneType: 'none' });
+  if (Array.isArray(r)) return r.map(x => String(x).toLowerCase()).join('');
+  return String(r).replace(/\s+/g, '').toLowerCase();
+}
+function romanizeName(name) {
+  try {
+    if (window.pinyinPro && window.pinyinPro.pinyin) {
+      const sur = toLatin(name[0]);
+      const given = toLatin(name.slice(1));
+      if (sur) return sur + '.' + given;
+    }
+  } catch (e) { /* fall through */ }
+  let out = '';
+  for (const ch of name) {
+    if (PINYIN_FALLBACK[ch]) out += (out ? '.' : '') + PINYIN_FALLBACK[ch];
+  }
+  return out || 'testuser';
+}
+
+// ===== 地址：縣市＋行政區＋路名＋門牌 =====
+function selectCounty(letter) {
+  const arr = ADDRESS_DATA.counties;
+  if (letter === 'NONE') return arr[rand(arr.length)];
+  return arr.find(c => c.letter === letter) || arr[rand(arr.length)];
+}
+function genAddress(county) {
+  const district = county.districts[rand(county.districts.length)];
+  const base = ROAD_BASES[rand(ROAD_BASES.length)];
+  const dir = ROAD_DIRECTIONS[rand(ROAD_DIRECTIONS.length)];
+  const type = ROAD_TYPES[rand(ROAD_TYPES.length)];
+  const num = randInt(1, 500);
+  let addr = county.name + district.name;
+  if (Math.random() < 0.5) {
+    addr += base + dir + type + num + '巷' + randInt(1, 40) + '號';
+  } else {
+    addr += base + dir + type + num + '號';
+  }
+  return { address: addr, postalCode: district.postal };
+}
+
+// ===== 其他欄位 =====
+function genBirthday(minAge, maxAge) {
+  const lo = Math.min(minAge, maxAge), hi = Math.max(minAge, maxAge);
+  const age = randInt(lo, hi);
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - age);
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+function genPhone() {
+  let p = '09';
+  for (let i = 0; i < 8; i++) p += randInt(0, 9);
+  return p;
+}
+function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+// ===== 欄位設定 =====
+const FIELD_ORDER = ['name', 'id', 'gender', 'birthday', 'phone', 'email', 'address', 'postalCode', 'uuid'];
+const FIELD_LABELS = {
+  name: '姓名', id: '身分證字號', gender: '性別', birthday: '出生日期',
+  phone: '手機號碼', email: 'Email', address: '地址', postalCode: '郵遞區號', uuid: 'UUID'
+};
+function getCheckedFields() {
+  const fields = {};
+  document.querySelectorAll('#fieldGroup input[type=checkbox]').forEach(cb => {
+    fields[cb.dataset.field] = cb.checked;
+  });
+  return fields;
+}
+
+// ===== 產生主流程 =====
+let currentRecords = [];
+async function generateResult() {
+  const wrap = document.getElementById('tableWrap');
+  wrap.innerHTML = '<div class="empty-hint">產生中…</div>';
+
+  await loadNameData();
+
+  const genderSel = document.getElementById('gender').value;
+  const citySel = document.getElementById('city').value;
+  const count = Math.max(1, +document.getElementById('count').value || 1);
+  const minAge = +document.getElementById('minAge').value || 0;
+  const maxAge = +document.getElementById('maxAge').value || 0;
+  const domainInput = document.getElementById('domain').value.trim();
+  const domains = domainInput.split(/[\n,]/).map(s => s.trim()).filter(Boolean);
+  const fields = getCheckedFields();
+
+  const counties = ADDRESS_DATA.counties;
+  const records = [];
+  const usedNames = new Set();
+
+  for (let i = 0; i < count; i++) {
+    const genderNum = genderSel === 'NONE' ? (Math.random() < 0.5 ? 1 : 2) : +genderSel;
+    const county = selectCounty(citySel);
+
+    const rec = {};
+    let name = '';
+    if (fields.name) { name = genUniqueName(genderNum, usedNames); rec.name = name; }
+    if (fields.id) rec.id = genId(county.letter, genderNum);
+    if (fields.gender) rec.gender = genderNum === 1 ? '男' : '女';
+    if (fields.birthday) rec.birthday = genBirthday(minAge, maxAge);
+    if (fields.phone) rec.phone = genPhone();
+    if (fields.email) {
+      const dom = domains.length ? domains[rand(domains.length)] : 'example.com';
+      rec.email = romanizeName(name) + '@' + dom;
+    }
+    if (fields.address || fields.postalCode) {
+      const a = genAddress(county);
+      if (fields.address) rec.address = a.address;
+      if (fields.postalCode) rec.postalCode = a.postalCode;
+    }
+    if (fields.uuid) rec.uuid = uuid();
+
+    // 依固定順序排列鍵
+    const ordered = {};
+    FIELD_ORDER.forEach(k => { if (rec[k] !== undefined) ordered[k] = rec[k]; });
+    records.push(ordered);
+  }
+
+  currentRecords = records;
+  renderTable(records, fields);
+}
+
+function renderTable(records, fields) {
+  const wrap = document.getElementById('tableWrap');
+  if (!records.length) {
+    wrap.innerHTML = '<div class="empty-hint">無資料。</div>';
+    return;
+  }
+  const cols = FIELD_ORDER.filter(k => fields[k]);
+  let html = '<table><thead><tr>';
+  cols.forEach(c => html += `<th>${FIELD_LABELS[c]}</th>`);
+  html += '</tr></thead><tbody>';
+  records.forEach(r => {
+    html += '<tr>';
+    cols.forEach(c => html += `<td>${escapeHtml(String(r[c] ?? ''))}</td>`);
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+}
+
+// ===== 輸出：複製全部 / CSV / JSON =====
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); resolve(); } catch (e) { reject(e); }
+    document.body.removeChild(ta);
+  });
+}
+
+function tsvFromRecords(records, fields) {
+  const cols = FIELD_ORDER.filter(k => fields[k]);
+  const header = cols.join('\t');
+  const rows = records.map(r => cols.map(c => String(r[c] ?? '')).join('\t'));
+  return [header, ...rows].join('\n');
+}
+
+function csvEscape(v) {
+  const s = String(v);
+  if (/[",\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+  return s;
+}
+function csvFromRecords(records, fields) {
+  const cols = FIELD_ORDER.filter(k => fields[k]);
+  const header = cols.map(csvEscape).join(',');
+  const rows = records.map(r => cols.map(c => csvEscape(r[c])).join(','));
+  return [header, ...rows].join('\n');
+}
+
+function copyAll() {
+  if (!currentRecords.length) { alert('請先產生資料。'); return; }
+  const fields = getCheckedFields();
+  copyText(tsvFromRecords(currentRecords, fields)).then(() => alert('已複製全部資料（分欄以 Tab 分隔）。'));
+}
+function downloadJson() {
+  if (!currentRecords.length) { alert('請先產生資料。'); return; }
+  const json = '\uFEFF' + JSON.stringify(currentRecords, null, 2);
+  const blob = new Blob([json], { type: 'application/json;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'taiwan_test_data.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function downloadCsv() {
+  if (!currentRecords.length) { alert('請先產生資料。'); return; }
+  const fields = getCheckedFields();
+  const csv = '\uFEFF' + csvFromRecords(currentRecords, fields);
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'taiwan_test_data.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ===== 初始化縣市下拉（來源為 ADDRESS_DATA）=====
+(function initCitySelect() {
+  const select = document.getElementById('city');
+  const regions = [];
+  ADDRESS_DATA.counties.forEach(c => { if (regions.indexOf(c.region) < 0) regions.push(c.region); });
+  regions.forEach(region => {
+    const optgroup = document.createElement('optgroup');
+    optgroup.label = region;
+    ADDRESS_DATA.counties.filter(c => c.region === region).forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.letter;
+      opt.textContent = c.name + ' - ' + c.letter;
+      optgroup.appendChild(opt);
+    });
+    select.appendChild(optgroup);
+  });
+})();
+
+</script>
+
+</body>
+</html>
