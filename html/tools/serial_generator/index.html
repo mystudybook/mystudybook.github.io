@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>序號／随機字串產生器 - 可自訂字元與長度的隨機碼生成工具</title>
+<meta name="description" content="免費序號、抽奖碼、一次性驗證碼、随机字串產生器，可自訂字元類型、長度、數量、前綴與分隔符，全部於瀏覽器前端執行。">
+<meta name="keywords" content="序號產生器,随机字串,密碼,驗證碼,抽奖碼,serial generator,random string">
+<meta property="og:title" content="序號／随机字串產生器 - 可自訂字元與長度的隨機碼生成工具">
+<meta property="og:description" content="免費序號、一次性驗證碼、随机字串產生器，可自訂字元類型、長度、數量、前綴與分隔符。">
+<meta property="og:type" content="website">
+<style>
+  body { font-family: "Microsoft JhengHei", Arial, sans-serif; margin: 0; padding: 20px; background: #f7f9fb; color: #222; }
+  h1 { text-align: center; }
+  .container { max-width: 740px; margin: 0 auto; background: #fff; padding: 22px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  label { display: block; margin: 14px 0 6px; font-weight: bold; }
+  textarea, input, select, button {
+    display: block; width: 100%; padding: 10px; font-size: 16px;
+    border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit;
+  }
+  .row { display: flex; gap: 12px; }
+  .row > div { flex: 1; }
+  button { background-color: #007bff; color: #fff; cursor: pointer; margin-top: 16px; }
+  button:hover { background-color: #0056b3; }
+  button.secondary { background-color: #28a745; }
+  button.secondary:hover { background-color: #1e7e34; }
+  .result { margin-top: 18px; }
+  textarea.result { min-height: 240px; font-family: "Consolas", "Courier New", monospace; font-size: 14px; resize: vertical; background: #fafafa; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .actions button { margin-top: 0; flex: 1 1 auto; min-width: 130px; }
+  .hint { color: #666; font-size: 13px; margin-top: 10px; }
+  .disclaimer { color: #b00; margin-top: 16px; font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>序號／随機字串產生器<small style="display:block;font-size:14px;color:#666;font-weight:normal;">Serial / Random String Generator</small></h1>
+
+<div class="container">
+  <label for="preset">字元預設：</label>
+  <select id="preset">
+    <option value="upper">大寫字母 ABCDEF…</option>
+    <option value="lower">小寫字母 abcdef…</option>
+    <option value="digits">數字 0-9</option>
+    <option value="alphanum" selected>字母＋數字</option>
+    <option value="hex">十六進位 0-9A-F</option>
+    <option value="custom">自訂字元集…</option>
+  </select>
+
+  <div id="customWrap" style="display:none;">
+    <label for="customChars">自訂字元（請輸入要用到的字元）：</label>
+    <input id="customChars" type="text" placeholder="例如: ABCDEFGHJKLMNPQRSTUVWXYZ23456789" value="ABCDEFGHJKLMNPQRSTUVWXYZ23456789">
+  </div>
+
+  <div class="row">
+    <div>
+      <label for="length">長度：</label>
+      <input id="length" type="number" min="1" max="128" value="16">
+    </div>
+    <div>
+      <label for="count">數量：</label>
+      <input id="count" type="number" min="1" max="1000" value="10">
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <label for="prefix">前綴（選填）：</label>
+      <input id="prefix" type="text" placeholder="例如: VIP-">
+    </div>
+    <div>
+      <label for="separator">分隔符（選填）：</label>
+      <select id="separator">
+        <option value="" selected>無</option>
+        <option value="-">連字號 -</option>
+        <option value="_">底線 _</option>
+        <option value=" ">空白</option>
+      </select>
+    </div>
+  </div>
+
+  <label for="blockLen" id="blockLabel">每幾碼分隔一次（選填，需先選分隔符）：</label>
+  <input id="blockLen" type="number" min="1" max="64" value="0" placeholder="0 表示不分組">
+
+  <button onclick="generate()">產生序號</button>
+
+  <div class="result">
+    <label for="output">結果：</label>
+    <textarea id="output" class="result" readonly placeholder="產生的序號會显示在此"></textarea>
+  </div>
+
+  <div class="actions">
+    <button class="secondary" onclick="copyOutput()">複製全部</button>
+    <button class="secondary" onclick="downloadTxt()">下載 .txt</button>
+  </div>
+  <div class="hint">產生的序號完全使用瀏覽器內建的加密隨機數（crypto.getRandomValues）生成，不會上傳至任何伺服器。</div>
+</div>
+
+<div class="container">
+  <div class="disclaimer">本工具僅用於產生随机序號或字串，請勿用于非法用途。</div>
+</div>
+
+<script>
+const PRESETS = {
+  upper: 'ABCDEFGHJKLMNPQRSTUVWXYZ',
+  lower: 'abcdefghijkmnopqrstuvwxyz',
+  digits: '0123456789',
+  alphanum: 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789',
+  hex: '0123456789ABCDEF'
+};
+
+function getCharset() {
+  const preset = document.getElementById('preset').value;
+  if (preset === 'custom') return document.getElementById('customChars').value;
+  return PRESETS[preset];
+}
+
+function randInt(max) {
+  // 避免模偏差的拒絕取樣
+  const limit = Math.floor(256 / max) * max;
+  const bytes = crypto.getRandomValues(new Uint8Array(1));
+  let v = bytes[0];
+  while (v >= limit) {
+    bytes.fill(0);
+    v = crypto.getRandomValues(new Uint8Array(1))[0];
+  }
+  return v % max;
+}
+
+function makeOne(length, charset) {
+  let s = '';
+  for (let i = 0; i < length; i++) {
+    s += charset[randInt(charset.length)];
+  }
+  return s;
+}
+
+function applyBlocks(str, sep, blockLen) {
+  if (!sep || !blockLen || blockLen <= 0) return str;
+  const re = new RegExp('.{1,' + blockLen + '}', 'g');
+  return str.match(re).join(sep);
+}
+
+function generate() {
+  const charset = getCharset();
+  if (!charset) { alert('自訂字元集為空，請輸入要使用的字元。'); return; }
+  const length = Math.min(128, Math.max(1, parseInt(document.getElementById('length').value, 10) || 1));
+  const count = Math.min(1000, Math.max(1, parseInt(document.getElementById('count').value, 10) || 1));
+  const prefix = document.getElementById('prefix').value;
+  const sep = document.getElementById('separator').value;
+  const blockLen = parseInt(document.getElementById('blockLen').value, 10) || 0;
+
+  const lines = [];
+  for (let i = 0; i < count; i++) {
+    let core = makeOne(length, charset);
+    if (sep && blockLen > 0) core = applyBlocks(core, sep, blockLen);
+    lines.push(prefix + core);
+  }
+  document.getElementById('output').value = lines.join('\n');
+}
+
+async function copyOutput() {
+  const text = document.getElementById('output').value;
+  if (!text) { alert('沒有可複製的內容。請先產生序號。'); return; }
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  alert('已複製 ' + text.split('\n').length + ' 個序號。');
+}
+
+function downloadTxt() {
+  const text = document.getElementById('output').value;
+  if (!text) { alert('沒有可下載的內容。請先產生序號。'); return; }
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'serials.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('preset').addEventListener('change', (e) => {
+  document.getElementById('customWrap').style.display = e.target.value === 'custom' ? 'block' : 'none';
+});
+document.getElementById('count').addEventListener('keydown', (e) => { if (e.key === 'Enter') generate(); });
+window.addEventListener('load', () => { document.getElementById('customWrap').style.display = 'none'; });
+</script>
+
+</body>
+</html>

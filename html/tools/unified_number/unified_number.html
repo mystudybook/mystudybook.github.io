@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>統一編號產生器 - 台灣公司統編產生與驗證</title>
+<meta name="description" content="免費統一編號產生器，可產生符合檢查碼規則的公司統一編號（統編），並提供統編驗證功能，適合程式開發與資料庫測試使用。">
+<meta name="keywords" content="統一編號,統編,統一編號產生器,統一編號驗證,公司統編,台灣稅籍號碼">
+<meta property="og:title" content="統一編號產生器 - 台灣公司統編產生與驗證">
+<meta property="og:description" content="免費統一編號產生器，可產生並驗證台灣公司統一編號（統編），含檢查碼校驗。">
+<meta property="og:type" content="website">
+<style>
+  body { font-family: "Microsoft JhengHei", Arial, sans-serif; margin: 0; padding: 20px; }
+  h1 { text-align: center; }
+  .container { max-width: 680px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  label { display: block; margin: 14px 0 6px; font-weight: bold; }
+  select, input, button {
+    display: block; width: 100%; padding: 10px; font-size: 16px;
+    border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+  }
+  button { background-color: #007bff; color: #fff; cursor: pointer; margin-top: 16px; }
+  button:hover { background-color: #0056b3; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 8px; }
+  .tab-btn { flex: 1; background: #eaeef3; color: #333; font-weight: bold; margin-top: 0; }
+  .tab-btn.active { background: #007bff; color: #fff; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  textarea { width: 100%; height: 220px; margin-top: 12px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; resize: none; font-family: monospace; box-sizing: border-box; }
+  .result { margin-top: 12px; padding: 10px; border-radius: 4px; display: none; font-size: 16px; }
+  .result.ok { background: #e6f4ea; color: #1e7e34; }
+  .result.bad { background: #fce8e6; color: #c62828; }
+  .hint { color: #666; font-size: 13px; margin-top: 6px; }
+  .disclaimer { color: #b00; margin-top: 16px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<h1>統一編號產生器<small style="display:block;font-size:14px;color:#666;font-weight:normal;">Taiwan Company Unified Number Generator</small></h1>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('generate')">產生統編</button>
+    <button class="tab-btn" onclick="switchTab('validate')">驗證統編</button>
+  </div>
+
+  <div id="generate" class="panel active">
+    <label for="count">選擇產生筆數：</label>
+    <select id="count">
+      <option value="1">1</option>
+      <option value="5">5</option>
+      <option value="10" selected>10</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+      <option value="200">200</option>
+      <option value="500">500</option>
+      <option value="1000">1000</option>
+    </select>
+    <div class="hint">統一編號第一位固定為 1，第二位起隨機產生並自動計算檢查碼。</div>
+    <button onclick="generate()">產生</button>
+    <textarea id="output" placeholder="統將在此顯示"></textarea>
+    <button onclick="copyOutput()">複製全部</button>
+  </div>
+
+  <div id="validate" class="panel">
+    <label for="validateInput">輸入統一編號（8 位數字）：</label>
+    <input id="validateInput" placeholder="例如 12345678" maxlength="8" inputmode="numeric">
+    <button onclick="validateSingle()">驗證</button>
+    <div id="singleResult" class="result"></div>
+
+    <label for="batchInput" style="margin-top:20px;">批次驗證（每行一個統編）：</label>
+    <textarea id="batchInput" placeholder="每行輸入一個 8 位統一編號" style="height:160px;"></textarea>
+    <button onclick="validateBatch()">批次驗證</button>
+    <div id="batchResult" class="result"></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="disclaimer">本產生器所產生之統一編號為隨機測試資料，僅供程式開發與測試使用，切勿用於非法用途。</div>
+</div>
+
+<script>
+// 統一編號檢查碼演算法：前 7 位乘權重 [1,2,1,2,1,2,4]，>=10 減 9，求和後取檢查碼
+const WEIGHTS = [1, 2, 1, 2, 1, 2, 4];
+
+function calcCheckDigit(first7) {
+  let sum = 0;
+  for (let i = 0; i < 7; i++) {
+    let d = parseInt(first7[i], 10) * WEIGHTS[i];
+    if (d >= 10) d -= 9;
+    sum += d;
+  }
+  return (10 - (sum % 10)) % 10;
+}
+
+function isValidUnifiedNumber(num) {
+  if (!/^\d{8}$/.test(num)) return false;
+  return calcCheckDigit(num.slice(0, 7)) === parseInt(num[7], 10);
+}
+
+function generateOne() {
+  let first7 = '1';
+  for (let i = 0; i < 6; i++) first7 += Math.floor(Math.random() * 10);
+  return first7 + calcCheckDigit(first7);
+}
+
+function generate() {
+  const count = parseInt(document.getElementById('count').value, 10);
+  const seen = new Set();
+  const out = [];
+  let guard = 0;
+  while (out.length < count && guard < count * 50 + 100) {
+    guard++;
+    const n = generateOne();
+    if (!seen.has(n)) { seen.add(n); out.push(n); }
+  }
+  document.getElementById('output').value = out.join('\n');
+}
+
+function copyOutput() {
+  const ta = document.getElementById('output');
+  ta.select();
+  document.execCommand('copy');
+  alert('已複製統編資料。');
+}
+
+function showResult(elId, ok, msg) {
+  const el = document.getElementById(elId);
+  el.className = 'result ' + (ok ? 'ok' : 'bad');
+  el.style.display = 'block';
+  el.textContent = msg;
+}
+
+function validateSingle() {
+  const val = document.getElementById('validateInput').value.trim();
+  if (!/^\d{8}$/.test(val)) {
+    showResult('singleResult', false, '格式錯誤：請輸入 8 位數字。');
+    return;
+  }
+  const ok = isValidUnifiedNumber(val);
+  showResult('singleResult', ok, ok ? '✓ 有效的統一編號。' : '✗ 无效的統一編號（檢查碼不符或格式錯誤）。');
+}
+
+function validateBatch() {
+  const lines = document.getElementById('batchInput').value.split('\n').map(l => l.trim()).filter(Boolean);
+  if (lines.length === 0) { showResult('batchResult', false, '請至少輸入一個統一編號。'); return; }
+  let valid = 0, invalid = 0;
+  const invalidList = [];
+  lines.forEach(n => {
+    if (isValidUnifiedNumber(n)) valid++;
+    else { invalid++; invalidList.push(n); }
+  });
+  const msg = `共 ${lines.length} 筆：有效 ${valid} 筆，無效 ${invalid} 筆` +
+    (invalidList.length ? '（無效：' + invalidList.slice(0, 10).join(', ') + (invalidList.length > 10 ? '…' : '') + '）' : '');
+  showResult('batchResult', invalid === 0, msg);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', (i === 0 && tab === 'generate') || (i === 1 && tab === 'validate'));
+  });
+  document.getElementById('generate').classList.toggle('active', tab === 'generate');
+  document.getElementById('validate').classList.toggle('active', tab === 'validate');
+}
+
+document.getElementById('validateInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') validateSingle(); });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code 產生器 - 文字網址轉 QR 碼</title>
+<meta name="description" content="免費 QR Code 產生器，将文字或网址转换为 QR 码，支持调整大小与下载 PNG 图档，适合网站、行销与开发使用。">
+<meta name="keywords" content="QR碼,QR Code,二维码,QR碼產生器,QR碼下載,條碼生成">
+<meta property="og:title" content="QR Code 產生器 - 文字網址轉 QR 碼">
+<meta property="og:description" content="免費 QR Code 產生器，将文字或网址转换为 QR 码，支持调整大小与下载 PNG 图档。">
+<meta property="og:type" content="website">
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<style>
+  body { font-family: "Microsoft JhengHei", Arial, sans-serif; margin: 0; padding: 20px; }
+  h1 { text-align: center; }
+  .container { max-width: 680px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  label { display: block; margin: 14px 0 6px; font-weight: bold; }
+  textarea, input, select, button {
+    display: block; width: 100%; padding: 10px; font-size: 16px;
+    border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+  }
+  button { background-color: #007bff; color: #fff; cursor: pointer; margin-top: 16px; }
+  button:hover { background-color: #0056b3; }
+  .row { display: flex; gap: 12px; }
+  .row > div { flex: 1; }
+  .qr-box { text-align: center; margin-top: 20px; padding: 16px; background: #fafafa; border: 1px dashed #ccc; border-radius: 8px; min-height: 60px; }
+  .qr-box canvas { image-rendering: pixelated; margin: 6px; background: #fff; }
+  .actions { display: flex; gap: 12px; margin-top: 16px; }
+  .actions button { margin-top: 0; }
+  .hint { color: #666; font-size: 13px; margin-top: 6px; }
+  .disclaimer { color: #b00; margin-top: 16px; font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>QR Code 產生器<small style="display:block;font-size:14px;color:#666;font-weight:normal;">Text / URL to QR Code Generator</small></h1>
+
+<div class="container">
+  <label for="qrText">輸入文字或網址：</label>
+  <textarea id="qrText" placeholder="請輸入要轉換的文字或網址" rows="3">https://</textarea>
+
+  <div class="row">
+    <div>
+      <label for="qrSize">大小（像素）：</label>
+      <select id="qrSize">
+        <option value="200">200 × 200</option>
+        <option value="256" selected>256 × 256</option>
+        <option value="300">300 × 300</option>
+        <option value="400">400 × 400</option>
+        <option value="512">512 × 512</option>
+      </select>
+    </div>
+    <div>
+      <label for="qrLevel">容錯等級：</label>
+      <select id="qrLevel">
+        <option value="L">L（低 7%）</option>
+        <option value="M" selected>M（中 15%）</option>
+        <option value="Q">Q（高 25%）</option>
+        <option value="H">H（最高 30%）</option>
+      </select>
+    </div>
+  </div>
+
+  <button onclick="generateQR()">產生 QR Code</button>
+
+  <div class="qr-box" id="qrBox"><span style="color:#999;">QR Code 將顯示在此</span></div>
+
+  <div class="actions">
+    <button onclick="downloadPNG()">下載 PNG</button>
+    <button onclick="copyText()" style="background:#28a745;">複製文字</button>
+  </div>
+  <div class="hint">產生的 QR Code 完全在瀏覽器前端生成，不會上傳至任何伺服器。</div>
+</div>
+
+<div class="container">
+  <div class="disclaimer">本工具僅用於產生 QR Code，請勿用于非法或欺騙性用途。</div>
+</div>
+
+<script>
+let currentCanvas = null;
+
+function drawQR(qr, size) {
+  const count = qr.getModuleCount();
+  const margin = 4;
+  const cellSize = (size - margin * 2) / count;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, size, size);
+  ctx.fillStyle = '#000000';
+  for (let r = 0; r < count; r++) {
+    for (let c = 0; c < count; c++) {
+      if (qr.isDark(r, c)) {
+        ctx.fillRect(Math.round(margin + c * cellSize), Math.round(margin + r * cellSize),
+          Math.ceil(cellSize), Math.ceil(cellSize));
+      }
+    }
+  }
+  return canvas;
+}
+
+function generateQR() {
+  const text = document.getElementById('qrText').value.trim();
+  const size = parseInt(document.getElementById('qrSize').value, 10);
+  const level = document.getElementById('qrLevel').value;
+  const box = document.getElementById('qrBox');
+
+  if (!text) { alert('請輸入文字或網址。'); return; }
+
+  try {
+    const qr = qrcode(0, level);
+    qr.addData(text, 'Byte');
+    qr.make();
+    currentCanvas = drawQR(qr, size);
+    box.innerHTML = '';
+    box.appendChild(currentCanvas);
+  } catch (e) {
+    alert('產生失敗：' + e.message);
+  }
+}
+
+function downloadPNG() {
+  if (!currentCanvas) { alert('請先產生 QR Code。'); return; }
+  const url = currentCanvas.toDataURL('image/png');
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'qrcode.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function copyText() {
+  const ta = document.getElementById('qrText');
+  if (!ta.value) { alert('沒有可复制的文字。'); return; }
+  ta.select();
+  document.execCommand('copy');
+  alert('已复制文字。');
+}
+
+document.getElementById('qrText').addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === 'Enter') generateQR();
+});
+
+window.addEventListener('load', () => { if (document.getElementById('qrText').value) generateQR(); });
+</script>
+
+</body>
+</html>

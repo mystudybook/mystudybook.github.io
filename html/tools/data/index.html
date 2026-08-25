@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>資料產生專區 - 台灣測試資料與識別碼生成工具</title>
+<meta name="description" content="資料產生專區：台灣測試資料、身分證字號、統一編號、中文姓名、密碼與 QR Code 產生器，全部在前端執行，保護隱私。">
+<meta name="keywords" content="資料產生,測試資料,身分證產生器,統一編號,中文姓名,密碼產生器,QR碼">
+<meta property="og:title" content="資料產生專區 - 台灣測試資料與識別碼生成工具">
+<meta property="og:description" content="台灣測試資料、身分證、統一編號、中文姓名、密碼、QR Code 產生器，全部於瀏覽器前端執行。">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Microsoft JhengHei", Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f4f6f9;
+    color: #222;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  h1 { text-align: center; margin-bottom: 6px; }
+  .subtitle { text-align: center; color: #666; margin-bottom: 8px; }
+  .group > h2 {
+    border-left: 4px solid #007bff;
+    padding-left: 10px;
+    margin-bottom: 14px;
+    color: #0d47a1;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: transform .15s ease, box-shadow .15s ease;
+    border: 1px solid #eaeef3;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,123,255,0.18);
+    border-color: #b9d3ff;
+  }
+  .card .name { font-size: 17px; font-weight: bold; margin-bottom: 6px; color: #0d47a1; }
+  .card .desc { font-size: 13px; color: #555; line-height: 1.5; }
+  .badge {
+    display: inline-block; background: #eaf2ff; color: #007bff;
+    font-size: 11px; padding: 2px 8px; border-radius: 20px; margin-bottom: 8px;
+  }
+  footer { text-align: center; color: #888; font-size: 12px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>資料產生專區</h1>
+  <p class="subtitle">台灣測試資料與識別碼生成工具，全部在前端執行，無需安裝軟體。</p>
+
+  <div class="group">
+    <h2>資料產生器</h2>
+    <div class="grid">
+      <a class="card" href="/html/tools/taiwan_test_data/taiwan_test_data.html">
+        <span class="badge">產生器</span>
+        <div class="name">台灣測試資料產生器</div>
+        <div class="desc">隨機產生台灣姓名、身分證字號、生日、手機號碼、Email 與地址，可匯出 CSV／JSON。</div>
+      </a>
+      <a class="card" href="/html/tools/taiwan_id/taiwan_id.html">
+        <span class="badge">產生器</span>
+        <div class="name">身分證產生器</div>
+        <div class="desc">依縣市、性別產生符合驗證規則的中華民國身分證字號。</div>
+      </a>
+      <a class="card" href="/html/tools/unified_number/unified_number.html">
+        <span class="badge">產生器</span>
+        <div class="name">統一編號產生器</div>
+        <div class="desc">產生並驗證台灣公司統一編號（統編），含檢查碼校驗。</div>
+      </a>
+      <a class="card" href="/html/tools/chinese_name/chinese_name.html">
+        <span class="badge">產生器</span>
+        <div class="name">中文姓名產生器</div>
+        <div class="desc">依性別隨機生成繁體中文姓名，支援指定姓氏與繁簡轉換。</div>
+      </a>
+      <a class="card" href="/html/tools/password_generator/password_generator.html">
+        <span class="badge">產生器</span>
+        <div class="name">密碼產生器</div>
+        <div class="desc">生成高强度随机密码，可自定义长度与字元類型。</div>
+      </a>
+      <a class="card" href="/html/tools/qr_code/qr_code.html">
+        <span class="badge">產生器</span>
+        <div class="name">QR Code 產生器</div>
+        <div class="desc">將文字或網址轉換為 QR Code，可下載 PNG 圖檔。</div>
+      </a>
+    </div>
+  </div>
+
+  <footer>資料產生專區 · 全部於瀏覽器前端執行，資料不會上傳伺服器</footer>
+</div>
+</body>
+</html>

@@ -1,227 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        .img-comp-container {
-            position: relative;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-left: 45%;
-        }
-
-        .img-comp-img {
-            position: absolute;
-            width: auto;
-            height: auto;
-            overflow: hidden;
-        }
-
-        .img-comp-img img {
-            display: block;
-        }
-
-        .img-comp-slider {
-            position: absolute;
-            z-index: 9;
-            cursor: ew-resize;
-            width: 40px;
-            height: 40px;
-            background-color: #2196F3;
-            opacity: 0.7;
-            border-radius: 50%;
-        }
-    </style>
-    <script src="/html/tools/ffmpeg/node_modules/@ffmpeg/ffmpeg/dist/umd/ffmpeg.js"></script>
-    <script type="module">
-        const { FFmpeg } = FFmpegWASM;
-        let ffmpeg = null;
-
-        const transcode = async () => {
-            const files = document.getElementById('uploader').files;
-            const message = document.getElementById('message');
-            if (ffmpeg === null) {
-                ffmpeg = new FFmpeg();
-                ffmpeg.on("log", ({ message }) => {
-                    console.log(message);
-                })
-                ffmpeg.on("progress", ({ progress, time }) => {
-                    message.innerHTML = `處理了： ${(progress * 100).toFixed(2)}%`;
-                });
-
-                message.innerHTML = '轉換器載入中...，請稍候 <div class="loader"></div>';
-                await ffmpeg.load({
-                    coreURL: "/html/tools/ffmpeg/node_modules/@ffmpeg/core/dist/umd/ffmpeg-core.js",
-                });
-            }
-
-            await ffmpeg.exec('-help');
-
-            const { name } = files[0];
-            message.innerHTML = '轉換器載入中...，請稍候 <div class="loader"></div>';
-            await ffmpeg.writeFile(name, await fetchFile(files[0]));
-            message.innerHTML = '開始轉換';
-
-            // 壓縮率
-            const command = ["-i", name];
-            command.push("-q:v", "2");
-            command.push("-loglevel", "debug");
-
-            const originalName = name.split('.').slice(0, -1).join('.'); // 去掉副檔名
-
-            const outputName = `${originalName}.jpeg`;
-            command.push(outputName);
-
-            console.time('exec');
-            await ffmpeg.exec(command);
-            console.timeEnd('exec');
-            message.innerHTML = '轉換完畢';
-            const data = await ffmpeg.readFile(outputName);
-
-            const output = document.getElementById('output');
-            output.src = URL.createObjectURL(new Blob([data.buffer], { type: 'image/png' }));
-
-            // const a = document.getElementById("downloadLink");
-            // const blob = new Blob([data.buffer], { type: 'audio/mpeg' });
-            // a.href = URL.createObjectURL(blob);
-            // a.download = outputName;
-            // a.textContent = "下載 MP3";
-            // a.style.display = 'inline';
-        }
-        const btn = document.getElementById('convertBtn');
-        btn.addEventListener('click', transcode);
-    </script>
-
-
-
-    <script>
-        const fetchFile = async file => {
-            let data
-
-            if (typeof file === "string") {
-                /* From base64 format */
-                if (/data:_data\/([a-zA-Z]*);base64,([^"]*)/.test(file)) {
-                    data = atob(file.split(",")[1])
-                        .split("")
-                        .map(c => c.charCodeAt(0))
-                    /* From remote server/URL */
-                } else {
-                    data = await (await fetch(file)).arrayBuffer()
-                }
-            } else if (file instanceof URL) {
-                data = await (await fetch(file)).arrayBuffer()
-            } else if (file instanceof File || file instanceof Blob) {
-                data = await readFromBlobOrFile(file)
-            } else {
-                return new Uint8Array()
-            }
-
-            return new Uint8Array(data)
-        }
-        const readFromBlobOrFile = blob =>
-            new Promise((resolve, reject) => {
-                const fileReader = new FileReader()
-                fileReader.onload = () => {
-                    const { result } = fileReader
-                    if (result instanceof ArrayBuffer) {
-                        resolve(new Uint8Array(result))
-                    } else {
-                        resolve(new Uint8Array())
-                    }
-                }
-                fileReader.onerror = event => {
-                    reject(
-                        Error(
-                            `File could not be read! Code=${event?.target?.error?.code || -1}`
-                        )
-                    )
-                }
-                fileReader.readAsArrayBuffer(blob)
-            })    
-    </script>
-    <script>
-        function compareImages(img) {
-            var slider, img, clicked = 0, w, h;
-            w = img.offsetWidth;
-            h = img.offsetHeight;
-            img.style.width = (w / 2) + "px";
-            slider = document.createElement("DIV");
-            slider.setAttribute("class", "img-comp-slider");
-            img.parentElement.insertBefore(slider, img);
-            slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
-            slider.style.left = (w / 2) - (slider.offsetWidth / 2) + "px";
-            slider.addEventListener("mousedown", slideReady);
-            window.addEventListener("mouseup", slideFinish);
-            slider.addEventListener("touchstart", slideReady);
-            window.addEventListener("touchend", slideFinish);
-            function slideReady(e) {
-                e.preventDefault();
-                clicked = 1;
-                window.addEventListener("mousemove", slideMove);
-                window.addEventListener("touchmove", slideMove);
-            }
-            function slideFinish() {
-                clicked = 0;
-            }
-            function slideMove(e) {
-                var pos;
-                if (clicked == 0) return false;
-                pos = getCursorPos(e)
-                if (pos < 0) pos = 0;
-                if (pos > w) pos = w;
-                slide(pos);
-            }
-            function getCursorPos(e) {
-                var a, x = 0;
-                e = (e.changedTouches) ? e.changedTouches[0] : e;
-                a = img.getBoundingClientRect();
-                x = e.pageX - a.left;
-                x = x - window.pageXOffset;
-                return x;
-            }
-            function slide(x) {
-                img.style.width = x + "px";
-                slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
-            }
-        }
-        function initComparisons() {
-            var x, i;
-            x = document.getElementsByClassName("img-comp-overlay");
-            for (i = 0; i < x.length; i++) {
-                compareImages(x[i]);
-            }
-        }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圖片壓縮 - 線上免費圖片壓縮工具</title>
+<meta name="description" content="免費線上圖片壓縮，於瀏覽器本地透過 canvas 压缩 JPG／WebP，支援批次處理與品質調整，保護隱私不上傳。">
+<meta name="keywords" content="圖片壓縮,壓縮圖片, JPG壓縮, WebP, 圖片縮小, 線上壓縮, image compressor">
+<meta property="og:title" content="圖片壓縮 - 線上免費圖片壓縮工具">
+<meta property="og:description" content="免費線上圖片壓縮，本地處理、支援批次與品質調整。">
+<meta property="og:type" content="website">
+<style>
+  body { font-family: "Microsoft JhengHei", Arial, sans-serif; margin: 0; padding: 24px; background: #f4f6f9; color: #222; }
+  h1 { text-align: center; margin-bottom: 4px; }
+  .subtitle { text-align: center; color: #666; margin-bottom: 20px; }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  .dropzone {
+    border: 2px dashed #b9c3d0; border-radius: 12px; padding: 40px 20px; text-align: center;
+    background: #fff; cursor: pointer; transition: .15s; color: #555;
+  }
+  .dropzone:hover, .dropzone.dragover { border-color: #007bff; background: #f0f6ff; }
+  .dropzone strong { display: block; font-size: 17px; margin-bottom: 6px; color: #333; }
+  input[type=file] { display: none; }
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: center;
+    background: #fff; padding: 16px; border-radius: 10px; margin: 18px 0; box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .controls label { font-weight: bold; font-size: 14px; }
+  .controls select, .controls input[type=range] { vertical-align: middle; }
+  .quality-val { display: inline-block; min-width: 34px; color: #007bff; font-weight: bold; }
+  .btn {
+    background: #007bff; color: #fff; border: none; padding: 10px 22px; border-radius: 6px;
+    font-size: 15px; cursor: pointer; font-weight: bold;
+  }
+  .btn:hover { background: #0056b3; }
+  .btn.secondary { background: #28a745; }
+  .btn.secondary:hover { background: #218838; }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+  .list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 8px; }
+  .card {
+    background: #fff; border-radius: 10px; padding: 12px; box-shadow: 0 1px 5px rgba(0,0,0,.08);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .card img { width: 100%; height: 130px; object-fit: contain; border-radius: 6px; background: #fafafa; border: 1px solid #eee; }
+  .meta { font-size: 12px; color: #666; line-height: 1.6; }
+  .meta .orig { color: #999; text-decoration: line-through; }
+  .meta .newc { color: #28a745; font-weight: bold; }
+  .ratio { font-size: 12px; color: #007bff; font-weight: bold; }
+  .card a.btn { display: inline-block; text-align: center; text-decoration: none; font-size: 13px; padding: 7px 0; }
+  .empty-note { text-align: center; color: #999; margin: 20px 0; }
+</style>
 </head>
-
 <body>
 
-    <div class="container">
-        <h1>圖片壓縮</h1>
-        <label for="uploader">請選擇您要壓縮的圖片檔案</label>
-        <input type="file" id="uploader">
+<div class="wrap">
+  <h1>圖片壓縮</h1>
+  <p class="subtitle">選擇品質與格式，批次壓縮圖片，全部於瀏覽器本地處理。</p>
 
-        <img id="output" controls style="width: 100%; margin-top: 10px;"></img>
-        <button id="convertBtn">壓縮</button>
-        <a style="display:none;" id="downloadLink">下載 MP3</a>
-        <p id="message"></p>
-    </div>
+  <div class="dropzone" id="dropzone">
+    <strong>點擊選擇图片或拖曳到此處</strong>
+    支援 JPG、PNG、WebP、GIF 等常見格式
+  </div>
+  <input type="file" id="fileInput" accept="image/*" multiple>
 
-    <p>壓縮後比較</p>
-    <div class="img-comp-container">
-        <div class="img-comp-img">
-            <img src="">
-        </div>
-        <div class="img-comp-img img-comp-overlay">
-            <img src="">
-        </div>
-    </div>
+  <div class="controls">
+    <label>輸出格式：
+      <select id="format">
+        <option value="image/jpeg">JPEG</option>
+        <option value="image/webp">WebP</option>
+      </select>
+    </label>
+    <label>品質：<span class="quality-val" id="qVal">70</span>%
+      <input type="range" id="quality" min="1" max="100" value="70">
+    </label>
+    <button class="btn secondary" id="compressBtn" disabled>壓縮全部</button>
+  </div>
 
-    <script>
-        initComparisons();
-    </script>
+  <div id="resultArea"></div>
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const dropzone = document.getElementById('dropzone');
+const qualityRange = document.getElementById('quality');
+const qVal = document.getElementById('qVal');
+const formatSelect = document.getElementById('format');
+const compressBtn = document.getElementById('compressBtn');
+const resultArea = document.getElementById('resultArea');
+
+let items = []; // {id, file, src, origSize, width, height}
+
+qualityRange.addEventListener('input', () => { qVal.textContent = qualityRange.value; });
+
+dropzone.addEventListener('click', () => fileInput.click());
+['dragenter', 'dragover'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.add('dragover'); }));
+['dragleave', 'drop'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.remove('dragover'); }));
+dropzone.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
+fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        items.push({ id: 'item_' + (items.length + 1) + '_' + Date.now(), file, src: e.target.result, origSize: file.size, width: img.width, height: img.height });
+        renderList();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function formatBytes(n) {
+  if (n < 1024) return n + ' B';
+  if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+  return (n / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function renderList() {
+  compressBtn.disabled = items.length === 0;
+  if (items.length === 0) { resultArea.innerHTML = ''; return; }
+  resultArea.innerHTML = '<h3 style="margin:18px 0 8px;">已上傳圖片</h3><div class="list"></div>';
+  const grid = resultArea.querySelector('.list');
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.id = item.id;
+    card.innerHTML = `
+      <img src="${item.src}" alt="預覽">
+      <div class="meta">
+        <div>${item.file.name}</div>
+        <div class="orig">${formatBytes(item.origSize)}</div>
+        <div class="newc" data-size="">—</div>
+        <div class="ratio" data-ratio=""></div>
+      </div>
+      <a class="btn secondary download" style="display:none;" download>下載壓縮結果</a>`;
+    grid.appendChild(card);
+  });
+}
+
+function compressOne(item, format, quality) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = item.width;
+      canvas.height = item.height;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob(blob => resolve(blob), format, quality / 100);
+    };
+    img.src = item.src;
+  });
+}
+
+compressBtn.addEventListener('click', async () => {
+  const format = formatSelect.value;
+  const quality = parseInt(qualityRange.value, 10);
+  compressBtn.disabled = true;
+  compressBtn.textContent = '壓縮中…';
+
+  for (const item of items) {
+    const blob = await compressOne(item, format, quality);
+    item.compBlob = blob;
+    item.compUrl = URL.createObjectURL(blob);
+    const card = document.getElementById(item.id);
+    card.querySelector('.newc').textContent = formatBytes(blob.size);
+    const saved = 100 - (blob.size / item.origSize * 100);
+    card.querySelector('.ratio').textContent = '節省 ' + saved.toFixed(1) + '%';
+    const dl = card.querySelector('.download');
+    dl.href = item.compUrl;
+    const ext = format.split('/')[1] === 'jpeg' ? 'jpg' : format.split('/')[1];
+    dl.download = 'compressed_' + item.file.name.replace(/\.[^.]+$/, '') + '.' + ext;
+    dl.style.display = 'inline-block';
+  }
+
+  compressBtn.disabled = false;
+  compressBtn.textContent = '壓縮全部';
+});
+</script>
 
 </body>
-
 </html>

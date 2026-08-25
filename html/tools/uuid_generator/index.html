@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UUID / GUID 產生器 - 隨機 UUID v4 生成工具</title>
+<meta name="description" content="免費 UUID／GUID 產生器，使用瀏覽器加密隨機數產生符合 RFC 4122 的 UUID v4，支援批量產生、一鍵複製與下載。">
+<meta name="keywords" content="UUID,GUID,UUID v4,產生器,識別碼,随机唯一識別碼">
+<meta property="og:title" content="UUID / GUID 產生器 - 隨機 UUID v4 生成工具">
+<meta property="og:description" content="免費 UUID／GUID 產生器，支援批量產生、一鍵複製與下載 PNG 之外的純文字輸出。">
+<meta property="og:type" content="website">
+<style>
+  body { font-family: "Microsoft JhengHei", Arial, sans-serif; margin: 0; padding: 20px; background: #f7f9fb; color: #222; }
+  h1 { text-align: center; }
+  .container { max-width: 720px; margin: 0 auto; background: #fff; padding: 22px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  label { display: block; margin: 14px 0 6px; font-weight: bold; }
+  textarea, input, select, button {
+    display: block; width: 100%; padding: 10px; font-size: 16px;
+    border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit;
+  }
+  .row { display: flex; gap: 12px; }
+  .row > div { flex: 1; }
+  button { background-color: #007bff; color: #fff; cursor: pointer; margin-top: 16px; }
+  button:hover { background-color: #0056b3; }
+  button.secondary { background-color: #28a745; }
+  button.secondary:hover { background-color: #1e7e34; }
+  .result { margin-top: 18px; }
+  textarea.result { min-height: 220px; font-family: "Consolas", "Courier New", monospace; font-size: 14px; resize: vertical; background: #fafafa; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .actions button { margin-top: 0; flex: 1 1 auto; min-width: 130px; }
+  .hint { color: #666; font-size: 13px; margin-top: 10px; }
+  .disclaimer { color: #b00; margin-top: 16px; font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>UUID / GUID 產生器<small style="display:block;font-size:14px;color:#666;font-weight:normal;">Random UUID v4 Generator</small></h1>
+
+<div class="container">
+  <label for="count">產生數量：</label>
+  <input id="count" type="number" min="1" max="1000" value="1" placeholder="請輸入 1 至 1000">
+
+  <div class="row">
+    <div>
+      <label for="uppercase">大小寫：</label>
+      <select id="uppercase">
+        <option value="lower" selected>小写 lowercase</option>
+        <option value="upper">大写 uppercase</option>
+      </select>
+    </div>
+    <div>
+      <label for="brackets">大括號：</label>
+      <select id="brackets">
+        <option value="none" selected>無 none</option>
+        <option value="curly">{} 大括號</option>
+        <option value="angle">&lt;&gt; 尖括號</option>
+      </select>
+    </div>
+  </div>
+
+  <button onclick="generate()">產生 UUID</button>
+
+  <div class="result">
+    <label for="output">結果：</label>
+    <textarea id="output" class="result" readonly placeholder="產生的 UUID 會顯示在此"></textarea>
+  </div>
+
+  <div class="actions">
+    <button class="secondary" onclick="copyOutput()">複製全部</button>
+    <button class="secondary" onclick="downloadTxt()">下載 .txt</button>
+  </div>
+  <div class="hint">產生的 UUID 完全使用瀏覽器內建的加密隨機數（crypto.randomUUID）生成，不會上傳至任何伺服器。</div>
+</div>
+
+<div class="container">
+  <div class="disclaimer">本工具僅用於產生随机唯一識別碼（UUID v4），請勿用于非法用途。</div>
+</div>
+
+<script>
+function makeUUID() {
+  if (window.crypto && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  // fallback：手動產生符合 RFC 4122 的 v4 UUID
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (128 >> (c >> 3)))).toString(16));
+}
+
+function wrap(uuid, mode) {
+  if (mode === 'curly') return '{' + uuid + '}';
+  if (mode === 'angle') return '<' + uuid + '>';
+  return uuid;
+}
+
+function generate() {
+  const count = Math.min(1000, Math.max(1, parseInt(document.getElementById('count').value, 10) || 1));
+  const upper = document.getElementById('uppercase').value === 'upper';
+  const brackets = document.getElementById('brackets').value;
+  const output = document.getElementById('output');
+
+  const list = [];
+  for (let i = 0; i < count; i++) {
+    let u = makeUUID();
+    if (upper) u = u.toUpperCase();
+    list.push(wrap(u, brackets));
+  }
+  output.value = list.join('\n');
+}
+
+async function copyOutput() {
+  const text = document.getElementById('output').value;
+  if (!text) { alert('沒有可複製的內容。請先產生 UUID。'); return; }
+  try {
+    await navigator.clipboard.writeText(text);
+    alert('已複製 ' + text.split('\n').length + ' 個 UUID。');
+  } catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('已複製 ' + text.split('\n').length + ' 個 UUID。');
+  }
+}
+
+function downloadTxt() {
+  const text = document.getElementById('output').value;
+  if (!text) { alert('沒有可下載的內容。請先產生 UUID。'); return; }
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'uuids.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('count').addEventListener('keydown', (e) => { if (e.key === 'Enter') generate(); });
+window.addEventListener('load', generate);
+</script>
+
+</body>
+</html>
