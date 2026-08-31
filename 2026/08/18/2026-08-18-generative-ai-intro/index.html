@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>什麼是生成式 AI？大模型、LLM、Diffusion 一次懂 - Mystudybook</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="mystudybook"><meta name="msapplication-TileImage" content="/images/Computer_icon_cc0.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="mystudybook"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="從 AI 發展史看懂生成式AI的核心概念：LLM、Diffusion、Transformer、推理模型，以及主流產品怎麼選。"><meta property="og:type" content="blog"><meta property="og:title" content="什麼是生成式 AI？大模型、LLM、Diffusion 一次懂"><meta property="og:url" content="https://mystudybook.github.io/2026/08/18/2026-08-18-generative-ai-intro/"><meta property="og:site_name" content="Mystudybook"><meta property="og:description" content="從 AI 發展史看懂生成式AI的核心概念：LLM、Diffusion、Transformer、推理模型，以及主流產品怎麼選。"><meta property="og:locale" content="zh_TW"><meta property="og:image" content="https://mystudybook.github.io/img/og_image.png"><meta property="article:published_time" content="2026-08-18T01:00:00.000Z"><meta property="article:modified_time" content="2026-08-31T15:14:29.751Z"><meta property="article:tag" content="AI"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://mystudybook.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://mystudybook.github.io/2026/08/18/2026-08-18-generative-ai-intro/"},"headline":"什麼是生成式 AI？大模型、LLM、Diffusion 一次懂","image":["https://mystudybook.github.io/img/og_image.png"],"datePublished":"2026-08-18T01:00:00.000Z","dateModified":"2026-08-31T15:14:29.751Z","author":{"@type":"Person","name":""},"publisher":{"@type":"Organization","name":"Mystudybook","logo":{"@type":"ImageObject","url":"https://mystudybook.github.io/images/Computer_icon_cc0.svg"}},"description":"從 AI 發展史看懂生成式AI的核心概念：LLM、Diffusion、Transformer、推理模型，以及主流產品怎麼選。"}</script><link rel="canonical" href="https://mystudybook.github.io/2026/08/18/2026-08-18-generative-ai-intro/"><link rel="icon" href="/images/Computer_icon_cc0.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-RXBQVV4XWX" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-RXBQVV4XWX');</script><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><script data-ad-client="ca-pub-7911581883313737" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" async></script><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/categories/%E5%A4%A7%E7%B6%B1/">系列大綱</a><a class="navbar-item" href="/pages/generators/">產生器</a><a class="navbar-item" href="/">首頁</a><a class="navbar-item" href="/archives">歸檔</a><a class="navbar-item" href="/categories">分類</a><a class="navbar-item" href="/tags">標籤</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/mystudybook"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2026-08-18T01:00:00.000Z" title="8/18/2026, 9:00:00 AM">2026-08-18</time>發表</span><span class="level-item"><time dateTime="2026-08-31T15:14:29.751Z" title="8/31/2026, 11:14:29 PM">2026-08-31</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/AI/">AI</a></span><span class="level-item">13 分鐘讀完 (大約1939個字)</span></div></div><h1 class="title is-3 is-size-4-mobile">什麼是生成式 AI？大模型、LLM、Diffusion 一次懂</h1><div class="content"><p>最近「AI」幾乎天天出現在新聞裡，但一深入就遇到一堆名詞：生成式 AI、大語言模型（LLM）、Diffusion、Transformer、推理模型……每個都好像懂，合起來又很模糊。</p>
+<p>這篇文章目標是讓<strong>完全沒有背景的讀者</strong>也能建立正確的心智模型，之後讀後續系列（Prompt、RAG、Agent、工具比較）才會跟得上。我們不碰公式，只用比喻和例子把概念講清楚。</p>
+<h2 id="從-AI-發展史看現在"><a href="#從-AI-發展史看現在" class="headerlink" title="從 AI 發展史看現在"></a>從 AI 發展史看現在</h2><p>要理解生成式 AI 有多革命性，先看看它站在哪些巨人肩上：</p>
+<table>
+<thead>
+<tr>
+<th>時代</th>
+<th>代表技術</th>
+<th>能做什麼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1950–80s</td>
+<td>規則系統、n-gram</td>
+<td>依程式設計師寫死的規則回應</td>
+</tr>
+<tr>
+<td>2012 後</td>
+<td>深度學習、神經網路</td>
+<td>從資料「學」特徵，而非手動設定</td>
+</tr>
+<tr>
+<td>2017</td>
+<td><strong>Transformer</strong> 架構</td>
+<td>一次看長距離關聯，讓大模型成為可能</td>
+</tr>
+<tr>
+<td>2022 後</td>
+<td>生成式 AI（ChatGPT 引爆）</td>
+<td>產生文字、圖片、影片、程式碼等新內容</td>
+</tr>
+</tbody></table>
+<p>關鍵轉折點在 <strong>2017 年 Google 提出的 Transformer 架構</strong>（論文《Attention Is All You Need》）。它讓模型能同時關注輸入的所有部分，訓練出超大型模型變得可行。之後所有的現代 AI，幾乎都建立在這個基礎上。</p>
+<h2 id="什麼是「生成式」AI？"><a href="#什麼是「生成式」AI？" class="headerlink" title="什麼是「生成式」AI？"></a>什麼是「生成式」AI？</h2><p><strong>生成式 AI（Generative AI）</strong> 是一類會<strong>產生新內容</strong>的 AI。它不只是把既有資料撈出來，而是學到資料背後的規律後，輸出從未出現過的：</p>
+<ul>
+<li><strong>文字</strong>：對話、文章、程式碼</li>
+<li><strong>圖片</strong>：依描述繪製的圖像</li>
+<li><strong>影片</strong>：文字或圖片生成的動態影像</li>
+<li><strong>音訊</strong>：語音合成、音樂</li>
+</ul>
+<p>它的核心行為可以簡化成一句話：<strong>學到訓練資料的規律 → 根據你的輸入（prompt）產生新內容。</strong></p>
+<p>這裡有個重要區分：</p>
+<ul>
+<li><strong>傳統 AI &#x2F; 判別式模型</strong>：做「分類」或「判斷」。例如辨識郵件是不是垃圾信、圖片裡是貓還是狗。它只給一個答案，不產生新東西。</li>
+<li><strong>生成式模型</strong>：「創造」內容。你給一句開頭，它幫你續寫下去。</li>
+</ul>
+<h2 id="大語言模型（LLM）：會說話的模型"><a href="#大語言模型（LLM）：會說話的模型" class="headerlink" title="大語言模型（LLM）：會說話的模型"></a>大語言模型（LLM）：會說話的模型</h2><p><strong>大語言模型（Large Language Model, LLM）</strong> 是生成式 AI 裡最出名的一種，專門處理文字（後來也擴到多模態）。</p>
+<p>幾個關鍵概念：</p>
+<ul>
+<li><strong>訓練資料</strong>：幾乎吃掉了整個網路上的文字。因為看得夠多，它學會了語言的規律與知識。</li>
+<li><strong>預測下一個字</strong>：LLM 本質上在做的事情很簡單——根據前面的文字，預測最可能的下一個 token（一個詞或字的一部分）。別小看這個能力，重複足夠多次，就能寫出連貫的文章、程式碼甚至推理過程。</li>
+<li><strong>參數（Parameters）</strong>：模型「學到的東西」的總量，常以十億（B）、千億（100B+）來衡量。數字越大通常代表容量越大，但不等於一定更好。</li>
+<li><strong>上下文窗口（Context Window）</strong>：模型一次能「記住」的文字長度。像讀一篇長報告、問一整份文件，都受這個限制。</li>
+</ul>
+<p>常見的 LLM 產品你有聽過這些：<strong>ChatGPT、Claude、Google Gemini、DeepSeek、Qwen、Kimi、Grok</strong> 等。它們背後都是不同公司訓練的 LLM。</p>
+<h2 id="Diffusion：畫圖的模型"><a href="#Diffusion：畫圖的模型" class="headerlink" title="Diffusion：畫圖的模型"></a>Diffusion：畫圖的模型</h2><p>LLM 處理文字，但你可能也看過 AI 畫圖、生成影片。那些多半是另一類模型——<strong>Diffusion（擴散）模型</strong>。</p>
+<p>它的原理可以這樣理解：</p>
+<ol>
+<li>從一張全是雜訊（像電視無訊號的雪花）的圖片開始。</li>
+<li>反覆「去噪」，一步步把模糊的雜訊清成清晰的圖像。</li>
+<li>你給的描述（prompt）會引導這個清理方向，最後出現你要的內容。</li>
+</ol>
+<p>文字到圖片（Text-to-Image）、文字到影片（Text-to-Video）都是這個思路。代表性產品：<strong>Midjourney、Stable Diffusion、Adobe Firefly</strong>（圖），以及 <strong>Sora、Veo、LTX-Video</strong>（影片）。</p>
+<p>簡單記：<strong>LLM 生成文字，Diffusion 生成圖像與影片</strong>，兩者常合稱「生成式 AI」。</p>
+<h2 id="為什麼現在這麼強？三種驅動力"><a href="#為什麼現在這麼強？三種驅動力" class="headerlink" title="為什麼現在這麼強？三種驅動力"></a>為什麼現在這麼強？三種驅動力</h2><p>為什麼 2022 年之前 AI 感覺一般，之後突然變神？主要靠三件事：</p>
+<ol>
+<li><strong>更大的模型</strong>：運力提升，能訓練出參數驚人的大模型。</li>
+<li><strong>更多的資料</strong>：網路文字資料豐富，供模型學習。</li>
+<li><strong>更好的訓練方法</strong>：除了預訓練，還用「人類回饋強化學習」（RLHF）讓模型的回應更符合人類期望、更好用、更安全。</li>
+</ol>
+<h2 id="新關鍵：推理模型（Reasoning-Thinking-Models）"><a href="#新關鍵：推理模型（Reasoning-Thinking-Models）" class="headerlink" title="新關鍵：推理模型（Reasoning &#x2F; Thinking Models）"></a>新關鍵：推理模型（Reasoning &#x2F; Thinking Models）</h2><p>這是 <strong>2025–2026 最重要的進展</strong>，也是你之後用 AI 一定會碰到的概念。</p>
+<p>傳統的 LLM 是「想到什麼就說什麼」，追求第一時間吐出答案。而<strong>推理模型</strong>會先在內部「先想一下、一步步推導」，再給出最終答案。類似的例子：解數學題時，不是直接報數字，而是先寫出計算過程。</p>
+<p>代表產品與系列：<strong>OpenAI 的 o1 &#x2F; gpt-5-thinking 系列、DeepSeek R1 之後的思考模型、Qwen 的 thinking 版本</strong>。</p>
+<p>對一般使用者意味著什麼？</p>
+<ul>
+<li><strong>適合複雜問題</strong>：邏輯、數學、程式除錯、多步驟規劃，推理模型通常更準。</li>
+<li><strong>要換「思考模式」</strong>很多工具裡需要主動開啟 thinking &#x2F; reasoning 模式，它才會慢慢想。</li>
+<li><strong>取代之餘更貴更慢</strong>：因為要多花算力思考，速度與成本都較高。日常閒聊或簡單任務，普通模型反而更快。</li>
+</ul>
+<h2 id="主流產品地圖（2026）"><a href="#主流產品地圖（2026）" class="headerlink" title="主流產品地圖（2026）"></a>主流產品地圖（2026）</h2><p>不用現在全記住，先有個印象就好，下一篇會詳細比較：</p>
+<table>
+<thead>
+<tr>
+<th>廠商</th>
+<th>代表產品</th>
+<th>強項印象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI</td>
+<td>ChatGPT</td>
+<td>生態完整、插件與工具多</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Claude</td>
+<td>寫作與程式能力受好評、注重安全</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>Gemini</td>
+<td>深度整合 Google 服務、多模態強</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>DeepSeek（中國）</td>
+<td>高CP值、推理模型出名</td>
+</tr>
+<tr>
+<td>Alibaba</td>
+<td>Qwen</td>
+<td>開放權重、本地部署熱門</td>
+</tr>
+<tr>
+<td>Meta</td>
+<td>Llama</td>
+<td>開放權重、可自建</td>
+</tr>
+<tr>
+<td>xAI</td>
+<td>Grok</td>
+<td>結合 X（Twitter）即時資訊</td>
+</tr>
+</tbody></table>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><ul>
+<li><strong>生成式 AI</strong> &#x3D; 會「產生新內容」的 AI，涵蓋文字、圖、影片、音訊。</li>
+<li><strong>LLM</strong> 主要處理文字；<strong>Diffusion</strong> 主要處理圖像與影片。</li>
+<li>現代 AI 建立在 <strong>Transformer</strong> 架構上，靠大模型、大資料、好訓練方法變強。</li>
+<li><strong>推理模型</strong>是最新趨勢，擅長複雜問題，但需要主動開啟思考模式。</li>
+</ul>
+<p>掌握了這些概念，你已經比大多數人懂 AI 的底層邏輯了。接下來可以依序閱讀：</p>
+<ol>
+<li><a href="/2026/08/19/2026-08-19-chatgpt-vs-claude-vs-gemini-vs-deepseek">ChatGPT vs Claude vs Gemini vs DeepSeek 該選哪個</a>（下一篇）</li>
+<li>Prompt Engineering：讓 AI 聽懂你</li>
+<li>RAG：讓 AI 讀你自己的文件</li>
+</ol>
+<hr>
+<p><em>這是《AI 新時代》系列第 01 篇。若覺得有幫助，歡迎分享給想認識 AI 的朋友。</em></p>
+</div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/AI/">AI</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://platform-api.sharethis.com/js/sharethis.js#property=6651e4e4fef97000199a5cfd&amp;product=inline-share-buttons&amp;source=platform" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2026/08/19/2026-08-19-chatgpt-vs-claude-vs-gemini-vs-deepseek/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">ChatGPT vs Claude vs Gemini vs DeepSeek 該選哪個</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/12/17/2025-12-17-image-resize/"><span class="level-item">圖片尺寸調整工具</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/AI/"><span class="level-start"><span class="level-item">AI</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/AI%E5%B7%A5%E5%85%B7/"><span class="level-start"><span class="level-item">AI工具</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/AI%E7%B9%AA%E5%9C%96/"><span class="level-start"><span class="level-item">AI繪圖</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/AWS/"><span class="level-start"><span class="level-item">AWS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/C-%E8%AA%9E%E8%A8%80/"><span class="level-start"><span class="level-item">C# 語言</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Chrome/"><span class="level-start"><span class="level-item">Chrome</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Design-Pattern/"><span class="level-start"><span class="level-item">Design Pattern</span></span><span class="level-end"><span class="level-item tag">15</span></span></a></li><li><a class="level is-mobile" href="/categories/Docker/"><span class="level-start"><span class="level-item">Docker</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Godot/"><span class="level-start"><span class="level-item">Godot</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/IDE%E6%93%8D%E4%BD%9C/"><span class="level-start"><span class="level-item">IDE操作</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile" href="/categories/JavaScript/"><span class="level-start"><span class="level-item">JavaScript</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Mac/"><span class="level-start"><span class="level-item">Mac</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/SQL/"><span class="level-start"><span class="level-item">SQL</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Tools/"><span class="level-start"><span class="level-item">Tools</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/Unity/"><span class="level-start"><span class="level-item">Unity</span></span><span class="level-end"><span class="level-item tag">82</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E7%B6%B1/"><span class="level-start"><span class="level-item">大綱</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-31T02:00:00.000Z">2026-08-31</time></p><p class="title"><a href="/2026/08/31/%E5%85%8D%E8%B2%BBAI-Agent%E6%95%B4%E7%90%86/">免費使用的 AI Agent 整理與比較</a></p><p class="categories"><a href="/categories/AI/">AI</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-31T02:00:00.000Z">2026-08-31</time></p><p class="title"><a href="/2026/08/31/2026-08-31-local-llm-tools/">本地 LLM 工具比較：Ollama、LM Studio、TextGen 該選哪個</a></p><p class="categories"><a href="/categories/AI/">AI</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-30T02:00:00.000Z">2026-08-30</time></p><p class="title"><a href="/2026/08/30/2026-08-30-how-to-use-cursor-ai-in-godot/">How to use Cursor AI in Godot</a></p><p class="categories"><a href="/categories/Godot/">Godot</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-29T01:00:00.000Z">2026-08-29</time></p><p class="title"><a href="/2026/08/29/2026-08-29-ai-trends-and-ethics/">AI 趨勢展望與倫理議題</a></p><p class="categories"><a href="/categories/AI/">AI</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-28T01:00:00.000Z">2026-08-28</time></p><p class="title"><a href="/2026/08/28/2026-08-28-ai-agents/">AI Agent：讓模型自己規劃並執行多步任務</a></p><p class="categories"><a href="/categories/AI/">AI</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2026/08/"><span class="level-start"><span class="level-item">八月 2026</span></span><span class="level-end"><span class="level-item tag">19</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/12/"><span class="level-start"><span class="level-item">十二月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/11/"><span class="level-start"><span class="level-item">十一月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/10/"><span class="level-start"><span class="level-item">十月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/03/"><span class="level-start"><span class="level-item">三月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/02/"><span class="level-start"><span class="level-item">二月 2025</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/01/"><span class="level-start"><span class="level-item">一月 2025</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/12/"><span class="level-start"><span class="level-item">十二月 2024</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/09/"><span class="level-start"><span class="level-item">九月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/08/"><span class="level-start"><span class="level-item">八月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/07/"><span class="level-start"><span class="level-item">七月 2024</span></span><span class="level-end"><span class="level-item tag">17</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/06/"><span class="level-start"><span class="level-item">六月 2024</span></span><span class="level-end"><span class="level-item tag">25</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/05/"><span class="level-start"><span class="level-item">五月 2024</span></span><span class="level-end"><span class="level-item tag">20</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/04/"><span class="level-start"><span class="level-item">四月 2024</span></span><span class="level-end"><span class="level-item tag">37</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/02/"><span class="level-start"><span class="level-item">二月 2024</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI/"><span class="tag">AI</span><span class="tag">16</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C#</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chrome/"><span class="tag">Chrome</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DB/"><span class="tag">DB</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Eclipse/"><span class="tag">Eclipse</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Event/"><span class="tag">Event</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Flex/"><span class="tag">Flex</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-API/"><span class="tag">Google API</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-Search-Console/"><span class="tag">Google Search Console</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Input-System/"><span class="tag">Input System</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Formatter/"><span class="tag">JSON Formatter</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Pretty/"><span class="tag">JSON Pretty</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Joint-2D/"><span class="tag">Joint 2D</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Mac/"><span class="tag">Mac</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ParticleSystem/"><span class="tag">ParticleSystem</span><span class="tag">13</span></a></div><div class="control"><a class="tags has-addons" href="/tags/SQL%E8%AA%9E%E6%B3%95/"><span class="tag">SQL語法</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ScriptableObject/"><span class="tag">ScriptableObject</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Shader-Graph/"><span class="tag">Shader Graph</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UGUI/"><span class="tag">UGUI</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Builder/"><span class="tag">UI Builder</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Toolkit/"><span class="tag">UI Toolkit</span><span class="tag">18</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unit-Test/"><span class="tag">Unit Test</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-Tips/"><span class="tag">Unity Tips</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-package/"><span class="tag">Unity package</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity%E6%9E%B6%E6%A7%8B/"><span class="tag">Unity架構</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ai-agent/"><span class="tag">ai_agent</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/delegate/"><span class="tag">delegate</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/free-tools/"><span class="tag">free_tools</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/html/"><span class="tag">html</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/llm/"><span class="tag">llm</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/password-generator/"><span class="tag">password_generator</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/qr-code/"><span class="tag">qr_code</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/sitemap/"><span class="tag">sitemap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-id/"><span class="tag">taiwan_id</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-test-data/"><span class="tag">taiwan_test_data</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/unified-number/"><span class="tag">unified_number</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%89%B5%E4%BD%9C/"><span class="tag">創作</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B8%E5%AD%B8%E7%9B%B8%E9%97%9C/"><span class="tag">數學相關</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%82%E9%96%93/"><span class="tag">時間</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%89%A9%E7%90%86%E7%9B%B8%E9%97%9C/"><span class="tag">物理相關</span><span class="tag">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%A8%8B%E5%BC%8F%E9%96%8B%E7%99%BC/"><span class="tag">程式開發</span><span class="tag">7</span></a></div></div></div></div></div><div class="card widget" data-type="adsense"><div class="card-content"><div class="menu"><h3 class="menu-label">廣告</h3><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7911581883313737" data-ad-slot="4842521037" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a><p class="is-size-7"><span>&copy; 2026 Mystudybook</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-tw");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到頁首" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此網站使用Cookie來改善您的體驗。",
+          dismiss: "知道了！",
+          allow: "允許使用Cookie",
+          deny: "拒絕",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="請輸入關鍵字..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"請輸入關鍵字...","untitled":"(無標題)","posts":"文章","pages":"頁面","categories":"分類","tags":"標籤"});
+        });</script></body></html>

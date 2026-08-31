@@ -33,399 +33,475 @@
       switchTab();
       window.addEventListener('hashchange', switchTab, false);
   })();
-  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/categories/%E5%A4%A7%E7%B6%B1/">系列大綱</a><a class="navbar-item" href="/pages/generators/">產生器</a><a class="navbar-item" href="/">首頁</a><a class="navbar-item" href="/archives">歸檔</a><a class="navbar-item" href="/categories">分類</a><a class="navbar-item" href="/tags">標籤</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/mystudybook"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-11-25T17:01:28.078Z" title="11/26/2024, 1:01:28 AM">2024-11-26</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.372Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">11 分鐘讀完 (大約1627個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/11/26/2024-11-26-unity-data-and-serialization/">Unity 資料(Data) 與 序列化(Serialization)</a></p><div class="content"><h2 id="資料結構"><a href="#資料結構" class="headerlink" title="資料結構"></a>資料結構</h2><p>在 Unity 中儲存資料時要選擇適合的資料結構來儲存，以下是 C# 常用的資料結構。</p>
-<ol>
-<li>陣列 (Array)：陣列適用於大小固定、元素類型一致的集合。例如，儲存固定數量的關卡分數或完成狀態。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span>[] levelScores = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">10</span>]; <span class="comment">// 用於存儲 10 個關卡的分數</span></span><br><span class="line">levelScores[<span class="number">0</span>] = <span class="number">100</span>; <span class="comment">// 第一關的分數</span></span><br><span class="line">levelScores[<span class="number">1</span>] = <span class="number">200</span>; <span class="comment">// 第二關的分數</span></span><br></pre></td></tr></table></figure></li>
-<li>列表 (List)：列表是動態的，能在執行時調整大小，適合在需要新增或移除元素的情境。例如，動態管理角色的物品欄。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;<span class="built_in">string</span>&gt; inventoryItems = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;(); <span class="comment">// 用於儲存物品清單</span></span><br><span class="line">inventoryItems.Add(<span class="string">&quot;Item1&quot;</span>); <span class="comment">// 添加物品</span></span><br><span class="line">inventoryItems.Add(<span class="string">&quot;Item2&quot;</span>); <span class="comment">// 添加物品</span></span><br></pre></td></tr></table></figure></li>
-<li>字典 (Dictionary)：字典是鍵(Key)與值(Value)的儲存方式，適合需要快速查找的情況。例如，排行榜系統或配置表。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Dictionary&lt;<span class="built_in">string</span>, <span class="built_in">int</span>&gt; leaderboard = <span class="keyword">new</span> Dictionary&lt;<span class="built_in">string</span>, <span class="built_in">int</span>&gt;(); <span class="comment">// 玩家名稱對應分數</span></span><br><span class="line">leaderboard[<span class="string">&quot;Player1&quot;</span>] = <span class="number">1000</span>; <span class="comment">// Player1 的分數</span></span><br><span class="line">leaderboard[<span class="string">&quot;Player2&quot;</span>] = <span class="number">1500</span>; <span class="comment">// Player2 的分數</span></span><br></pre></td></tr></table></figure></li>
-<li>自定義資料結構：當內建資料結構無法滿足需求時，可設計自定義結構以應對特定場景。例如，設計角色屬性與技能系統。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Character</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Health;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Mana;</span><br><span class="line">    <span class="keyword">public</span> List&lt;<span class="built_in">string</span>&gt; Abilities;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Character</span>(<span class="params"><span class="built_in">string</span> name, <span class="built_in">int</span> health, <span class="built_in">int</span> mana</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Name = name;</span><br><span class="line">        Health = health;</span><br><span class="line">        Mana = mana;</span><br><span class="line">        Abilities = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AddAbility</span>(<span class="params"><span class="built_in">string</span> ability</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Abilities.Add(ability);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="資料結構對效能的影響"><a href="#資料結構對效能的影響" class="headerlink" title="資料結構對效能的影響"></a>資料結構對效能的影響</h3><ol>
-<li>優化記憶體使用<br>選用適當的資料結構能減少不必要的記憶體浪費。例如：若需要儲存固定數量的元素，可使用 陣列 (Array) 而非列表 (List)。陣列因固定大小而佔用較少的記憶體空間。</li>
-<li>提升存取與檢索速度<br>不同的資料結構提供不同的存取效率，選擇合適的結構能顯著提升遊戲回應速度。例如：字典 (Dictionary) 提供常數時間的查找，非常適合需要快速檢索的場景，例如排行榜的玩家數據。</li>
-<li>高效的資料操作<br>適合的資料結構能簡化資料新增、刪除等操作，讓遊戲流程更順暢。例如：列表 (List) 適合用於需要頻繁增刪元素的場景，例如動態的物品欄。</li>
-<li>降低處理負擔<br>選用適當的資料結構可減少額外處理，進一步提升遊戲效能。例如：若需要按順序遍歷元素，使用 列表 (List) 而非字典 (Dictionary) 可避免多餘的鍵值查找。</li>
-</ol>
-<hr>
-<h2 id="資料序列化-Serialization"><a href="#資料序列化-Serialization" class="headerlink" title="資料序列化 (Serialization)"></a>資料序列化 (Serialization)</h2><p>序列化是將資料轉換為可儲存或傳輸的格式（如 JSON 或 XML）。在 Unity 中，以下是常見的序列化方法</p>
-<ol>
-<li>使用 JSON 序列化，適合用於需要與網路服務或跨平台數據交換的情境。而 Unity 內建的 JsonUtility 類別，適合簡單的序列化。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line">[<span class="meta">System.Serializable</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GameData</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> playerLevel;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> playerScore;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SerializationExample</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 建立資料</span></span><br><span class="line">        GameData data = <span class="keyword">new</span> GameData &#123; playerLevel = <span class="number">10</span>, playerScore = <span class="number">500</span> &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 序列化</span></span><br><span class="line">        <span class="built_in">string</span> json = JsonUtility.ToJson(data);</span><br><span class="line">        Debug.Log(<span class="string">&quot;Serialized JSON: &quot;</span> + json);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 反序列化</span></span><br><span class="line">        GameData loadedData = JsonUtility.FromJson&lt;GameData&gt;(json);</span><br><span class="line">        Debug.Log(<span class="string">&quot;Loaded Level: &quot;</span> + loadedData.playerLevel);</span><br><span class="line">        Debug.Log(<span class="string">&quot;Loaded Score: &quot;</span> + loadedData.playerScore);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>使用 XML 序列化，XML (eXtensible Markup Language) 是一種結構化的數據格式，常用於儲存遊戲設定(configuration settings)或是與舊系統的兼容。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"><span class="keyword">using</span> System.Xml.Serialization;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line">[<span class="meta">System.Serializable</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GameData</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> playerLevel;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> playerScore;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">XmlSerializationExample</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 建立資料</span></span><br><span class="line">        GameData data = <span class="keyword">new</span> GameData &#123; playerLevel = <span class="number">10</span>, playerScore = <span class="number">500</span> &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 序列化</span></span><br><span class="line">        XmlSerializer serializer = <span class="keyword">new</span> XmlSerializer(<span class="keyword">typeof</span>(GameData));</span><br><span class="line">        StringWriter writer = <span class="keyword">new</span> StringWriter();</span><br><span class="line">        serializer.Serialize(writer, data);</span><br><span class="line">        <span class="built_in">string</span> xml = writer.ToString();</span><br><span class="line">        Debug.Log(<span class="string">&quot;Serialized XML: &quot;</span> + xml);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 反序列化</span></span><br><span class="line">        StringReader reader = <span class="keyword">new</span> StringReader(xml);</span><br><span class="line">        GameData loadedData = (GameData)serializer.Deserialize(reader);</span><br><span class="line">        Debug.Log(<span class="string">&quot;Loaded Level: &quot;</span> + loadedData.playerLevel);</span><br><span class="line">        Debug.Log(<span class="string">&quot;Loaded Score: &quot;</span> + loadedData.playerScore);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>二進位序列化(Binary serialization)<br>二進位序列化是一種將物件壓縮成緊湊的二進位格式的方式，適合用於需要高效儲存或讀寫數據的情境，例如保存遊戲進度或本地化配置文件。相比於 JSON 或 XML 等文本格式，二進位格式在讀取和寫入速度上具有顯著優勢，同時生成的數據也更小。<br>但 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-tw/dotnet/core/compatibility/serialization/5.0/binaryformatter-serialization-obsolete">BinaryFormatter 在 ASP.NET 應用程式中已淘汰並禁止</a>。</li>
-<li>ScriptableObject<br>ScriptableObject 是 Unity 中用來存儲資料的資源(assets)類型，提供一種直觀的方式來管理設定、參數和可重複使用的組件。它們在 Unity 編輯器中以序列化的格式儲存數據。<ol>
-<li>定義 ScriptableObject <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line">[<span class="meta">CreateAssetMenu(fileName = <span class="string">&quot;NewSettings&quot;</span>, menuName = <span class="string">&quot;Game Settings&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GameSettings</span> : <span class="title">ScriptableObject</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> playerHealth;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> enemyCount;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> playerSpeed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>ScriptableObject 的序列化與反序列化 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SettingsManager</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> GameSettings gameSettings; <span class="comment">// 引用 ScriptableObject</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 保存遊戲設定到檔案</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SaveSettings</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> jsonSettings = JsonUtility.ToJson(gameSettings); <span class="comment">// 序列化為 JSON</span></span><br><span class="line">        File.WriteAllText(Application.persistentDataPath + <span class="string">&quot;/settings.json&quot;</span>, jsonSettings); <span class="comment">// 寫入檔案</span></span><br><span class="line">        Debug.Log(<span class="string">&quot;Settings saved to &quot;</span> + Application.persistentDataPath + <span class="string">&quot;/settings.json&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 從檔案加載遊戲設定</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LoadSettings</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> path = Application.persistentDataPath + <span class="string">&quot;/settings.json&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (File.Exists(path)) <span class="comment">// 檢查檔案是否存在</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">string</span> jsonSettings = File.ReadAllText(path); <span class="comment">// 讀取檔案</span></span><br><span class="line">            JsonUtility.FromJsonOverwrite(jsonSettings, gameSettings); <span class="comment">// 將 JSON 加載到現有的 ScriptableObject</span></span><br><span class="line">            Debug.Log(<span class="string">&quot;Settings loaded from &quot;</span> + path);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            Debug.LogWarning(<span class="string">&quot;Settings file not found at &quot;</span> + path);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-</ol>
-<h2 id="PlayerPrefs"><a href="#PlayerPrefs" class="headerlink" title="PlayerPrefs"></a>PlayerPrefs</h2><p>PlayerPrefs 是 Unity 提供的內建解決方案，用於以鍵(Key)值(Value)對的形式存儲小型資料，如玩家偏好設置、基本遊戲進度或遊戲內設置資料。它易於使用且跨平臺支持，適合管理輕量級資料。</p>
-<ul>
-<li>PlayerPrefs 僅支持基礎類型（如 int、float 和 string），</li>
-<li>如果需要存儲更複雜的資料結構，則需要進行序列化。將資料轉換為 JSON 或 XML 格式，然後以字符串形式存儲到 PlayerPrefs 中。</li>
-<li>PlayerPrefs 的資料以明文形式存儲，容易受到未授權的訪問。</li>
-<li>何時不使用 PlayerPrefs，儘管 PlayerPrefs 簡單易用，但在以下情況下可能並不適合：<ul>
-<li>大型資料：對於複雜或大規模資料，就不適合使用，可改使用資料庫（如 SQLite）。</li>
-<li>敏感數據：對於高度敏感的信息，應考慮使用加密文件或平台特定的安全存儲方案。</li>
-<li>網絡同步：PlayerPrefs 不適合在設備間同步資料，應使用雲存儲或服務器端資料管理。</li>
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/categories/%E5%A4%A7%E7%B6%B1/">系列大綱</a><a class="navbar-item" href="/pages/generators/">產生器</a><a class="navbar-item" href="/">首頁</a><a class="navbar-item" href="/archives">歸檔</a><a class="navbar-item" href="/categories">分類</a><a class="navbar-item" href="/tags">標籤</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/mystudybook"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜尋" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-02-12T23:00:25.913Z" title="2/13/2025, 7:00:25 AM">2025-02-13</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">13 分鐘讀完 (大約1960個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/02/13/2025-02-13-shader-graph-block-node/">Shader Graph Block Node 筆記</a></p><div class="content"><h1 id="Block-Node"><a href="#Block-Node" class="headerlink" title="Block Node"></a>Block Node</h1><ul>
+<li>是一種特殊類型的節點，用於 Master Stack 中。每個 Block 代表了 Shader Graph 在最終著色器輸出中使用的單一表面(surface)（或頂點(vertex)）描述資料。</li>
+<li>內建的 Block 節點 始終可用，</li>
+<li>但特定渲染管線的節點僅在該管線中可用。例如，<ul>
+<li>Universal Block 節點 只在 Universal Render Pipeline（URP） 中可用，</li>
+<li>而 High Definition Block 節點 只在 High Definition Render Pipeline（HDRP） 中可用。</li>
 </ul>
 </li>
-</ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-11-25T01:51:44.143Z" title="11/25/2024, 9:51:44 AM">2024-11-25</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.372Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">19 分鐘讀完 (大約2806個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/11/25/2024-11-25-unity-ugui-performance/">Unity UGUI performance</a></p><div class="content"><h2 id="Canvas"><a href="#Canvas" class="headerlink" title="Canvas"></a>Canvas</h2><p>在 Unity UI 中，修改單一元素可能會觸發整個 Canvas 的重新整理。這種重新評估與網格生成的過程會對效能造成嚴重影響，特別是在複雜的 UI 設計中。主要原因如下：</p>
-<ol>
-<li>網格生成成本高：Unity 的 UI 系統會將元素分組為繪製批次（Draw Calls），但每次小變動都需要重新生成批次，導致高資源消耗。</li>
-<li>過度使用單一 Canvas：將大量 UI 元素集中於一個 Canvas 內，當有微小更新時，會引發顯著的效能尖峰。</li>
-</ol>
-<p>解決方式：將 UI 分割到多個 Canvas 是減少效能問題的有效方法。</p>
-<ul>
-<li>將單一個 Canvas 分割為 巢狀 Canvas（Nested Canvases），這麼做的好處有<ul>
-<li>子 Canvas 與父 Canvas 和兄弟 Canvas 互相隔離，具有獨立的幾何圖形和批次處理功能。</li>
-<li>有助於組織層次結構化的 UI。</li>
-<li>單一 Canvas 的變動不會影響其他 Canvas，縮小了網格重新生成的範圍。</li>
-</ul>
-</li>
-<li>分割 Canvas 的最佳實踐<ul>
-<li>依刷新頻率分組：<ul>
-<li>靜態元素：將不常變動的 UI 元素（如背景圖片、標題）放在單獨的 Canvas 上。</li>
-<li>動態元素：將頻繁更新的 UI 元素（如血量條、分數、計時器）分配到不同的 Canvas。</li>
-</ul>
-</li>
-<li>保持一致性：<ul>
-<li>確保 Canvas 內的元素共享相同的 Z 值、材質和貼圖，以提高批次處理的效率。</li>
-</ul>
-</li>
-<li>避免過度巢狀化：<ul>
-<li>雖然巢狀 Canvas 功能強大，但過度巢狀化會增加維護難度。應針對邏輯分組策略性使用。</li>
-</ul>
-</li>
-<li>範例結構：<ul>
-<li><code>主 Canvas</code>：作為 UI 的總容器。<ul>
-<li><code>HUD Canvas</code>：顯示血量、分數和小地圖（頻繁更新）。</li>
-<li><code>暫停菜單 Canvas</code>：包含按鈕和靜態菜單元素（很少更新）。</li>
-<li><code>背包 Canvas</code>：用於展示背包內容（僅在打開時更新）。</li>
-</ul>
-</li>
-<li>這樣的結構下，當玩家血量在遊戲中變動時，僅 <code>HUD Canvas</code> 會更新，<code>暫停菜單 Canvas</code>和<code>背包 Canvas</code> 不受影響。這樣的分割方式有效避免了不必要的效能開銷。</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>某些 Block 只有在特定的 Graph Settings 下才會兼容，並且可能會根據你選擇的圖表設置變為啟用或禁用。</li>
+<li>你無法對 Block 進行剪切、複製或粘貼操作。</li>
+<li>而某些節點只能在 頂點階段（Vertex Stage） 或 片段階段（Fragment Stage） 使用。</li>
 </ul>
 <hr>
-<h2 id="Graphic-Raycasters"><a href="#Graphic-Raycasters" class="headerlink" title="Graphic Raycasters"></a>Graphic Raycasters</h2><p><code>Graphic Raycaster</code> 是 Unity UI 系統的一部分，負責將玩家的觸控或點擊行為轉換為遊戲可理解的事件。它的主要作用是：</p>
-<ul>
-<li>事件檢測：確認玩家觸碰的屏幕區域是否對應到某個 UI 元素。</li>
-<li>信息傳遞：將觸控位置與設定為可互動的 UI 元素匹配，並將事件傳遞給正確的遊戲部分。</li>
-<li>運作方式：Graphic Raycaster 僅關注 UI 圖形元素（例如按鈕、圖片）。檢查所有設置為可響應觸控的 UI 部件，並確認玩家的觸碰是否在其範圍內。</li>
+<h2 id="Vertex-Stage-Blocks"><a href="#Vertex-Stage-Blocks" class="headerlink" title="Vertex Stage Blocks"></a>Vertex Stage Blocks</h2><p>在 頂點階段（Vertex Stage），著色器(shader)會對網格 (mesh) 上的每個頂點(vertex)進行處理，並將它們移動到螢幕(screen)上的正確位置。我們可以對頂點進行操作，例如移動它們，或改變光照與它們的互動方式。</p>
+<h3 id="Position-Block-：-Position（位置）區塊-定義了-網格（Mesh）上每個頂點的位置。"><a href="#Position-Block-：-Position（位置）區塊-定義了-網格（Mesh）上每個頂點的位置。" class="headerlink" title="Position (Block)： Position（位置）區塊 定義了 網格（Mesh）上每個頂點的位置。"></a>Position (Block)： Position（位置）區塊 定義了 網格（Mesh）上每個頂點的位置。</h3><ul>
+<li>如果不進行修改，頂點的位置將與 建模軟體中的原始位置 相同。</li>
+<li>我們可以調整這個 Vector3 來改變頂點的位置，使網格實際發生形變，例如海浪效果。</li>
+<li>但要注意，我們無法修改單獨的像素（Pixels）或片段（Fragments）的位置，只能操作頂點（Vertices）。</li>
 </ul>
-<p><code>Graphic Raycaster</code> 產生的問題：</p>
-<ul>
-<li>效能消耗高：<ul>
-<li>每次觸控時，Graphic Raycaster 都需要遍歷屏幕上的所有可交互 UI 元素。</li>
-<li>過多的 Graphic Raycaster 或不必要的檢測可能導致資源浪費，尤其是在大型 UI 設計中。</li>
+<h3 id="Normal-Block-：-Normal（法線）區塊-定義了-頂點法線-vertex-normal-points-的方向-direction-。"><a href="#Normal-Block-：-Normal（法線）區塊-定義了-頂點法線-vertex-normal-points-的方向-direction-。" class="headerlink" title="Normal (Block)： Normal（法線）區塊 定義了 頂點法線(vertex normal points)的方向(direction)。"></a>Normal (Block)： Normal（法線）區塊 定義了 頂點法線(vertex normal points)的方向(direction)。</h3><ul>
+<li>這個方向對許多 光照計算 來說非常重要，因此修改它可能會影響 物件與光線的互動方式。</li>
+<li>與 Position Block 不同，我們可以在 片段階段（Fragment Stage） 透過其他區塊節點來 逐像素（Per-Pixel）修改法線，而不只是修改頂點的法線。</li>
+<li>Normal 也是一個 Vector3，用來表示法線的方向。</li>
 </ul>
-</li>
-<li>非交互元素：<ul>
-<li>並非所有 UI 元素都需要響應觸控事件，例如裝飾性的圖片或靜態文本。對這些元素進行射線檢測會降低效能。</li>
-</ul>
-</li>
-</ul>
-<p>解決方式：</p>
-<ul>
-<li>移除不必要的 <code>Graphic Raycasters</code><ul>
-<li>確保僅在需要檢測觸控事件的 UI Canvas 或元素上添加 Graphic Raycaster。</li>
-<li>非交互式 Canvas（例如背景圖像）則移除 Graphic Raycaster，避免不必要的檢測。</li>
-</ul>
-</li>
-<li>關閉非交互元素的 <code>Raycast Target</code><ul>
-<li>對於不需要觸控的 UI 元素（如純裝飾性圖片），關閉其 Raycast Target 設定。<ul>
-<li>在 Image 組件中，取消勾選 Raycast Target。</li>
-<li>這樣可以防止該元素被包含在射線檢測的範圍內，減少計算負擔。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>使用阻擋遮罩（Blocking Mask）<ul>
-<li>當 Canvas 的 Render Mode 設置為 Worldspace Camera 或 Screen Space Camera 時，可以使用 Blocking Mask：<ul>
-<li>該遮罩決定 Raycaster 是否使用 2D 或 3D 物理來檢測阻擋物。</li>
-<li>如果物理檢測對 UI 無直接影響，避免啟用該功能以節省資源。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>分割 Canvas<ul>
-<li>將靜態和動態 UI 元素分離至不同的 Canvas。</li>
-<li>靜態 Canvas 不需要頻繁更新，也不需要 Graphic Raycaster。</li>
-</ul>
-</li>
-</ul>
-<p>例子：<br>假設遊戲的 UI 包含以下部分</p>
-<ul>
-<li>主菜單：大部分按鈕需要觸控響應，因此保留 Graphic Raycaster，並確保按鈕的 Raycast Target 為啟用狀態。</li>
-<li>背景圖片：純裝飾性元素，關閉 Raycast Target 並移除其 Canvas 的 Graphic Raycaster。</li>
-<li>玩家 HUD（血量條、得分顯示）：分配到單獨的 Canvas，僅需要檢測少數互動（例如按鈕點擊）。</li>
+<h3 id="Tangent-Block-：-Tangent（切線）區塊-可以用來-修改切線向量。"><a href="#Tangent-Block-：-Tangent（切線）區塊-可以用來-修改切線向量。" class="headerlink" title="Tangent (Block) ： Tangent（切線）區塊 可以用來 修改切線向量。"></a>Tangent (Block) ： Tangent（切線）區塊 可以用來 修改切線向量。</h3><ul>
+<li>切線向量(Tangent vector) 與 頂點法線（Vertex Normal）垂直(perpendicular)，在平坦的表面上，它通常會沿著物件的表面方向。</li>
+<li>如果你更改了頂點法線（Vertex Normal），建議你也調整切線（Tangent），以確保它仍然與法線保持垂直關係。</li>
+<li>Tangent 也是一個 Vector3，表示方向。</li>
 </ul>
 <hr>
-<h2 id="管理-UI-對象池"><a href="#管理-UI-對象池" class="headerlink" title="管理 UI 對象池"></a>管理 UI 對象池</h2><p>問題：在常見的 UI 對象池使用方式中，開發者通常先更改對象的父節點（parent），再禁用對象（disable）。然而，這樣的操作會導致：</p>
+<h2 id="Fragment-Stage-Blocks"><a href="#Fragment-Stage-Blocks" class="headerlink" title="Fragment Stage Blocks"></a>Fragment Stage Blocks</h2><ul>
+<li>當 頂點階段（Vertex Stage）完成頂點的變換並確定它們的新位置後，畫面會進行 光柵化（Rasterization），將 3D 資訊轉換成一個片段（Fragment）陣列。</li>
+<li>通常，每個片段(Fragment)對應到一個像素（Pixel），但在某些情況下，片段的大小可能會小於像素（例如抗鋸齒技術）。</li>
+<li>為了簡化討論，這裡我們將「片段」與「像素」視為相同的概念。<br>片段階段（Fragment Stage） 中的區塊（Block Nodes）會對每個像素進行操作，例如決定顏色、透明度、光照等效果。</li>
+</ul>
+<h3 id="Base-Color-Block"><a href="#Base-Color-Block" class="headerlink" title="Base Color (Block)"></a>Base Color (Block)</h3><ul>
+<li>在某些版本的 Shader Graph 中，這個屬性被稱為 Albedo（反照率）。<br>Base Color（基礎顏色） 是物件的純顏色，如果忽略所有光照、透明度與其他效果，物件將會顯示這個顏色。</li>
+</ul>
+<h3 id="Normal-Tangent-Object-World-Block"><a href="#Normal-Tangent-Object-World-Block" class="headerlink" title="Normal (Tangent&#x2F;Object&#x2F;World) (Block)"></a>Normal (Tangent&#x2F;Object&#x2F;World) (Block)</h3><ul>
+<li>在頂點階段（Vertex Stage） 有自己的 Normal（法線）區塊。在這個片段階段（Fragment Stage），我們可以存取這個法線資訊，進一步修改每個像素的法線向量，並將修改後的法線傳回 Unity 的內建光照計算系統。</li>
+<li>Shader Graph 中有 三種 Normal（法線）區塊，它們的差別在於所使用的座標空間：<ul>
+<li>Tangent Space（切線空間）</li>
+<li>Object Space（物件空間）</li>
+<li>World Space（世界空間）</li>
+</ul>
+</li>
+<li>在 Shader 設定中，同一時間只能啟用一種法線空間，你可以在 Graph Settings（圖形設定）中透過 Fragment Normal Space（片段法線空間） 選擇要使用的空間類型。</li>
+</ul>
+<h3 id="Emission-Block"><a href="#Emission-Block" class="headerlink" title="Emission (Block)"></a>Emission (Block)</h3><ul>
+<li>自發光（Emissive）光源 是一種非常適合用來 創建物件周圍的輝光（Bloom）效果 的技術。可以想像像是 霓虹燈、發光火焰 或 魔法咒語 等效果。</li>
+<li>Emission（發光）區塊 接受 HDR 顏色（高動態範圍顏色），這讓我們能夠將光源的強度 提高到遠超過一般顏色的範圍，產生更亮、更強烈的光效。</li>
+</ul>
+<h3 id="Metallic-Block"><a href="#Metallic-Block" class="headerlink" title="Metallic (Block)"></a>Metallic (Block)</h3><ul>
+<li>Metallic（金屬性）區塊 接受一個 浮點數（float） 值。當數值為 0 時，物體的光照效果會像是 完全非金屬（non-metallic），而當數值為 1 時，物體會呈現 完全金屬(totally metallic)。</li>
+<li>這個屬性只有在使用 金屬性工作流（Metallic workflow） 時才會生效。你可以在 Graph Settings（圖形設定） 中，使用 Workflow 選項來選擇使用金屬性工作流還是 鏡面反射工作流（Specular workflow），且只有在材質設定為 Lit（有光照） 時，這個選項才會出現。</li>
+</ul>
+<h3 id="Specular-Block"><a href="#Specular-Block" class="headerlink" title="Specular (Block)"></a>Specular (Block)</h3><ul>
+<li>與 Metallic（金屬性） 區塊不同，Specular（鏡面反射） 區塊接收的是 顏色 作為輸入，因為鏡面反射高光（Specular Highlights）可以有不同的顏色。顏色越亮、越接近白色，鏡面反射的高光就越強。</li>
+</ul>
+<h3 id="Smoothness-Block"><a href="#Smoothness-Block" class="headerlink" title="Smoothness (Block)"></a>Smoothness (Block)</h3><ul>
+<li>物體表面越光滑，光照高光的顯示就越明顯。當 Smoothness（光滑度） 為 0 時，物體表面的光照會顯得粗糙且無光澤；而當 Smoothness 為 1 時，物體表面會像 鏡面一樣光滑，反射出明亮的高光。</li>
+</ul>
+<h3 id="Ambient-Occlusion-Block"><a href="#Ambient-Occlusion-Block" class="headerlink" title="Ambient Occlusion (Block)"></a>Ambient Occlusion (Block)</h3><p>環境遮蔽（Ambient Occlusion，簡稱 AO） 是一種測量像素受到其他場景物體（如牆壁）遮擋，從而減少光源照射的程度。這是一個 浮點數（float） 值，當值為 0 時，該像素應該完全根據照射到它的光源來顯示照明效果；當值為 1 時，光照會被人為減少到最小值。</p>
+<h3 id="Alpha-Block"><a href="#Alpha-Block" class="headerlink" title="Alpha (Block)"></a>Alpha (Block)</h3><p>Alpha 是衡量像素透明度的數值，它的範圍從 0 到 1，其中 0 代表完全透明(totally transparent)，而 1 代表完全不透明(fully opaque)。渲染透明物體比渲染不透明物體更消耗計算資源，因此在 Unity 中，我們需要在 Graph Settings 中選擇 Transparent Surface 選項，讓 Unity 正確處理這個著色器。</p>
+<h3 id="Alpha-Clip-Threshold-Block"><a href="#Alpha-Clip-Threshold-Block" class="headerlink" title="Alpha Clip Threshold (Block)"></a>Alpha Clip Threshold (Block)</h3><p>Alpha 剪裁（Alpha Clipping），當像素的 alpha 值低於特定閾值時，這些像素會被剔除（culling）。我們可以通過在 Graph Settings 中勾選 Alpha Clip 選項來啟用 Alpha Clip Threshold 區塊。這項技術無論是物體表面設置為透明（Transparent）還是完全不透明（Opaque）都可以使用，因此 Alpha 區塊在不透明材質上也不一定是完全無用的！這在模擬透明效果時非常有用，通常會使用不透明渲染，但會根據一定模式剔除像素，從而創造出透明的假象。</p>
+<hr>
+<p>參考</p>
 <ul>
-<li>多次改變層級結構：反復更新對象的層級關係（hierarchy），使得整體性能受到影響。</li>
-<li>不必要的開銷：每次改變父節點或激活&#x2F;禁用對象時，Unity 會標記整個層級結構為“髒”，從而增加開銷。</li>
+<li><a target="_blank" rel="noopener" href="https://danielilett.com/2021-05-20-every-shader-graph-node/">https://danielilett.com/2021-05-20-every-shader-graph-node/</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.0/manual/Block-Node.html">https://docs.unity3d.com/Packages/com.unity.shadergraph@17.0/manual/Block-Node.html</a></li>
 </ul>
-<p>解決方案：優化對象激活與重設順序</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-02-12T06:16:33.240Z" title="2/12/2025, 2:16:33 PM">2025-02-12</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">4 分鐘讀完 (大約616個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/02/12/2025-02-12-shader-graph-space/">Shader Graph 的空間</a></p><div class="content"><p>Object Space</p>
 <ul>
-<li>為提高效率，建議按照以下順序管理 UI 對象池：<ul>
-<li>禁用對象再更改父節點：<ul>
-<li>禁用對象（SetActive(false)）後再將其重新分配到對象池的父節點。</li>
-<li>這樣可以確保原始層級結構僅被標記一次為“髒”，避免重複更新。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>從對象池提取時的順序：<ul>
-<li>先更改父節點：將對象移動到新父節點中。</li>
-<li>更新對象數據：重設對象的數據（如 UI 文本或圖片）。</li>
-<li>最後激活對象：使用 SetActive(true) 啟用對象。</li>
-</ul>
-</li>
-<li>這樣的流程可將每個對象的層級結構變化降至最少，從而減少不必要的性能開銷。</li>
+<li>模型的所有頂點位置都是 相對於該物件的中心點（Pivot Point） 來計算的，而不是世界原點 (0,0,0)</li>
+<li><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1739427967/Hexo/2025/20250213/object_space_ztddxh.svg" width="400px" height="400px"/></li>
 </ul>
 <hr>
-<h2 id="隱藏-Canvas-的方法"><a href="#隱藏-Canvas-的方法" class="headerlink" title="隱藏 Canvas 的方法"></a>隱藏 Canvas 的方法</h2><p>在開發過程中，可能需要暫時隱藏某些 UI 元素或整個 Canvas。常見的方式有</p>
+<p>World Space</p>
 <ul>
-<li><code>使用 SetActive(false) 禁用整個 GameObject</code> <ul>
-<li>可能會導致 Canvas 層級結構中的回調函數執行（如 OnDisable 和 OnEnable），增加不必要的性能開銷。</li>
+<li>世界空間（World Space） 是所有物件共享的一個全域座標系統，其中所有物件的位置都是相對於 世界原點 (0,0,0) 來計算的。在 Unity Editor 中，當你修改某個 Object Transform 的位置，就是在修改那個 Object 的 World Space。</li>
+<li>假設有一個物件 A 在 (3,2,1) 的世界座標，然後它的子物件 B 在 localPosition &#x3D; (1,1,1)：<ul>
+<li>A.position &#x3D; (3,2,1)（世界空間）</li>
+<li>B.localPosition &#x3D; (1,1,1)（本地空間，相對於 A）</li>
+<li>B.position &#x3D; (4,3,2)（世界空間，因為 A 的位置 + B 的本地位置 &#x3D; 世界位置）</li>
+<li>所以，如果你在 Unity 編輯器中修改 B.position，你就是在改變它的 世界空間座標，而 B.localPosition 會自動調整，以維持相對於 A 的關係。</li>
 </ul>
 </li>
-<li><code>移動 Canvas 的位置，讓使用者看不見</code><ul>
-<li>並不能停止 GPU 的繪製操作，仍會影響性能。</li>
-</ul>
-</li>
-<li><code>改變透明度</code>，<ul>
-<li>並不能停止 GPU 的繪製操作，仍會影響性能。</li>
-</ul>
-</li>
-</ul>
-<p>解決方案：停用 Canvas 組件，透過停用 Canvas 可以</p>
-<ol>
-<li>停止繪製操作，當停用 Canvas 組件會立即停止向 GPU 發送繪製請求，使畫布變得不可見。</li>
-<li>並保留頂點緩衝區，Canvas 的頂點資料（meshes 和 vertices）會被保留，因此在重新啟用時無需重建(rebulid)，僅需恢復繪製操作。</li>
-<li>避免不必要的回調，停用 Canvas 組件不會觸發整個層級結構的 OnDisable&#x2F;OnEnable 回調，從而減少性能損耗。</li>
-</ol>
-<hr>
-<h2 id="UI-元素動畫"><a href="#UI-元素動畫" class="headerlink" title="UI 元素動畫"></a>UI 元素動畫</h2><p>當在 UI 元素上應用 Animator 時，即使動畫的值保持不變，也會在每一幀對 UI 元素產生影響。這會導致</p>
-<ul>
-<li>不必要的性能消耗，特別是在多個靜態 UI 元素上。</li>
-</ul>
-<p>解決方案：針對靜態或偶爾改變的 UI 動畫需求，避免使用 Animator。可以透過以下方式實現高效的 UI 動畫。使用程式碼或 Tweening 系統進行動畫處理</p>
-<ul>
-<li>手寫動畫程式碼：針對簡單的動畫需求，直接使用 C# 程式碼逐步更改 UI 屬性（如位置、透明度等）。</li>
-<li>Tweening 系統：使用輕量級的 Tweening 庫來簡化動畫實現。</li>
-<li>Tweening 系統通過插值逐步更改屬性，對於臨時或事件驅動的動畫需求非常高效。</li>
-<li>使用專業的 Tweening 資產（如 DoTween）可以快速實現高效動畫。</li>
 </ul>
 <hr>
-<h2 id="開發-UI-建議"><a href="#開發-UI-建議" class="headerlink" title="開發 UI 建議"></a>開發 UI 建議</h2><ol>
-<li>為最常用的 UI 元素建立 Prefabs<ul>
-<li>對於經常使用的 UI 元素（如標題文字），可以將其創建為 Prefab，並將所需的組件附加到這些 Prefab 上。這樣一來，當你需要修改某些元素時，所有使用該 Prefab 的地方都會自動更新，讓你更輕鬆地管理與修改 UI 元素。</li>
-<li>例子：假設你有多個地方需要顯示標題文字，將標題文字做成 Prefab，並在遊戲中重複使用。未來如果需要調整字體或大小，只需更改 Prefab，就能同步更新所有相關元素。</li>
+<p>Absolute World Space 與 World Space</p>
+<ul>
+<li>URP：Universal Render Pipeline（通用渲染管線），較強調效能，適合跨平台。</li>
+<li>HDRP：High Definition Render Pipeline（高解析度渲染管線），較強調畫質，適用於 高端 PC、主機遊戲、電影級畫質</li>
+<li>在 URP 中，world space 與 absolute world space 是一樣的。</li>
+<li>但是在 HDRP 中，他使用 camera relative rendering ， 因此 HDRP 的 world space 是相對於相機的 (camera-relative) ，而他的 absolute world space 則不管相機。</li>
+<li><img style="inline-block" src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1739428848/Hexo/2025/20250213/World_Space_mlrua6.svg"  height="400px"/></li>
 </ul>
-</li>
-<li>使用 Sprite Atlas<ul>
-<li>在 Unity 中使用 Sprite Atlas 來將多個 Sprite 紋理打包到一個單一的紋理資源中。這對於優化遊戲效能非常有幫助，因為它減少了渲染過程中的 draw calls，從而提升遊戲性能，特別是在移動設備上。</li>
-<li>Sprite Atlas 的優點：<ul>
-<li>Draw call 優化：使用 Sprite Atlas，可以減少 draw calls，讓 Unity 在渲染多個 Sprite 時只用一個 draw call，大大提高性能。</li>
-<li>紋理分組：Sprite Atlas 讓你能夠將多個 Sprite 或紋理打包在一起，便於管理和組織資源。</li>
-<li>自動打包：Unity 會自動進行紋理打包，將個別的 Sprite 儘可能地安排在 Atlas 中，減少空白區域的浪費，並優化紋理使用。</li>
-<li>Mipmapping 支援：Sprite Atlas 支援 Mipmapping，這能夠提高在遠距離查看紋理時的渲染質量。</li>
-<li>平台適配：可以為不同的裝置平台或螢幕解析度創建不同的 Sprite Atlas 變體，保證在各種設備上的最佳效能。</li>
-<li>Unity 編輯器整合：你可以直接在 Unity 編輯器中創建與管理 Sprite Atlas，方便遊戲開發者進行資源的視覺化與調整。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>使用透明圖片疊加進行設計對齊<ul>
-<li>將設計圖層疊加一個稍微透明的圖片，這樣可以幫助你更準確地對齊並組織 UI 視圖，使其符合最終設計。</li>
-</ul>
-</li>
-</ol>
 <hr>
-<h2 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h2><p>在 Unity 中實作 MVVM</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Model</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GameData</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> level;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> starts;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ViewModel</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GameViewModel</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> GameData gameData;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> level =&gt; gameData.level;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> starts =&gt; gameData.starts;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        gameData = <span class="keyword">new</span> GameData();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">UpdateGameData</span>(<span class="params"><span class="built_in">int</span> level, <span class="built_in">int</span> score</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        gameData.level = level;</span><br><span class="line">        gameData.starts = score;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// View</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GameView</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">SerializeField</span>] <span class="keyword">private</span> GameViewModel gameViewModel;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        gameViewModel.UpdateGameData(<span class="number">1</span>, <span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Debug.Log(<span class="string">&quot;Level: &quot;</span> + gameViewModel.level);</span><br><span class="line">        Debug.Log(<span class="string">&quot;Starts: &quot;</span> + gameViewModel.starts);</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-11-18T01:55:05.298Z" title="11/18/2024, 9:55:05 AM">2024-11-18</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.372Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">2 分鐘讀完 (大約288個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/11/18/2024-11-18-textmeshpro-%E9%A1%AF%E7%A4%BA%E4%B8%AD%E6%96%87/">TextMeshPro 顯示中文</a></p><div class="content"><p>使用 TextMeshPro 時，因為 Unity 預設的字型資源（如 LiberationSans SDF）不包含中文字元，所以中文會顯示為空白或方框。<br>我們需要自己下載支援中文的字體檔案，一些免費的可以在網路上找到，像是 Google 的 <a target="_blank" rel="noopener" href="https://fonts.google.com/noto/specimen/Noto+Sans+TC">Noto Sans Traditional Chinese</a></p>
-<p>生成靜態字體</p>
+<p>Tangent Space</p>
 <ul>
-<li>將下載的字體檔案（如 .ttf 或 .otf）拖入 Unity 的專案中。</li>
-<li>使用 <code>Window</code> -&gt; <code>TextMeshPro</code> -&gt; <code>Font Asset Creator</code>，選擇字型檔案後，可以生成 .asset 檔案。</li>
-<li>這種方式需要手動指定要包含的字元範圍（如常用中文字、標點符號等），因此使用上較麻煩。</li>
+<li>在 切線空間（Tangent Space） 中，位置和方向是相對於每個頂點及其法線來定義的。</li>
+<li><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1739427967/Hexo/2025/20250213/Tangent_Space_a57fai.svg" width="400px" height="400px"/></li>
 </ul>
-<p>動態字體：如果不想手動管理字元集，可以使用 <code>Dynamic Font Asset</code>：</p>
+<hr>
+<p>View&#x2F;Eye Space</p>
 <ul>
-<li>選擇 <code>Assets</code> -&gt; <code>Create</code> -&gt; <code>TextMeshPro</code> -&gt; <code>Font Asset</code>。<ul>
-<li>快捷鍵：<code>Ctrl/Cmd</code> + <code>Shift</code> + <code>F12</code></li>
+<li>在 視圖空間（View&#x2F;Eye Space） 中，物件的位置是相對於相機及其朝前的方向( forward-facing direction )來描述的。這與 相機相對渲染（Camera-Relative Rendering） 不同，因為視圖空間會考慮相機的旋轉。</li>
+<li><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1739427967/Hexo/2025/20250213/View_Eye_Space_s2seu4.svg" width="400px"  height="400px"/></li>
 </ul>
-</li>
-<li>Unity 將自動創建一個動態字體資產，該資產會在運行時根據需要生成缺失的字元，避免因字元缺失而顯示為空白。</li>
-</ul>
-<p>Reference:</p>
+<hr>
+<p>Clip space</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2/manual/FontAssetsDynamicFonts.html">https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2/manual/FontAssetsDynamicFonts.html</a></li>
+<li>在 裁剪空間（Clip Space） 中，物件的位置是相對於螢幕（Screen）的。這個空間是在視圖空間經過投影變換（projected）後產生的，其結果取決於相機的視野範圍（Field of View, FOV）和裁剪平面（Clipping Planes）。通常，超出裁剪空間範圍的物體會被裁剪（Clipped），也稱為剔除（Culled），簡單來說就是被刪除，因此這個空間被稱為「裁剪空間」。</li>
 </ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-09-22T16:56:49.559Z" title="9/23/2024, 12:56:49 AM">2024-09-23</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.372Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Java/">Java</a></span><span class="level-item">2 分鐘讀完 (大約374個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/09/23/2024-09-23-java-copy-file/">Java 複製檔案的方式</a></p><div class="content"><p>方法一： 使用 <code>java.io</code> 的 FileInputStream 讀取，在使用 FileOutputStream 寫入。這種方式使用 byte stream 直接讀取來源檔案內容，在寫入到目標檔案。比 <code>Files.copy</code> 慢。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">FileInputStream</span> <span class="variable">fis</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;source.txt&quot;</span>);</span><br><span class="line"><span class="type">FileOutputStream</span> <span class="variable">fos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;destination.txt&quot;</span>);</span><br><span class="line"><span class="type">byte</span>[] buffer = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="type">int</span> length;</span><br><span class="line"><span class="keyword">while</span> ((length = fis.read(buffer)) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    fos.write(buffer, <span class="number">0</span>, length);</span><br><span class="line">&#125;</span><br><span class="line">fis.close();</span><br><span class="line">fos.close();</span><br></pre></td></tr></table></figure>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-02-12T01:54:01.988Z" title="2/12/2025, 9:54:01 AM">2025-02-12</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Tools/">Tools</a></span><span class="level-item">幾秒讀完 (大約15個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/02/12/2025-02-12-image-to-base64/">圖片與 Base64 轉換 - 線上工具</a></p><div class="content"><script type="text/javascript">
+  function resizeIframe(iframe) {
+    iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
+    window.requestAnimationFrame(() => resizeIframe(iframe));
+  }
+</script>  
 
-<p>方法二： 使用 <code>java.nio</code> 的 transferTo 讀取，在使用 transferFrom 寫入。這種方式可以直接在 FileChannel 中傳輸資料。它可以快速的將資料從一個 channel 傳輸到另外一個 channel ，而不需要在 User space 與 Kernal space 進行資料複製，是一種實現 <code>zero copy</code> 的複製方式。但是在某些作業系統中， transferTo 可能會限制傳輸的最大 Byte ，因此在使用時，可能需要進行分段傳輸。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">FileChannel</span> <span class="variable">sourceChannel</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;source.txt&quot;</span>).getChannel();</span><br><span class="line"><span class="type">FileChannel</span> <span class="variable">destChannel</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;destination.txt&quot;</span>).getChannel();</span><br><span class="line">sourceChannel.transferTo(<span class="number">0</span>, sourceChannel.size(), destChannel);</span><br><span class="line">sourceChannel.close();</span><br><span class="line">destChannel.close();</span><br></pre></td></tr></table></figure>
-
-
-<p>方法三： 使用 <code>java.nio</code> 的 Files.copy 。java NIO 提供的一種高級操作方式，但是它本身不實現 zero copy 技術</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Path</span> <span class="variable">sourcePath</span> <span class="operator">=</span> Paths.get(<span class="string">&quot;source.txt&quot;</span>);</span><br><span class="line"><span class="type">Path</span> <span class="variable">destinationPath</span> <span class="operator">=</span> Paths.get(<span class="string">&quot;destination.txt&quot;</span>);</span><br><span class="line">Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);</span><br></pre></td></tr></table></figure>
-
-
-<p>注意：以上的操作都沒有使用 try finally 或是 try-with-resources 關閉資源，正確的使用需要關閉資源才不會造成 Memory leak</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> (<span class="type">FileInputStream</span> <span class="variable">fis</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;source.txt&quot;</span>);</span><br><span class="line">     <span class="type">FileOutputStream</span> <span class="variable">fos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;destination.txt&quot;</span>)) &#123;</span><br><span class="line">    <span class="type">byte</span>[] buffer = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line">    <span class="type">int</span> length;</span><br><span class="line">    <span class="keyword">while</span> ((length = fis.read(buffer)) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        fos.write(buffer, <span class="number">0</span>, length);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-09-22T06:35:33.925Z" title="9/22/2024, 2:35:33 PM">2024-09-22</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.371Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">2 分鐘讀完 (大約262個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/09/22/2024-09-22-how-to-use-cursor-ai-in-unity/">How to use Cursor AI in Unity</a></p><div class="content"><p>在 Mac 的 Unity 中如何使用 Cursor AI ？<br>以下記載如何在 Mac 的 Unity 中設定 Cursor AI</p>
-<ol>
-<li><p>在 Unity 編輯器中，找到 <code>Windows</code> -&gt; <code>Package Manager</code><br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1727016017/Hexo/2024/09/20240922/ai_1_s8h8qw.png"></p>
-</li>
-<li><p>點擊 <code>+</code> 展開選單，並找到 <code>Add package from git URL</code> 並選擇，在輸入 <code>https://github.com/boxqkrtm/com.unity.ide.cursor.git</code> ， 以安裝 <code>Cursor Editor</code> 。</p>
-</li>
-<li><p>接著到 <a target="_blank" rel="noopener" href="https://www.cursor.com/">https://www.cursor.com/</a> 註冊帳號並下載 <code>Cusor Editor</code> 安裝。</p>
-</li>
-<li><p>然後到 <code>Preferences</code> -&gt; <code>External Tools</code> -&gt; <code>External Script Editor</code> ，選擇安裝的 <code>Cursor</code><br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1727017393/Hexo/2024/09/20240922/ai_5_wcpa6i.png"></p>
-</li>
-<li><p>至此，便可以在編寫程式碼的時候，使用 Cursor AI 了。</p>
-</li>
-</ol>
+<iframe onload="resizeIframe(this)"  src='/html/tools/image_to_base64/index.html' scrolling="no" frameborder="0" width='100%' style='margin-top:12px'>
+</iframe>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-02-10T23:25:11.817Z" title="2/11/2025, 7:25:11 AM">2025-02-11</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">24 分鐘讀完 (大約3621個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/02/11/2025-02-11-shader-graph-node/">Shader Graph Node 筆記</a></p><div class="content"><hr>
+<p>Add Node ： 將輸入 A 與 B 相加後輸出。可用在</p>
 <ul>
-<li><p>按下 <code>⌘</code> + <code>L</code> 可以開啟 AI 互動，在這邊你可以向AI闡述你的問題，讓它生成相關的程式碼<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1727016877/Hexo/2024/09/20240922/ai_3_ds7as7.png"></p>
-</li>
-<li><p>按下 <code>⌘</code> + <code>K</code> 在這邊你可以向AI闡述你的需求，讓它在選中的段落為你產生程式碼。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1727016877/Hexo/2024/09/20240922/ai_4_nfjamy.png"></p>
-</li>
+<li>顏色混合：兩個顏色相加會讓結果更亮，例如 紅色(1,0,0) + 綠色(0,1,0) &#x3D; 黃色(1,1,0)。</li>
+<li>偏移效果：可以為 UV 座標 添加一個數值，實現紋理偏移或滾動效果。</li>
+<li>漸變控制：用於疊加額外的數值，如增加光照強度或提高某些參數的基礎值。</li>
 </ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-08-28T17:11:45.708Z" title="8/29/2024, 1:11:45 AM">2024-08-29</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.371Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">7 分鐘讀完 (大約989個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/08/29/2024-08-29-liquid-2d/">Unity 2D Liquid</a></p><div class="content"><p>以下將介紹如何使用 Shader ， Texture ， 以及 Camera 來在 2D 中建立液體(Liquid)效果。</p>
-<h1 id="建立互動物件"><a href="#建立互動物件" class="headerlink" title="建立互動物件"></a>建立互動物件</h1><ol>
-<li>首先建立液體：建立一個 Circle Sprite 並添加 CircleCollider2D 與 Rigidbody2D ，並命名為 Liquid 。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724894745/Hexo/2024/08/20240829/liquid_1_lfqkf0.png"></li>
-<li>建立一個 Empty Game Object 命名為 Liquids ， 並在其中將剛剛建立的 Liquid 複製多份。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724894983/Hexo/2024/08/20240829/liquid_2_ii9prh.png"></li>
-<li>建立牆體：建立一個 Square Sprite 並加入 BoxCollider2D ，並命名為 Wall 。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724895074/Hexo/2024/08/20240829/liquid_3_tfmqaa.png"></li>
-<li>建立一個 Empty Game Object 命名為 Walls ， 並在其中將剛剛建立的 Wall 複製多份，排列為一個可以承裝物體的凹型。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724895238/Hexo/2024/08/20240829/liquid_4_iyg9az.png"></li>
-<li>建立一個 Liquids Layer<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724895391/Hexo/2024/08/20240829/liquid_5_aaizin.png"></li>
-<li>建立一個 LiquidCamera 並更改以下屬性<ul>
-<li>Clear Flags ： <code>Solid Color</code></li>
-<li>Background ： 黑色</li>
-<li>Culling Mask ： 設為剛剛建立的 <code>Liquids</code> Layer</li>
-<li>Projection ： 更改為 <code>Orthographic</code><br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724895979/Hexo/2024/08/20240829/liquid_6_gthyxe.png"></li>
-</ul>
-</li>
-<li>建立一個 Textures 資料夾，在其中建立一個 <code>Render Texture</code> 並命名為 LiquidTexture<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724896485/Hexo/2024/08/20240829/liquid_7_eyhpdx.png"></li>
-<li>將剛剛建立的 LiquidTexture 設定到 LiquidCamera 的 <code>Target Texture</code><br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724896693/Hexo/2024/08/20240829/liquid_8_rer5is.png"></li>
-<li>安裝 Shader Graph<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724897168/Hexo/2024/08/20240829/liquid_9_hgvp0u.png"></li>
-<li>建立一個 Shaders 資料夾，在其中建立一個 <code>Unlit Shader Graph</code> 並命名為 LiquidShaderGraph<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724897168/Hexo/2024/08/20240829/liquid_10_of76ye.png"></li>
-<li>使用滑鼠左鍵點擊剛剛建立的 LiquidShaderGraph 打開 Shader Graph Editor<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724897497/Hexo/2024/08/20240829/liquid_11_dua6nd.png"></li>
-<li>滑鼠在 <code>+</code> 按鈕上面點擊一下展開選單，找到 <code>Texture 2D</code> 並點擊建立，並命名為 MainTex<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724897976/Hexo/2024/08/20240829/liquid_12_vcvifa.png"></li>
-<li>點擊剛剛建立的 MainTex 在右側的 <code>Graph Inspector</code> 中找到 <code>Default</code> 並將 LiquidTexture 設定到這個 <code>Default</code> 中<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724898287/Hexo/2024/08/20240829/liquid_13_kfycx7.png"></li>
-<li>使用滑鼠左鍵按住 MainTex 並拖拉到中央，如下圖<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724898472/Hexo/2024/08/20240829/liquid_14_reppj5.png"></li>
-<li>在空白處按下滑鼠右鍵找到 <code>Create Node</code> 並按下，在 Create Node 選單中找到 <code>Sample Texture 2D</code> 並按下建立一個 Sample Texture 2D Node<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724899106/Hexo/2024/08/20240829/liquid_15_ehqmxi.png"></li>
-<li>使用滑鼠左鍵將 MainTex 的接點拖拉到剛剛建立的 Sample Texture 2D Node<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724915032/Hexo/2024/08/20240829/liquid_16_ggm1ad.png"></li>
-<li>建立一個 <code>Float</code> 並命名為 Tickness<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724915388/Hexo/2024/08/20240829/liquid_17_wiqd1k.png"></li>
-<li>建立一個 <code>Step</code> Node ，將剛剛建立的 Thickness 連接到 Edge ，將 Sample Texture 2D 的 Alpha (A) 連接到 In<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724915608/Hexo/2024/08/20240829/liquid_18_shembt.png"></li>
-<li>建立一個 <code>Color</code> 並命名為 Color ， Default 設為藍色<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724915941/Hexo/2024/08/20240829/liquid_19_cnr4xy.png"></li>
-<li>建立一個 <code>Multiply</code> Node 並將 Step Node 的 Out 連接到 A ； 將剛剛建立的 Color 連接到 B<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724916121/Hexo/2024/08/20240829/liquid_20_xxzvfv.png"></li>
-<li>找到 <code>Fragment</code> Node ，將它的 Suface Type 設為 Transparent ，將 Step Node 的 Out 連接到 Fragment 的 Alpha ； 將 Multiply 的 Out 連接到 Base Color<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724916429/Hexo/2024/08/20240829/liquid_21_sg0u2e.png"></li>
-<li>最後按下 Save Asset 把它儲存<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724916631/Hexo/2024/08/20240829/liquid_22_hj0u6j.png"></li>
-<li>建立一個 Materials 資料夾，並在其中建立 Material 並命名為 LiquidMaterial<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724916875/Hexo/2024/08/20240829/liquid_23_k8hhon.png"></li>
-<li>將剛剛建立的 LiquidMaterial 的 Shader 設為之前建立的 LiquidShaderGraph 並設定它的顏色為藍色<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724919890/Hexo/2024/08/20240829/liquid_24_wzzgmf.png"></li>
-<li>在 LiquidCamera 之下建立一個 Quad ，將它的 Z Position 設為 10 ，它的 Materials 設為 LiquidMaterial<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1724920115/Hexo/2024/08/20240829/liquid_25_hzo0ed.png"></li>
-<li>最後觀看結果</li>
-</ol>
-<iframe frameborder="0" src="https://itch.io/embed-upload/11331883?color=333333" allowfullscreen="" width="720" height="620"><a target="_blank" rel="noopener" href="https://studyplace.itch.io/testliquid2d">Play TestLiquid2D on itch.io</a></iframe>
-
-<p>Reference: </p>
+<hr>
+<p>Multiply Node ： 將輸入 A 與 B 相乘後輸出。可用在</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=_8v4DRhHu2g">https://www.youtube.com/watch?v=_8v4DRhHu2g</a></li>
+<li>顏色調整：用 Multiply 乘以一個顏色值可以調整其亮度，例如 (1,1,1) * 0.5 讓顏色變暗。</li>
+<li>遮罩（Mask）：如果將一個紋理乘以一個黑白影像（如漸層遮罩），黑色部分（0）會被隱藏，白色部分（1）保持不變。</li>
+<li>縮放（Scaling）：可以用 Multiply 來控制值的縮放，例如控制波動強度、光照強度等。</li>
 </ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-19T06:50:16.094Z" title="7/19/2024, 2:50:16 PM">2024-07-19</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.371Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">2 分鐘讀完 (大約225個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/19/2024-07-19-color-by-speed/">粒子系統的 Color by Speed</a></p><div class="content"><p>此模組可以根據粒子的速度（每秒的距離單位）來改變顏色</p>
+<hr>
+<p>Split Node： 會將輸入向量 In 拆分為四個 Float 輸出 R、G、B 和 A。</p>
+<p>這些輸出對應於輸入 In 向量的各個通道：</p>
+<ul>
+<li>R (紅色通道)</li>
+<li>G (綠色通道)</li>
+<li>B (藍色通道)</li>
+<li>A (Alpha 透明度通道)</li>
+<li>如果輸入向量 In 的維度小於 4（即不是 Vector4），則缺少的輸出通道將預設為 0。</li>
+</ul>
+<p>生成的程式碼</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">float _Split_R = In[0];</span><br><span class="line">float _Split_G = In[1];</span><br><span class="line">float _Split_B = 0;</span><br><span class="line">float _Split_A = 0;</span><br></pre></td></tr></table></figure>
+
+<p>參考： <a target="_blank" rel="noopener" href="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.0/manual/Split-Node.html">https://docs.unity3d.com/Packages/com.unity.shadergraph@17.0/manual/Split-Node.html</a></p>
+<hr>
+<p>Transform Node： 用來將輸入從一個座標空間轉換到另一個座標空間。可以用來處理位置 (Position)、方向 (Direction) 或法線 (Normal) 等資料的變換。</p>
+<ul>
+<li>位置 (Position) 會受 平移、旋轉、縮放 影響。</li>
+<li>方向 (Direction) 只受 旋轉縮放 影響，不會受 平移 影響。</li>
+</ul>
+<p>當轉換的不是 Position（位置）時，Unity 建議使用 World 選項，而不要使用 Absolute World，否則可能會產生非預期行為。<br>例如，當轉換方向（Direction）或法線（Normal）時，Camera Relative（相機相對世界） 可能會影響計算結果，因此 World 會更適合。</p>
+<p>參考： <a target="_blank" rel="noopener" href="https://docs.unity3d.com/Packages/com.unity.shadergraph@17.0/manual/Transform-Node.html">https://docs.unity3d.com/Packages/com.unity.shadergraph@17.0/manual/Transform-Node.html</a></p>
+<hr>
+<p>對於計算機圖形學中的應用中，噪聲應該是偽隨機的，也就是說兩次調用應得到同樣的結果。</p>
+<p>Gradient Noise (梯度噪聲)： 梯度噪聲產生的紋理具有連續性，因此常用於模擬自然現象（如雲層、山脈、火焰等）。</p>
+<ul>
+<li>Perlin 噪聲（Perlin noise，又稱為柏林噪聲）是梯度噪聲的一種。由Ken Perlin開發的自然噪聲生成算法，具有在函數上的連續性，可在多次調用時給出一致的數值。該噪聲可以用來模擬人體的隨機運動，螞蟻行進的線路等。另外，還可以通過計算分形和模擬雲朵，火焰等非常複雜的紋理。</li>
+</ul>
+<p>Gradient Noise Node ：梯度噪聲節點，根據輸入 UV 生成梯度噪聲（Gradient Noise）或 Perlin 噪聲（Perlin Noise）。</p>
+<ul>
+<li>可調整 Scale 來控制噪聲的大小與細節。</li>
+</ul>
+<p>輸入</p>
+<ul>
+<li>UV ： 為 Vector2 ， UV 位置作為噪聲的「種子」，可透過偏移、縮放來改變噪聲分佈<ul>
+<li>UV + 偏移（Offset） → 平移噪聲圖案</li>
+<li>UV * 縮放（Scale） → 改變噪聲細節</li>
+<li>UV 變形（Distortion） → 產生扭曲效果</li>
+</ul>
+</li>
+<li>Scale ： 為 Float ， 可改變噪聲的細節程度<ul>
+<li>較大值 → 細節更密集，較小值 → 細節較稀疏<br>輸出</li>
+</ul>
+</li>
+<li>Output ： 為 Float ， 輸出範圍為 0.0 到 1.0</li>
+</ul>
+<p>Simple Noise Node ： 根據輸入的 UV 可以產生 簡單 (Simple) 或是 Value 雜訊。</p>
+<p>參考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://huailiang.github.io/blog/2021/noise/">https://huailiang.github.io/blog/2021/noise/</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Value_noise">https://en.wikipedia.org/wiki/Value_noise</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Czhenya/article/details/119900293">https://blog.csdn.net/Czhenya/article/details/119900293</a></li>
+<li><a target="_blank" rel="noopener" href="https://huailiang.github.io/blog/2021/noise/">https://huailiang.github.io/blog/2021/noise/</a></li>
+</ul>
+<hr>
+<p>UV Node ： UV 節點 用來獲取頂點或片段的 UV 坐標。Unity 允許你在網格的數據中處理多個紋理座標集，因此可以透過 Channel 下拉選單來選擇從四組 UV 坐標中擷取資料。大多數網格通常只會使用 UV0，但你也可以利用其他通道來隱藏更多數據。<br>需要注意的是，Shader Graph 有一個限制，就是它只能存取 UV0 到 UV3，而 UV4 到 UV7 則只能在著色器程式碼中訪問。這意味著如果需要更多的 UV 通道，Shader Graph 本身無法直接處理，但你仍然可以在手寫的著色器代碼中處理更高的 UV 通道。</p>
+<hr>
+<p>Position Node： 根據此節點所在的 Shader 階段 (Shader Stage)來決定，此節點是存取 網格頂點 (Vertex) 或片段 (Fragment) 的位置 (Position) 。<br>可以使用 Space (空間) 下拉選單來選擇輸出值的座標空間。</p>
+<p>Ports</p>
 <table>
 <thead>
 <tr>
-<th>屬性</th>
-<th>說明</th>
+<th>名稱</th>
+<th>描述</th>
+<th>類型</th>
+<th>綁定</th>
+<th>描述</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Color</td>
-<td>根據速度範圍定義的粒子顏色漸變。</td>
-</tr>
-<tr>
-<td>Speed Range</td>
-<td>此屬性用來映射顏色漸變（速度在範圍外的將映射到漸變的端點）。</td>
+<td>Out</td>
+<td>輸出</td>
+<td>Vector3</td>
+<td>無</td>
+<td>網格頂點 (Vertex) 或片段 (Fragment) 的位置 (Position)</td>
 </tr>
 </tbody></table>
-<hr>
-<p>燃燒或發光的粒子（如火花）在快速通過空氣時通常會燃燒得更亮（例如，當火花暴露在更多氧氣中時），但隨著速度減慢會稍微變暗。為了模擬這一點，你可以使用按速度變化顏色功能（Color By Speed），將漸變色設置為速度範圍的高端為白色，低端為紅色（在火花的例子中，更快的粒子會顯示為白色，而較慢的粒子則顯示為紅色）。</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-19T06:30:22.369Z" title="7/19/2024, 2:30:22 PM">2024-07-19</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.371Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">2 分鐘讀完 (大約244個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/19/2024-07-19-color-over-lifetime/">Color over Lifetime</a></p><div class="content"><p>此模組指定粒子在生命週期中要如何要如何顯示它的顏色與透明度。</p>
+<p>Controls</p>
 <table>
 <thead>
 <tr>
-<th>屬性</th>
-<th>說明</th>
+<th>名稱</th>
+<th>類型</th>
+<th>選項</th>
+<th>描述</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Color</td>
-<td>粒子在其生命週期內的顏色漸變。漸變條最左邊的點表示粒子生命的開始，最右邊的點表示粒子生命的結束。</td>
-</tr>
-</tbody></table>
-<p>粒子會隨著時間變化顏色，例如，白熱的火花在穿過空氣時會冷卻，而魔法咒語可能會爆發出彩虹般的顏色。同樣重要的是透明度的變化。粒子在其生命週期結束時通常會燃燒殆盡、逐漸消失或散佈（例如，熱火花、煙火和煙霧粒子），而一個簡單的逐漸減少的漸變可以產生這種效果。</p>
-<p>當同時使用起始顏色屬性時，此模組會將兩種顏色相乘，得到最終的粒子顏色。</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-19T01:26:51.650Z" title="7/19/2024, 9:26:51 AM">2024-07-19</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.371Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">3 分鐘讀完 (大約464個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/19/2024-07-19-lifetime-by-emitter-speed/">粒子系統的 Lifetime by Emitter Speed</a></p><div class="content"><p>Lifetime by Emitter Speed 模組根據發射器的速度來控制每個粒子的初始壽命。它會將粒子的初始壽命乘以一個取決於發射物體速度的值。對於大多數粒子系統來說，這個值是來自遊戲物體的速度，但對於子發射器（sub-emitter）來說，速度來自於生成該子發射器粒子的父粒子。</p>
-<table>
-<thead>
-<tr>
-<th>屬性</th>
-<th>說明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Multiplier</td>
-<td>粒子的初始壽命會乘上一個倍數。這個模組根據你設置的曲線模式以不同方式使用這個倍數。曲線模式包括： <hr> <code>Constant</code> ：使用固定倍數值。這種模式會忽略 <code>Speed Range</code> 屬性。 <br> <code>Curve</code> ： 根據發射器的速度，將其映射到介於 0 和 1 之間的值，然後使用正規化為這個曲線取樣。 <br> <code>Random Between Two Constants</code> ：為每個粒子設置一個介於兩個值之間的隨機倍數。這種模式會忽略 <code>Speed Range</code> 屬性。 <br> <code>Random Between Two Curves</code> ：根據發射器的速度，將其映射到介於 0 和 1 之間的值，然後使用正規化為這些曲線取樣。對於每個粒子，模組會將倍數設置為這兩個樣本之間的隨機值。</td>
-</tr>
-<tr>
-<td>Speed Range</td>
-<td>粒子系統將發射器速度映射到 Multiplier（倍數）曲線上的最小值和最大值。如果發射器的速度等於第一個值，那麼倍數就是曲線開始時的值。如果發射器的速度等於第二個值，那麼倍數就是曲線末端的值。這個屬性僅在 倍數(Multiplier)的曲線模式設置為曲線 <code>Curve</code> 或 <code>Random Between Two Curves</code> 時才有關聯。</td>
-</tr>
-</tbody></table>
-<p>Reference:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/Manual/PartSysLifetimeByEmitterSpeedModule.html">https://docs.unity3d.com/Manual/PartSysLifetimeByEmitterSpeedModule.html</a></li>
-</ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-07-19T00:22:53.160Z" title="7/19/2024, 8:22:53 AM">2024-07-19</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.371Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">2 分鐘讀完 (大約300個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2024/07/19/2024-07-19-force-over-lifetime/">粒子系統的 Force over Lifetime</a></p><div class="content"><p>在此模組中指定的力量（如風或吸引力）讓粒子加速。</p>
-<table>
-<thead>
-<tr>
-<th>屬性</th>
-<th>說明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>X, Y, Z</td>
-<td>在 X、Y 和 Z 軸上應用於每個粒子的力量。</td>
-</tr>
-<tr>
 <td>Space</td>
-<td>選擇力量是應用於局部空間(<code>Local</code>)還是世界空間(<code>World</code>)。</td>
-</tr>
-<tr>
-<td>Randomize</td>
-<td>當使用 <code>Random Between Two Constants</code> 或 <code>Random Between Two Curves</code> 模式時，系統會在每一幀內從定義的範圍中選擇新的力的方向讓粒子的運動變得更加混亂和不規則。</td>
+<td>下拉選單</td>
+<td>Object, View, World, Tangent, Absolute World</td>
+<td>為這個 Position 節點的輸出選一個座標空間(coordinate space)</td>
 </tr>
 </tbody></table>
-<p>在流體(Fluids)的運動中，常常會受到外力的影響。例如，煙霧從火源上升時，會因為周圍的熱空氣而稍微加速。通過使用曲線來控制粒子在其生命周期中的力量，可以實現微妙的效果。以之前的例子為例，煙霧最初會向上加速，但隨著上升的空氣逐漸變涼，力量會減弱。火焰產生的濃煙可能會在最初加速，然後隨著擴散變慢，甚至如果持續很長時間，可能會開始向下落。</p>
-<p>Reference:</p>
+<p>World 與 Absolute World<br>Position 節點 提供 World (世界) 和 Absolute World (絕對世界) 兩種座標空間選項：</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/Manual/PartSysForceOverLifeModule.html">https://docs.unity3d.com/Manual/PartSysForceOverLifeModule.html</a></li>
+<li>Absolute World (絕對世界座標)： 在所有 Scriptable Render Pipeline (SRP) 中，始終返回物件在場景中的絕對世界位置。</li>
+<li>World (世界座標)： 返回所選 SRP 預設的世界座標。</li>
 </ul>
-</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/3/">上一頁</a></div><div class="pagination-next"><a href="/page/5/">下一頁</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link is-current" href="/page/4/">4</a></li><li><a class="pagination-link" href="/page/5/">5</a></li><li><span class="pagination-ellipsis">&hellip;</span></li><li><a class="pagination-link" href="/page/15/">15</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/AI%E5%B7%A5%E5%85%B7/"><span class="level-start"><span class="level-item">AI工具</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/AI%E7%B9%AA%E5%9C%96/"><span class="level-start"><span class="level-item">AI繪圖</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/AWS/"><span class="level-start"><span class="level-item">AWS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/C-%E8%AA%9E%E8%A8%80/"><span class="level-start"><span class="level-item">C# 語言</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Chrome/"><span class="level-start"><span class="level-item">Chrome</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Design-Pattern/"><span class="level-start"><span class="level-item">Design Pattern</span></span><span class="level-end"><span class="level-item tag">15</span></span></a></li><li><a class="level is-mobile" href="/categories/Docker/"><span class="level-start"><span class="level-item">Docker</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Godot/"><span class="level-start"><span class="level-item">Godot</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/IDE%E6%93%8D%E4%BD%9C/"><span class="level-start"><span class="level-item">IDE操作</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile" href="/categories/JavaScript/"><span class="level-start"><span class="level-item">JavaScript</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Mac/"><span class="level-start"><span class="level-item">Mac</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/SQL/"><span class="level-start"><span class="level-item">SQL</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Tools/"><span class="level-start"><span class="level-item">Tools</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/Unity/"><span class="level-start"><span class="level-item">Unity</span></span><span class="level-end"><span class="level-item tag">82</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E7%B6%B1/"><span class="level-start"><span class="level-item">大綱</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-24T04:00:00.000Z">2026-08-24</time></p><p class="title"><a href="/2026/08/24/%E5%AF%86%E7%A2%BC%E7%94%A2%E7%94%9F%E5%99%A8/">密碼產生器</a></p><p class="categories"><a href="/categories/Tools/">Tools</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-24T03:00:00.000Z">2026-08-24</time></p><p class="title"><a href="/2026/08/24/QR%E7%A2%BC%E7%94%A2%E7%94%9F%E5%99%A8/">QR Code 產生器</a></p><p class="categories"><a href="/categories/Tools/">Tools</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-24T02:00:00.000Z">2026-08-24</time></p><p class="title"><a href="/2026/08/24/%E7%B5%B1%E4%B8%80%E7%B7%A8%E8%99%9F%E7%94%A2%E7%94%9F%E5%99%A8/">統一編號產生器</a></p><p class="categories"><a href="/categories/Tools/">Tools</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-23T04:00:00.000Z">2026-08-23</time></p><p class="title"><a href="/2026/08/23/taiwan_test_data_generator/">台灣測試資料產生器</a></p><p class="categories"><a href="/categories/Tools/">Tools</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-12-17T14:18:10.769Z">2025-12-17</time></p><p class="title"><a href="/2025/12/17/2025-12-17-image-resize/">圖片尺寸調整工具</a></p><p class="categories"><a href="/categories/Tools/">Tools</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2026/08/"><span class="level-start"><span class="level-item">八月 2026</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/12/"><span class="level-start"><span class="level-item">十二月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/11/"><span class="level-start"><span class="level-item">十一月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/10/"><span class="level-start"><span class="level-item">十月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/03/"><span class="level-start"><span class="level-item">三月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/02/"><span class="level-start"><span class="level-item">二月 2025</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/01/"><span class="level-start"><span class="level-item">一月 2025</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/12/"><span class="level-start"><span class="level-item">十二月 2024</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/09/"><span class="level-start"><span class="level-item">九月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/08/"><span class="level-start"><span class="level-item">八月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/07/"><span class="level-start"><span class="level-item">七月 2024</span></span><span class="level-end"><span class="level-item tag">17</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/06/"><span class="level-start"><span class="level-item">六月 2024</span></span><span class="level-end"><span class="level-item tag">25</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/05/"><span class="level-start"><span class="level-item">五月 2024</span></span><span class="level-end"><span class="level-item tag">20</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/04/"><span class="level-start"><span class="level-item">四月 2024</span></span><span class="level-end"><span class="level-item tag">37</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/02/"><span class="level-start"><span class="level-item">二月 2024</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI/"><span class="tag">AI</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C#</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chrome/"><span class="tag">Chrome</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DB/"><span class="tag">DB</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Eclipse/"><span class="tag">Eclipse</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Event/"><span class="tag">Event</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Flex/"><span class="tag">Flex</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-API/"><span class="tag">Google API</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-Search-Console/"><span class="tag">Google Search Console</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Input-System/"><span class="tag">Input System</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Formatter/"><span class="tag">JSON Formatter</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Pretty/"><span class="tag">JSON Pretty</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Joint-2D/"><span class="tag">Joint 2D</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Mac/"><span class="tag">Mac</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ParticleSystem/"><span class="tag">ParticleSystem</span><span class="tag">13</span></a></div><div class="control"><a class="tags has-addons" href="/tags/SQL%E8%AA%9E%E6%B3%95/"><span class="tag">SQL語法</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ScriptableObject/"><span class="tag">ScriptableObject</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Shader-Graph/"><span class="tag">Shader Graph</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UGUI/"><span class="tag">UGUI</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Builder/"><span class="tag">UI Builder</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Toolkit/"><span class="tag">UI Toolkit</span><span class="tag">18</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unit-Test/"><span class="tag">Unit Test</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-Tips/"><span class="tag">Unity Tips</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-package/"><span class="tag">Unity package</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity%E6%9E%B6%E6%A7%8B/"><span class="tag">Unity架構</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/delegate/"><span class="tag">delegate</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/html/"><span class="tag">html</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/password-generator/"><span class="tag">password_generator</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/qr-code/"><span class="tag">qr_code</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/sitemap/"><span class="tag">sitemap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-id/"><span class="tag">taiwan_id</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-test-data/"><span class="tag">taiwan_test_data</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/unified-number/"><span class="tag">unified_number</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B8%E5%AD%B8%E7%9B%B8%E9%97%9C/"><span class="tag">數學相關</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%82%E9%96%93/"><span class="tag">時間</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%89%A9%E7%90%86%E7%9B%B8%E9%97%9C/"><span class="tag">物理相關</span><span class="tag">5</span></a></div></div></div></div></div><div class="card widget" data-type="adsense"><div class="card-content"><div class="menu"><h3 class="menu-label">廣告</h3><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7911581883313737" data-ad-slot="4842521037" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a><p class="is-size-7"><span>&copy; 2026 Mystudybook</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-tw");</script><script>var IcarusThemeSettings = {
+<p>不同渲染管線的 World 預設行為：</p>
+<ul>
+<li>High Definition Render Pipeline (HDRP) 預設使用 Camera Relative (相機相對) 世界座標。</li>
+<li>Universal Render Pipeline (URP) 預設使用 Absolute World (絕對世界座標)。</li>
+</ul>
+<p>舊版本</p>
+<ul>
+<li>Shader Graph 6.7.0 或更早版本，如果 Position 節點 使用 World 空間，則會自動升級為 Absolute World，以確保計算結果不變。</li>
+<li>HDRP 中，如果之前使用 World 空間 手動計算 Camera Relative 世界座標，現在可以直接選擇 World，系統會自動使用相機相對的世界座標。</li>
+</ul>
+<p>參考： <a target="_blank" rel="noopener" href="https://docs.unity3d.com/Packages/com.unity.shadergraph@7.1/manual/Position-Node.html">https://docs.unity3d.com/Packages/com.unity.shadergraph@7.1/manual/Position-Node.html</a></p>
+<hr>
+<p>Tiling And Offset Node（平鋪與偏移節點）： Tiling And Offset Node 用於調整紋理（Texture）或 UV 坐標的平鋪（Tiling）和偏移（Offset），允許你在 Shader Graph 中動態改變紋理的大小與位置。</p>
+<ul>
+<li>Tiling 輸入是 Vector 2，它控制紋理在物件上複製的次數（即平鋪的數量）。 <code>UV * Tilling</code></li>
+<li>Offset 輸入是 Vector 2，它用來在任何方向上移動（滾動）紋理。 <code>UV + Offset</code></li>
+<li>UVs 輸入是原始的 UV 座標，平鋪和偏移會應用到這些座標上。</li>
+</ul>
+<p>UV 乘以一個數值就是縮放 (Tiling)<br>UV 加減一個值，就是移動 (Offset)</p>
+<p>產生的程式碼</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void Unity_TilingAndOffset_float(float2 UV, float2 Tiling, float2 Offset, out float2 Out)</span><br><span class="line">&#123;</span><br><span class="line">    Out = UV * Tiling + Offset;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>Absolute Node ： 將 輸入 取絕對值後 輸出。</p>
+<hr>
+<p>Power Node ： Power Node 就是次方的意思，當輸入 A 、 B， 輸出為 A的B次方， <code>A^B</code></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Unity_Power_float4</span>(<span class="params">float4 A, float4 B, <span class="keyword">out</span> float4 Out</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Out = pow(A, B);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>Sample Texture 2D ： </p>
+<ul>
+<li>有三個輸入：<ul>
+<li>Texture：要取樣的紋理（Texture 2D）。</li>
+<li>UV coordinate：紋理的取樣座標，這決定了紋理中哪個位置的顏色將被取樣。</li>
+<li>Sampler State：決定如何取樣紋理的採樣器狀態。</li>
+</ul>
+</li>
+<li>這個節點還有兩個額外選項：<ul>
+<li>Type：這個選項決定節點的取樣行為：<ul>
+<li>當選擇 Default 時，該節點會取樣紋理的顏色（顏色值）。</li>
+<li>當選擇 Normal 時，該節點會取樣法線圖（Normal Map），這樣可以獲得法線的資訊來用於光照計算等效果。</li>
+</ul>
+</li>
+<li>Space：這個選項只有在 Normal 模式下有效，決定輸出的法線信息應該處於哪個空間：<ul>
+<li>Object：???。</li>
+<li>Tabgent：???。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>在 SpriteRenderer 有時候會有 Material does not have a _MainTex texture property. It is required for SpriteRenderer 的警告，這表示 你的 Shader 沒有 _MainTex 屬性。可以這麼理解：在 Shader Graph 中，如果你設定了一個 Texture2D 屬性，並將它的 Reference 設為 _MainTex，那麼，當這個 Shader 被應用到 Sprite Renderer 的 Material 上時，Sprite Renderer 會自動把它的 Sprite 貼圖傳遞給 _MainTex。這樣 Shader 就能正確使用 Sprite 的貼圖，而不需要手動指定 Texture。</p>
+<hr>
+<p>Time Node (時間節點) ： 用來提供 時間資訊</p>
+<ul>
+<li>Time: 返回自場景(scene)開始以來的時間（以秒為單位）。這個值隨著場景運行而增加。</li>
+<li>Sine Time: sin(Time)，產生 -1 到 1 之間的循環值，這個輸出經常用於創建周期性或擺動的效果。</li>
+<li>Cosine Time: cos(Time)，效果類似於 Sine Time，但它的波形會有不同的相位（即開始的點不同），通常用於不同的波動模式。</li>
+<li>Delta Time: 返回自上一幀以來經過的時間（以秒為單位）。這個值用於幀率無關的動畫或運動計算，確保無論運行速度如何，行為都保持一致。</li>
+<li>Smooth Delta: 類似於 Delta Time，但它會對多幀的時間差進行平滑處理，通過平均多個幀的時間差來減少突變，使過渡更加平滑。</li>
+</ul>
+<p>當希望物件可以持續的動，或者 Shader 需要依賴時間來運作時，就可以使用 Time 節點，可以嘗試使用<code> Time 節點</code> 來做 <code>動畫漸變（Gradient）</code>、<code>顏色（Color）</code>、<code>紋理（Texture）</code>，以創造獨特的 Shader 效果。</p>
+<p>下圖是一個簡單的使用方式，如果你想要產生 0 到 1 之間循環的數值，可以這樣做。</p>
+<ul>
+<li>Time 節點 選擇  Sine Time ， 其範圍為 [-1, 1] 。</li>
+<li>將 Sine Time 連接到 Add Node ， 把 sin(Time) 加上 1 ， 轉換為 [0,2]</li>
+<li>連接上 Divide Node ， 把 Add Node 的輸出 除以 2 ， 轉換為 [0,1]<br><img src="data:image/png;base64,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"></li>
+<li>參考： <a target="_blank" rel="noopener" href="https://blog.csdn.net/chillxiaohan/article/details/130107677">https://blog.csdn.net/chillxiaohan/article/details/130107677</a></li>
+</ul>
+<p>參考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://danielilett.com/2021-05-20-every-shader-graph-node/">https://danielilett.com/2021-05-20-every-shader-graph-node/</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.unity.com/tutorial/shadergraph-time-node#5f625e2cedbc2a0020036df9">https://learn.unity.com/tutorial/shadergraph-time-node#5f625e2cedbc2a0020036df9</a></li>
+</ul>
+<hr>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-02-09T05:42:10.769Z" title="2/9/2025, 1:42:10 PM">2025-02-09</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Tools/">Tools</a></span><span class="level-item">幾秒讀完 (大約26個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/02/09/2025-02-09-mp3-converter/">MP3 轉換器</a></p><div class="content"><script type="text/javascript">
+  function resizeIframe(iframe) {
+    iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
+    window.requestAnimationFrame(() => resizeIframe(iframe));
+  }
+</script>  
+
+<iframe onload="resizeIframe(this)"  src='/html/tools/ffmpeg/index.html' scrolling="no" frameborder="0" width='100%' style='margin-top:12px'>
+</iframe>
+
+<p>參考：<a target="_blank" rel="noopener" href="https://github.com/ffmpegwasm/ffmpeg.wasm/tree/main">https://github.com/ffmpegwasm/ffmpeg.wasm/tree/main</a></p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-02-08T06:19:59.255Z" title="2/8/2025, 2:19:59 PM">2025-02-08</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Mac/">Mac</a></span><span class="level-item">1 分鐘讀完 (大約216個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/02/08/2025-02-08-%E5%B0%87%E8%B3%87%E6%96%99%E5%A4%BE%E6%8C%87%E5%90%91%E5%88%B0%E5%85%B6%E4%BB%96%E4%BD%8D%E7%BD%AE/">將資料夾指向到其他位置</a></p><div class="content"><p>如果 Mac 本機的容量不足，但是應用程式卻需要固定路徑才能使用，此時可以使用 symbolic link ，將原來的位置指向到另外一個位置。</p>
+<p>以 <a target="_blank" rel="noopener" href="https://github.com/divamgupta/diffusionbee-stable-diffusion-ui">DiffusionBee</a> 為例，他的資料夾位置是在 <code>~/.diffusionbee</code> ，我們可以把這個資料夾指向到外部硬碟的位置</p>
+<ol>
+<li>使用 <code>mv</code> 指令把 <code>~/.diffusionbee</code> 移動到外部硬碟位置<ul>
+<li><code>mv ~/.diffusionbee &#39;/Volumes/外部硬碟/bee/&#39;</code></li>
+</ul>
+</li>
+<li>使用 <code>ln -s</code> 將外部硬碟位置連接到 <code>~/.diffusionbee</code><ul>
+<li><code>ln -s /Volumes/外部硬碟/bee/.diffusionbe ~/.diffusionbee</code></li>
+</ul>
+</li>
+</ol>
+<p>如果需要再次更改，連接到其他硬碟的話，只需要使用 <code>rm</code> 指令刪除原來鏈結，再次建立即可<br><code>rm ~/.diffusionbee</code><br><code>ln -s /Volumes/另一個外部硬碟/bee_new/.diffusionbee ~/.diffusionbee</code></p>
+<p>參考： <a target="_blank" rel="noopener" href="https://michaelcharl.es/aubrey/en/code/diffusionbee-on-external-storage">https://michaelcharl.es/aubrey/en/code/diffusionbee-on-external-storage</a></p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-02-07T16:49:14.797Z" title="2/8/2025, 12:49:14 AM">2025-02-08</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Docker/">Docker</a></span><span class="level-item">1 分鐘讀完 (大約170個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/02/08/2025-02-08-docker-note/">Docker 筆記</a></p><div class="content"><p>Docker 筆記，記錄一些在使用上遇到的問題</p>
+<hr>
+<p>拉取 Image 時出現 <code>Error: creating build container: short-name &quot;tomcat:9.0.20-jdk8-slim&quot; did not resolve to an alias and no unqualified-search registries are defined in &quot;/etc/containers/registries.conf&quot;</code><br>因為 Docker Hub 不希望你拉錯 Image ，使用 UNQUALIFIED IMAGE NAMES 時可能會拉到攻擊者的 Image ，所以 Docker Hub 要你明確指定來源</p>
+<p>解決方式是</p>
+<ul>
+<li>執行 <code>podman pull docker.io/tomcat:9.0.20-jdk8-slim</code> 而不是 <code>podman pull tomcat:9.0.20-jdk8-slim</code></li>
+<li>或是在 &#x2F;etc&#x2F;containers&#x2F;registries.conf 中加上 unqualified-search-registries &#x3D; [“docker.io”] ， 這樣當你沒有明確指明來源時，會從 Docker Hub 抓。</li>
+</ul>
+<p>參考： <a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/701784/podman-no-longer-searches-dockerhub-error-short-name-did-not-resolve-to-an">https://unix.stackexchange.com/questions/701784/podman-no-longer-searches-dockerhub-error-short-name-did-not-resolve-to-an</a></p>
+<hr>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-01-30T02:26:23.560Z" title="1/30/2025, 10:26:23 AM">2025-01-30</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">5 分鐘讀完 (大約810個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/01/30/2025-01-30-create-unit-test-for-unity/">在 Unity 中使用 Unit test</a></p><div class="content"><p>本文記錄如何在 Unity 中使用內建的 Unity Test Runner 進行 Unit Test。 。</p>
+<p>首先選擇 <code>Window</code> -&gt; <code>General</code> -&gt; <code>Test Runner</code> 開啟 <code>Test Runner</code> 。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738295031/Hexo/2025/20250131/1_m1cs6f.png"></p>
+<p>到 <code>Test Runner</code> 中找到 <code>Create a Test new Assembly Folder in the active path.</code> 按鈕，按下。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738295030/Hexo/2025/20250131/2_fwki2k.png"></p>
+<p>按下後會建立一個 Tests 資料夾，裡面會幫你建立一個 <code>Tests.asmdef</code> 檔案，這個檔案是 Unity 的 Assembly Definition File (程序集定義文件)，讓你可以管理測試腳本的組件。</p>
+<p>之後，為了讓測試腳本知道你寫的腳本，你需要在你放腳本的地方（如 Asserts&#x2F;Scripts） 建立一個 Assembly Definition File (<code>Create</code> -&gt; <code>Scripting</code> -&gt; <code>Assembly Definition</code>)， 並取為自己想要的名稱，這邊命名為 MyScriptAssembly。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738295031/Hexo/2025/20250131/3_lxzxmn.png"></p>
+<p>注意，如果你有使用 TextMeshPro 或是 DOTween 的話，你還需要在 MyScriptAssembly 中的 Assembly Definition References 加入 Unity.TextMeshPro 和 DOTween.Modules （預設不會有 DOTween.Modules，請參考 <a href="#20250131_scroll_dotween">建立 DoTween 的 asmdef 檔案</a>）。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738295030/Hexo/2025/20250131/4_r9gpg5.png"></p>
+<p>接著回到 <code>Tests.asmdef</code> 檔案，將 MyScriptAssembly 加入到 <code>Tests.asmdef</code> 的 Assembly Definition References 中。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738295030/Hexo/2025/20250131/5_o5u3cx.png"></p>
+<p>最後你就可以在 Unity 中開始使用 <code>Unit Test</code> 了，到 Tests 資料夾中，選擇 <code>Create</code> -&gt; <code>Testing</code> -&gt; <code>C# Test Script</code> 建立測試腳本。此外，你也可以在 Tests 資料夾中建立其他資料夾規劃你的測試。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738295031/Hexo/2025/20250131/6_fkahia.png"></p>
+<p>建立測試腳本</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">NewTestScript</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// A Test behaves as an ordinary method</span></span><br><span class="line">    [<span class="meta">Test</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">NewTestScriptSimplePasses</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Use the Assert class to test conditions</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use</span></span><br><span class="line">    <span class="comment">// `yield return null;` to skip a frame.</span></span><br><span class="line">    [<span class="meta">UnityTest</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IEnumerator <span class="title">NewTestScriptWithEnumeratorPasses</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Use the Assert class to test conditions.</span></span><br><span class="line">        <span class="comment">// Use yield to skip a frame.</span></span><br><span class="line">        <span class="keyword">yield</span> <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到 <code>Test Runner</code> 就可以看到測試了，可以一個一個選擇執行，或是執行全部。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738295031/Hexo/2025/20250131/7_zk9vtx.png"></p>
+<hr>
+<p>一些注意事項：</p>
+<ol>
+<li><p>如果要測試拋出例外之類的測試的話，需要使用 <code>LogAssert.Expect</code> 而不是 <code>Assert.***</code></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 測試錯誤日誌</span></span><br><span class="line">[<span class="meta">Test</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestLogError</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    testComponent.LogError(<span class="string">&quot;Test error message&quot;</span>);</span><br><span class="line">    LogAssert.Expect(LogType.Error, <span class="string">&quot;&lt;color=red&gt;❌&lt;/color&gt;[&lt;color=lightblue&gt;TestObject&lt;/color&gt;]: Test error message\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 測試例外日誌</span></span><br><span class="line">[<span class="meta">Test</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestLogException</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="built_in">int</span> a = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">float</span> b = <span class="number">1</span> / a;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (System.Exception e)</span><br><span class="line">    &#123;</span><br><span class="line">        testComponent.LogException(e, <span class="string">&quot;My Message&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    LogAssert.Expect(LogType.Exception, <span class="string">&quot;DivideByZeroException: Attempted to divide by zero.&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SetUp 與 TearDown</p>
+<ul>
+<li>SetUp: 每個測試案例開始前，會執行此方法。通常用來還原測試案例初始化狀態，確保測試案例不互相干擾。</li>
+<li>TearDown: 每個測試案例完成後，會執行此方法。通常用來清除測試案例的狀態，確保測試案例不互相干擾。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title">TestObject</span> : <span class="title">MonoBehaviour</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> GameObject testGameObject;</span><br><span class="line"><span class="keyword">private</span> TestObject testComponent;</span><br><span class="line"><span class="keyword">private</span> LogCapture logCapture;</span><br><span class="line"></span><br><span class="line">[<span class="meta">SetUp</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Setup</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    testGameObject = <span class="keyword">new</span> GameObject(<span class="string">&quot;TestObject&quot;</span>);</span><br><span class="line">    testComponent = testGameObject.AddComponent&lt;TestObject&gt;();</span><br><span class="line">    logCapture = <span class="keyword">new</span> LogCapture();</span><br><span class="line">    Application.logMessageReceived += logCapture.HandleLog;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">TearDown</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Teardown</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    Application.logMessageReceived -= logCapture.HandleLog;</span><br><span class="line">    Object.DestroyImmediate(testGameObject);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<hr>
+<div>
+  <h3 id="20250131_scroll_dotween">建立 DoTween 的 asmdef 檔案</h3>
+</div>
+
+<p>一般預設是不會有 DoTween 的 asmdef 檔案，必須到 <code>Tools</code> -&gt; <code>Demigiant</code> -&gt; <code>DOTween Utility Panel</code> 中，開啟 <code>DOTween Utility Panel</code><br>並找到 <code>Create ASMDEF</code> 按鈕 ，按下建立 asmdef 檔案。</p>
+<p><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738295032/Hexo/2025/20250131/8_wcg95e.png"></p>
+<hr>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-01-28T22:57:42.018Z" title="1/29/2025, 6:57:42 AM">2025-01-29</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">6 分鐘讀完 (大約928個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/01/29/2025-01-29-particle-system-smoke-effect/">使用粒子系統(Particle System) 製作 2D 煙霧效果</a></p><div class="content"><p>首先需要一張煙霧圖片，這邊使用 <a target="_blank" rel="noopener" href="https://www.photopea.com/">Photopea</a> 來製作做煙霧圖片，<br>進入 <a target="_blank" rel="noopener" href="https://www.photopea.com/">Photopea</a> 後，選擇 <code>檔案</code> -&gt; <code>新增</code> ， 會彈出新增專案畫面。</p>
+<ul>
+<li>將寬高設定為 512 像素 。</li>
+<li>DPI 設為 100 像素&#x2F;Inch 。</li>
+<li>背景選擇白色。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140579/Hexo/2025/20250129/2025-01-29_4.45.11_ypa1af.png"></li>
+</ul>
+<p>選擇 <code>檢視</code> -&gt; <code>顯示</code> -&gt; <code>格線</code> 。啟用格線，方便我們之後對齊<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738143288/Hexo/2025/20250129/2025-01-29_5.33.46_t9gqbo.png"></p>
+<p>選擇 <code>編輯</code> -&gt; <code>選項</code> 打開選項畫面，調整格線大小，由於 寬高是 512 ，我們想要切為四等分，因此設定網格間隙為 512 &#x2F; 4 &#x3D; 128<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140579/Hexo/2025/20250129/2025-01-29_4.39.13_fe2yab.png"></p>
+<p>接著選擇 <code>濾鏡</code> -&gt; <code>渲染</code> -&gt; <code>雲彩</code> 。 建立一個雲霧的圖片<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140579/Hexo/2025/20250129/2025-01-29_4.40.59_g0k11g.png"></p>
+<p>再建立一個新專案，寬高一樣是 512 ， 但是這次背景選 <code>透明</code><br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140580/Hexo/2025/20250129/2025-01-29_4.35.35_fapvro.png"></p>
+<p>回到有雲彩圖片的專案，選擇套索工具，羽化設為 <code>20</code> px ， 使用 套索工具 切出煙霧圖案<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140580/Hexo/2025/20250129/2025-01-29_4.42.05_d0kc4d.png"></p>
+<p>按下 <code>ctrl</code> + <code>c</code> 將切出的圖案複製 ， 切換到 背景<code>透明</code>的專案，按下 <code>ctrl</code> + <code>v</code> 貼上。可以使用移動工具，移動煙霧圖片，對齊中心。 如下圖：<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140580/Hexo/2025/20250129/2025-01-29_4.46.20_vzjhrs.png"></p>
+<p>最後，輸出煙霧圖片為 <code>PNG</code><br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140580/Hexo/2025/20250129/2025-01-29_4.46.53_qnfbff.png"></p>
+<p>至此，我們的煙霧圖片就準備完畢了。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140579/Hexo/2025/20250129/smoke_bckjlw.png"></p>
+<p>接著到 Unity 編輯器中。將煙霧圖片複製到裡面</p>
+<p>建立一個 Material，命名為 SmokeMaterial<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738144202/Hexo/2025/20250129/2025-01-29_5.48.39_nevpr9.png"></p>
+<p>將 SmokeMaterial 的 Shader 更改為 <code>Particles/Unlit</code></p>
+<ul>
+<li>將 <code>Surface Type</code> 設為 <strong>Transparent</strong> 。設為透明。</li>
+<li>將 <code>Surface Inputs</code> 中 <code>Base Map</code> 設為剛剛的煙霧圖片。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140579/Hexo/2025/20250129/2025-01-29_3.27.35_v9bats.png"></li>
+</ul>
+<p>建立一個 GameObject ，命名為 <code>Smoke</code> 。接著在這個物件下建立一個 Particle System ， 命名為 <code>Smoke Particle System</code>。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738140581/Hexo/2025/20250129/2025-01-29_3.28.56_pxf58w.png"></p>
+<p>以下開始設定 Smoke Particle System ，<br>Transform 組件</p>
+<ul>
+<li>預設噴射方向是朝 Z 軸方向噴射，由於是 2D 遊戲，我們將其 Rotation 的 X 設為 -90 ， 讓粒子系統朝 Y 軸方向噴射，在畫面上會呈現朝上噴射。</li>
+</ul>
+<p>修改以下模組<br>主模組</p>
+<ul>
+<li><code>Start Life Time</code> ： 設為 Random Between Two Constants， <strong>2</strong> 和 <strong>5</strong></li>
+<li><code>Start Speed</code> ：設為 Random Between Two Constants， <strong>3</strong> 和 <strong>4</strong></li>
+<li><code>Start Rotation</code> ：設為 Random Between Two Constants， <strong>-180</strong> 和 <strong>180</strong></li>
+<li><code>Scaling Mode</code> ： <strong>Hierarchy</strong> 。 讓粒子系統可以直接隨父級物件縮放。</li>
+</ul>
+<p>Emission 模組</p>
+<ul>
+<li><code>Rate over Time</code> ： <strong>40</strong> 。 每秒生成的40個粒子。</li>
+</ul>
+<p>Shape 模組</p>
+<ul>
+<li><code>Shape</code> ： <strong>Cone</strong> 。</li>
+</ul>
+<p>Color over Lifetime 模組 </p>
+<ul>
+<li>開始時顏色為白色且透明，逐漸變得不透明，然後變為黑色並再次變透明，模擬煙霧散去的效果。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738145272/Hexo/2025/20250129/2025-01-29_6.03.30_e3zkrx.png"></li>
+</ul>
+<p>Texture Sheet Animation 模組</p>
+<ul>
+<li><code>Mode</code> ： <strong>Grid</strong> 。確保煙霧圖片已經被切割為 2×2 的動畫格，這樣才能正確使用 Grid 模式來播放動畫。</li>
+<li><code>Tile</code> ： 圖片是 4 個，因此 X, Y 設為 2<ul>
+<li><code>X</code> ： <strong>2</strong></li>
+<li><code>Y</code> ： <strong>2</strong></li>
+</ul>
+</li>
+<li><code>Animation</code> ： <strong>Whole Sheet</strong> 。 整張圖片</li>
+<li><code>Time Mode</code> ： <strong>LifeTime</strong></li>
+<li><code>Frame over Time</code> ： 選擇 <strong>Random Between Constants</strong> ， 數字填 <strong>0</strong> 和 <strong>3</strong></li>
+</ul>
+<p>Renderer 模組</p>
+<ul>
+<li><code>Material</code> ： 更改為上面建立的 SmokeMaterial</li>
+</ul>
+<p>最後效果如圖<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738146248/Hexo/2025/20250129/2025-01-29_6.20.29_x2e0sg.gif"></p>
+<p>參考： <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1UY4y1n76t?spm_id_from=333.788.videopod.sections&vd_source=f103d4eb21cc24456defbcf356882852">https://www.bilibili.com/video/BV1UY4y1n76t?spm_id_from=333.788.videopod.sections&amp;vd_source=f103d4eb21cc24456defbcf356882852</a></p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-01-23T06:12:33.338Z" title="1/23/2025, 2:12:33 PM">2025-01-23</time>發表</span><span class="level-item"><time dateTime="2026-08-13T02:58:16.373Z" title="8/13/2026, 10:58:16 AM">2026-08-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Unity/">Unity</a></span><span class="level-item">8 分鐘讀完 (大約1130個字)</span></div></div><p class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2025/01/23/2025-01-23-particle-system-collision/">在 2D世界中使用粒子系統 (Particle system) 碰撞物體</a></p><div class="content"><p>使用粒子系統 (Particle system) 產生粒子，並讓粒子與其他物件碰撞。可以用來製作粒子推動其他物體的效果，</p>
+<p>首先建立一個 GameObject ， 依自己需要取名(這邊取名 WindObject )<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738133059/Hexo/2025/20250124/%E6%88%AA%E5%9C%96_2025-01-23_%E4%B8%8B%E5%8D%8810.46.05_bap8kf.png"></p>
+<p>在這個 GameObject 之下建立一個 Particle system (<code>Effects</code> -&gt; <code>Particle system</code>) ，依自己需要取名(這邊取名 WindEffect )<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738133059/Hexo/2025/20250124/%E6%88%AA%E5%9C%96_2025-01-24_%E4%B8%8A%E5%8D%8810.36.32_yllerw.png"></p>
+<p>修改以下模組參數：<br>主要模組中的<br><code>Duration</code> ： <strong>1</strong> ， 設定粒子系統的持續時間。設為 1 意味著粒子系統的 一次發射周期持續 1 秒。</p>
+<ul>
+<li>如果粒子系統是循環播放的（Looping 開啟），它會每 1 秒重置並重新發射粒子。</li>
+<li>如果 Looping 關閉，粒子系統只會運行 1 秒後停止。</li>
+</ul>
+<p><code>Start Lifetime</code> ： <strong>0.5</strong> ， 每個粒子的生命週期（以秒為單位）。 設為 0.5 表示每個粒子在生成後僅存活 0.5 秒。當生命週期結束時，粒子將被銷毀。如果 Start Lifetime 設置為隨機範圍，則每個粒子會有不同的存活時間。<br><code>Start Speed</code> ： <strong>2</strong> ， 粒子生成時的初始速度（以單位&#x2F;秒為單位）。 設為 2 表示粒子從生成位置以每秒 2 單位的速度移動。<br><code>Gravity Source</code> ： <strong>2D Physics</strong> 。 設為 2D Physics 表示粒子受到 Unity 2D 重力場的影響，會根據 Unity 2D 的 Physics2D.gravity 設定進行模擬。<br><code>Simulation Space</code> ： <strong>World</strong> 。 設為 World 表示粒子生成後會與世界空間對齊，並且粒子位置不會受到粒子系統的移動影響。<br><code>Scaling Mode</code> ： <strong>Hierarchy</strong> 。 Hierarchy 模式指的是粒子系統會根據其所在的父級物件及其整個層級結構的縮放來影響粒子的大小、速度、壽命等屬性。讓粒子系統可以直接隨父級物件縮放，無需手動調整。<br><code>Max Particles</code> ： <strong>10</strong> 。 粒子系統同一時間允許存在的最大粒子數。設為 10 表示在任何時刻，粒子系統內的粒子數不會超過 10 個。</p>
+<p>Emission 模組<br><code>Rate over Time</code> ： <strong>10</strong> 。 每秒生成的粒子數量。設置為 10 意味著粒子系統會在每秒內均勻生成 10 個粒子。</p>
+<ul>
+<li>會受到 Max Particles 與 Start Lifetime 限制，<ul>
+<li>如果 Max Particles 設置為 10，且粒子的存活時間（Start Lifetime）足夠長，那麼粒子系統最多同時顯示 10 個粒子，即便 Rate over Time 想生成更多粒子，也會受到限制。</li>
+<li>當 Start Lifetime 為 0.5 時，粒子會在 0.5 秒內消失。因此，即使 Rate over Time 為 10，由於粒子存活時間短，每秒可能只有一半的粒子還存活。</li>
+</ul>
+</li>
+</ul>
+<p>Shape 模組<br><code>Shape</code> ： <strong>Edge</strong> 。 粒子會沿著一條 邊線（Edge） 發射，而不是從一個平面或三維體積中生成。<br><code>Radius</code> ： <strong>0.1</strong> 。 當 Shape 設為 Edge 時，Radius 表示該邊線的長度（在視覺上呈現為一小段線段）。</p>
+<p>Force over Lifetime<br><code>X</code> ： <strong>-20</strong> 。 表示粒子在 X 軸方向 持續受到 -20 的力，造成向左的運動。<br><code>Y</code> ： <strong>-5</strong> 。 粒子會向 負 Y 方向 持續加速，模擬下墜或重力效果。<br><code>Z</code> ： <strong>0</strong> 。 表示粒子在 Z 軸方向 不受任何外力影響。<br><code>Space</code> ： <strong>World</strong> 。 表示所有的力都基於 世界空間，而非粒子系統的局部空間。</p>
+<p>Color over Lifetime 模組<br><code>Color</code> ： 將後段設為透明，讓粒子發射後逐漸變透明。<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738133059/Hexo/2025/20250124/%E6%88%AA%E5%9C%96_2025-01-24_%E4%B8%8A%E5%8D%8811.37.17_vpzjvx.png"></p>
+<p>Size over Lifetime 模組<br><code>Size</code> ： 指定粒子的大小如何隨著其生命週期從生成到消亡逐漸改變，將它設為一開始小後面變大的曲線，<br><img src="https://res.cloudinary.com/dqz8udjhr/image/upload/v1738133059/Hexo/2025/20250124/%E6%88%AA%E5%9C%96_2025-01-24_%E4%B8%8A%E5%8D%8811.39.02_vtacnz.png"></p>
+<p>Collision 模組<br><code>Type</code> ： <strong>World</strong> 。 讓粒子會與世界空間中的物理對象（如場景中的碰撞器）發生碰撞，而不是局限於粒子系統本身。<br><code>Mode</code> ： <strong>2D</strong></p>
+<p>Render 模組<br><code>Material</code> ： 用於指定粒子的材質，從而決定粒子的顯示樣式。</p>
+<ul>
+<li>需要建立一個 Material ，然後選擇 Sprite-Lit-Default</li>
+</ul>
+</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/3/">上一頁</a></div><div class="pagination-next"><a href="/page/5/">下一頁</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link is-current" href="/page/4/">4</a></li><li><a class="pagination-link" href="/page/5/">5</a></li><li><span class="pagination-ellipsis">&hellip;</span></li><li><a class="pagination-link" href="/page/17/">17</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分類</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/AI/"><span class="level-start"><span class="level-item">AI</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/AI%E5%B7%A5%E5%85%B7/"><span class="level-start"><span class="level-item">AI工具</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/AI%E7%B9%AA%E5%9C%96/"><span class="level-start"><span class="level-item">AI繪圖</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/AWS/"><span class="level-start"><span class="level-item">AWS</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/C-%E8%AA%9E%E8%A8%80/"><span class="level-start"><span class="level-item">C# 語言</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Chrome/"><span class="level-start"><span class="level-item">Chrome</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Design-Pattern/"><span class="level-start"><span class="level-item">Design Pattern</span></span><span class="level-end"><span class="level-item tag">15</span></span></a></li><li><a class="level is-mobile" href="/categories/Docker/"><span class="level-start"><span class="level-item">Docker</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Godot/"><span class="level-start"><span class="level-item">Godot</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Hexo/"><span class="level-start"><span class="level-item">Hexo</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/IDE%E6%93%8D%E4%BD%9C/"><span class="level-start"><span class="level-item">IDE操作</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile" href="/categories/JavaScript/"><span class="level-start"><span class="level-item">JavaScript</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Mac/"><span class="level-start"><span class="level-item">Mac</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/SQL/"><span class="level-start"><span class="level-item">SQL</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Tools/"><span class="level-start"><span class="level-item">Tools</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/Unity/"><span class="level-start"><span class="level-item">Unity</span></span><span class="level-end"><span class="level-item tag">82</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E7%B6%B1/"><span class="level-start"><span class="level-item">大綱</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-31T02:00:00.000Z">2026-08-31</time></p><p class="title"><a href="/2026/08/31/%E5%85%8D%E8%B2%BBAI-Agent%E6%95%B4%E7%90%86/">免費使用的 AI Agent 整理與比較</a></p><p class="categories"><a href="/categories/AI/">AI</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-31T02:00:00.000Z">2026-08-31</time></p><p class="title"><a href="/2026/08/31/2026-08-31-local-llm-tools/">本地 LLM 工具比較：Ollama、LM Studio、TextGen 該選哪個</a></p><p class="categories"><a href="/categories/AI/">AI</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-30T02:00:00.000Z">2026-08-30</time></p><p class="title"><a href="/2026/08/30/2026-08-30-how-to-use-cursor-ai-in-godot/">How to use Cursor AI in Godot</a></p><p class="categories"><a href="/categories/Godot/">Godot</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-29T01:00:00.000Z">2026-08-29</time></p><p class="title"><a href="/2026/08/29/2026-08-29-ai-trends-and-ethics/">AI 趨勢展望與倫理議題</a></p><p class="categories"><a href="/categories/AI/">AI</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-08-28T01:00:00.000Z">2026-08-28</time></p><p class="title"><a href="/2026/08/28/2026-08-28-ai-agents/">AI Agent：讓模型自己規劃並執行多步任務</a></p><p class="categories"><a href="/categories/AI/">AI</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">彙整</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2026/08/"><span class="level-start"><span class="level-item">八月 2026</span></span><span class="level-end"><span class="level-item tag">19</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/12/"><span class="level-start"><span class="level-item">十二月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/11/"><span class="level-start"><span class="level-item">十一月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/10/"><span class="level-start"><span class="level-item">十月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/03/"><span class="level-start"><span class="level-item">三月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/02/"><span class="level-start"><span class="level-item">二月 2025</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/01/"><span class="level-start"><span class="level-item">一月 2025</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/12/"><span class="level-start"><span class="level-item">十二月 2024</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/09/"><span class="level-start"><span class="level-item">九月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/08/"><span class="level-start"><span class="level-item">八月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/07/"><span class="level-start"><span class="level-item">七月 2024</span></span><span class="level-end"><span class="level-item tag">17</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/06/"><span class="level-start"><span class="level-item">六月 2024</span></span><span class="level-end"><span class="level-item tag">25</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/05/"><span class="level-start"><span class="level-item">五月 2024</span></span><span class="level-end"><span class="level-item tag">20</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/04/"><span class="level-start"><span class="level-item">四月 2024</span></span><span class="level-end"><span class="level-item tag">37</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/02/"><span class="level-start"><span class="level-item">二月 2024</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">標籤</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/AI/"><span class="tag">AI</span><span class="tag">16</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C#</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Chrome/"><span class="tag">Chrome</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DB/"><span class="tag">DB</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Eclipse/"><span class="tag">Eclipse</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Event/"><span class="tag">Event</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Flex/"><span class="tag">Flex</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-API/"><span class="tag">Google API</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Google-Search-Console/"><span class="tag">Google Search Console</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Input-System/"><span class="tag">Input System</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Formatter/"><span class="tag">JSON Formatter</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JSON-Pretty/"><span class="tag">JSON Pretty</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Joint-2D/"><span class="tag">Joint 2D</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Mac/"><span class="tag">Mac</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ParticleSystem/"><span class="tag">ParticleSystem</span><span class="tag">13</span></a></div><div class="control"><a class="tags has-addons" href="/tags/SQL%E8%AA%9E%E6%B3%95/"><span class="tag">SQL語法</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ScriptableObject/"><span class="tag">ScriptableObject</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Shader-Graph/"><span class="tag">Shader Graph</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UGUI/"><span class="tag">UGUI</span><span class="tag">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Builder/"><span class="tag">UI Builder</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/UI-Toolkit/"><span class="tag">UI Toolkit</span><span class="tag">18</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unit-Test/"><span class="tag">Unit Test</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-Tips/"><span class="tag">Unity Tips</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity-package/"><span class="tag">Unity package</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unity%E6%9E%B6%E6%A7%8B/"><span class="tag">Unity架構</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ai-agent/"><span class="tag">ai_agent</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/delegate/"><span class="tag">delegate</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/free-tools/"><span class="tag">free_tools</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/html/"><span class="tag">html</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/llm/"><span class="tag">llm</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/password-generator/"><span class="tag">password_generator</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/qr-code/"><span class="tag">qr_code</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/sitemap/"><span class="tag">sitemap</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-id/"><span class="tag">taiwan_id</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/taiwan-test-data/"><span class="tag">taiwan_test_data</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/unified-number/"><span class="tag">unified_number</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%89%B5%E4%BD%9C/"><span class="tag">創作</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B8%E5%AD%B8%E7%9B%B8%E9%97%9C/"><span class="tag">數學相關</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%82%E9%96%93/"><span class="tag">時間</span><span class="tag">7</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%89%A9%E7%90%86%E7%9B%B8%E9%97%9C/"><span class="tag">物理相關</span><span class="tag">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%A8%8B%E5%BC%8F%E9%96%8B%E7%99%BC/"><span class="tag">程式開發</span><span class="tag">7</span></a></div></div></div></div></div><div class="card widget" data-type="adsense"><div class="card-content"><div class="menu"><h3 class="menu-label">廣告</h3><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7911581883313737" data-ad-slot="4842521037" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/Computer_icon_cc0.svg" alt="Mystudybook" height="28"></a><p class="is-size-7"><span>&copy; 2026 Mystudybook</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-tw");</script><script>var IcarusThemeSettings = {
             article: {
                 highlight: {
                     clipboard: true,
