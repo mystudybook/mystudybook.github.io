@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>電力觀測站 App — 隱私權政策</title>
+<style>
+/* 全部內嵌、不載入任何外部資源；App 內用 WebView 或外部瀏覽器開，越輕越好。 */
+:root { color-scheme: light dark; }
+body {
+  margin: 0 auto; padding: 24px 20px 64px; max-width: 46rem;
+  font-family: -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  line-height: 1.75; font-size: 17px; color: #16232e; background: #fff;
+  word-wrap: break-word;
+}
+h1 { font-size: 1.6rem; margin: 0 0 4px; }
+h2 { font-size: 1.2rem; margin: 2em 0 .5em; padding-bottom: .3em; border-bottom: 1px solid rgba(128,128,128,.25); }
+h3 { font-size: 1.05rem; margin: 1.5em 0 .4em; }
+.updated { color: #5b7183; font-size: .95rem; margin-bottom: 1.5em; }
+table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: .95rem; display: block; overflow-x: auto; }
+th, td { border: 1px solid rgba(128,128,128,.3); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: rgba(128,128,128,.1); }
+code { background: rgba(128,128,128,.15); padding: .1em .35em; border-radius: 4px; font-size: .9em; }
+a { color: #1b63ab; }
+hr { border: 0; border-top: 1px solid rgba(128,128,128,.25); margin: 2em 0; }
+@media (prefers-color-scheme: dark) {
+  body { color: #e6edf3; background: #101922; }
+  .updated { color: #8fa3b5; }
+  a { color: #6fb4f5; }
+}
+</style>
+</head>
+<body>
+<h1>電力觀測站 App — 隱私權政策</h1>
+<p class="updated">最後更新：2026-11-09</p>
+<hr>
+
+<h2>我們是誰</h2>
+<p>電力觀測站 App（以下稱「本 App」）由 studyplace 開發。本 App 不是台灣電力公司或任何政府機關的官方產品。</p>
+<p>聯絡方式：<a href="mailto:e4572351@gmail.com">e4572351@gmail.com</a></p>
+
+<h2>簡單版</h2>
+<p>本 App <strong>不會</strong>蒐集你的姓名、電話、電子郵件、地址或精確位置，也沒有帳號系統。</p>
+<p>你設定的關注地區、搜尋文字與通知設定，全部只存在你自己的手機上，不會傳給我們、資料來源或廣告服務。</p>
+<p>唯一會離開你手機的個人相關資料，是 Google AdMob 為了投放廣告所使用的<strong>廣告識別碼</strong>等資訊。</p>
+
+<h2>存在你手機上的資料</h2>
+<p>以下資料只存在裝置本機（App 私有目錄），我們看不到，也不會上傳：</p>
+<table><thead><tr><th>資料</th><th>用途</th></tr></thead><tbody>
+<tr><td>關注地區（縣市、行政區，以及選填的路名或里名）</td><td>在首頁顯示相關停電公告，並比對新公告通知</td></tr>
+<tr><td>深淺色主題、通知開關與查詢間隔</td><td>記住你的設定</td></tr>
+<tr><td>已通知過的公告識別碼與時段（不含你的關注地區文字）</td><td>避免同一則公告重複通知</td></tr>
+<tr><td>官方公開資料的離線副本（計畫性停電公告、用電與供電資訊、七天供需預測、消防署停電統計、台電災害停電通報）</td><td>沒有網路時仍能查看上次取得的資料，減少重複下載</td></tr>
+</tbody></table>
+<ul>
+<li>災害停電通報只保存畫面上顯示的公開欄位，不保存官方資料中的聯絡人、電話或座標。</li>
+<li>Android：本 App 關閉系統備份，上述資料不會隨 Google 備份上傳。</li>
+<li>iOS：離線副本已標記為不備份；關注地區、主題與通知設定屬於 App 設定，可能隨你的 iPhone 備份存到<strong>你自己的</strong> iCloud，我們無法存取。</li>
+</ul>
+<p>移除本 App 時，這些資料會一併刪除。你也可以在「設定」移除關注地區；關閉公告通知會清除通知比對紀錄。</p>
+
+<h2>本 App 會連線的對象</h2>
+<h3>官方公開資料（不會傳送你的個人資料）</h3>
+<p>本 App 直接向以下網站下載公開資料，不經過我們的伺服器。這些請求<strong>不含</strong>你的關注地區或任何識別你的資訊：</p>
+<ul>
+<li>台灣電力公司 <code>service.taipower.com.tw</code> — 計畫性停電公告、用電與供電資訊、七天供需預測、災害停電通報</li>
+<li>內政部消防署 <code>portal2.emic.gov.tw</code> — 停電統計</li>
+</ul>
+<p>在 App 內開啟「台電官方公告」時，會直接顯示台電區處的公告網頁，該網頁的內容與 Cookie 依台電網站自身的政策處理。</p>
+<p>和瀏覽一般網站一樣，這些網站可能依其政策記錄連線紀錄（例如 IP 位址與連線時間），這不在本 App 的控制範圍內。</p>
+
+<h3>背景查詢與通知</h3>
+<p>開啟「關注地區新公告」通知後，本 App 會依你選的間隔在背景下載台電計畫性停電公告，實際執行時間由 Android／iOS 系統安排。</p>
+<p>通知由本 App 在你的手機上產生，沒有使用推播伺服器，也不會產生或上傳推播識別碼。你可以隨時在 App 或系統設定關閉通知。</p>
+
+<h3>Google AdMob（廣告）</h3>
+<p>本 App 顯示由 Google AdMob 提供的橫幅廣告，用來支應開發與上架費用。</p>
+<p>AdMob 可能會蒐集與使用：</p>
+<ul>
+<li><strong>廣告識別碼（Advertising ID）</strong> — 用於投放與衡量廣告成效</li>
+<li>IP 位址與由此推估的粗略位置（例如國家）、裝置與 App 的基本資訊、廣告的顯示與點擊紀錄</li>
+</ul>
+<p>你的關注地區、搜尋文字與通知設定<strong>不會</strong>提供給 Google。我們<strong>看不到</strong>上述資料的個別內容，只會看到 AdMob 後台的彙總統計（曝光次數、收益等）。</p>
+<ul>
+<li>Google 隱私權政策：<a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a></li>
+<li>Google 如何使用合作夥伴應用程式的資訊：<a href="https://policies.google.com/technologies/partner-sites">https://policies.google.com/technologies/partner-sites</a></li>
+<li>Google 廣告技術合作夥伴清單：<a href="https://support.google.com/admob/answer/9012903">https://support.google.com/admob/answer/9012903</a></li>
+</ul>
+
+<h2>你的選擇</h2>
+<ul>
+<li><strong>重設或刪除廣告識別碼</strong>：Android 系統設定 →「Google」→「廣告」；iOS 可在「設定 → 隱私權與安全性 → 追蹤」及「Apple 廣告」調整。</li>
+<li><strong>關閉通知與背景查詢</strong>：App 內「設定 → 通知」關閉「關注地區新公告」，或在系統設定關閉本 App 的通知。</li>
+<li><strong>清除本機資料</strong>：在「設定」移除關注地區，或直接移除本 App。</li>
+</ul>
+
+<h2>兒童</h2>
+<p>本 App 不以兒童為目標對象，也不會刻意蒐集兒童的個人資料。</p>
+
+<h2>資料保留</h2>
+<p>本 App 自身不在伺服器上保存任何使用者資料（我們沒有伺服器）。</p>
+<p>裝置上的資料保留到你移除關注地區、關閉通知或移除 App 為止；離線副本會在下次成功更新時被新資料取代。</p>
+<p>AdMob 的資料保留依 Google 的政策辦理。</p>
+
+<h2>政策變更</h2>
+<p>本政策若有修改，會更新本頁最上方的日期。重大變更會在 App 更新說明中告知。</p>
+
+<h2>聯絡我們</h2>
+<p>對本政策有疑問，請寄信到 <a href="mailto:e4572351@gmail.com">e4572351@gmail.com</a>。</p>
+<hr>
+
+<h2>免責</h2>
+<p>本 App 的停電與電力供需資訊來自台灣電力公司與政府開放資料，僅供參考，</p>
+<p>實際停電時間與範圍以台灣電力公司公告為準。</p>
+</body>
+</html>
